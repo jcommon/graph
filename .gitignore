@@ -1,3 +1,7 @@
+!.gitignore
+
+.idea/workspace.xml
+
 *.class
 
 # Package Files #
