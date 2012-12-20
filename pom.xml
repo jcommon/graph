@@ -2,9 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <name>jdeps</name>
+
   <groupId>com.github.davidhoyt</groupId>
   <artifactId>jdeps</artifactId>
   <version>1.0</version>
+
+  <packaging>jar</packaging>
   <inceptionYear>2012</inceptionYear>
   <url>https://github.com/davidhoyt/jdeps/</url>
   <description>
@@ -12,10 +15,9 @@
   </description>
 
   <scm>
-    <url>https://github.com/davidhoyt/jdeps/</url>
-    <connection>scm:git:git://github.com/davidhoyt/jdeps.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/davidhoyt/jdeps.git</developerConnection>
-    <tag>v1.0</tag>
+    <url>git@github.com:davidhoyt/jdeps.git</url>
+    <connection>scm:git:git@github.com:davidhoyt/jdeps.git</connection>
+    <developerConnection>scm:git:git@github.com:davidhoyt/jdeps.git</developerConnection>
   </scm>
 
   <dependencies>
@@ -149,6 +151,9 @@
           <value>true</value>
         </property>
       </activation>
+      <properties>
+        <gpg.keyname>4E912FE5</gpg.keyname>	<!-- GPG Key ID to use for signing -->
+      </properties>
       <build>
         <plugins>
           <plugin>
@@ -202,6 +207,13 @@
       </roles>
     </developer>
   </developers>
+
+  <!-- Please see https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide -->
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
+  </parent>
 
   <modelVersion>4.0.0</modelVersion>
 </project>
