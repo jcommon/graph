@@ -5,7 +5,7 @@
 
   <groupId>com.github.davidhoyt</groupId>
   <artifactId>jdeps</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
 
   <packaging>jar</packaging>
   <inceptionYear>2012</inceptionYear>
@@ -18,6 +18,7 @@
     <url>git@github.com:davidhoyt/jdeps.git</url>
     <connection>scm:git:git@github.com:davidhoyt/jdeps.git</connection>
     <developerConnection>scm:git:https://github.com/davidhoyt/jdeps.git</developerConnection>
+    <tag>v1.0</tag>
   </scm>
 
   <dependencies>
