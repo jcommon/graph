@@ -17,7 +17,7 @@
   <scm>
     <url>git@github.com:davidhoyt/jdeps.git</url>
     <connection>scm:git:git@github.com:davidhoyt/jdeps.git</connection>
-    <developerConnection>scm:git:https://github.com/davidhoyt/jdeps.git</developerConnection>
+    <developerConnection>scm:git:ssh://git@github.com/davidhoyt/jdeps.git</developerConnection>
   </scm>
 
   <dependencies>
