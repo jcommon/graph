@@ -2,6 +2,8 @@
 
 .idea/workspace.xml
 
+release.properties
+
 *.class
 
 # Package Files #
