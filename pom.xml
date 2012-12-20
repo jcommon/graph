@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <name>jdeps</name>
-  <groupId>jdeps</groupId>
+  <groupId>com.github.davidhoyt</groupId>
   <artifactId>jdeps</artifactId>
   <version>1.0-SNAPSHOT</version>
   <inceptionYear>2012</inceptionYear>
@@ -48,6 +48,18 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+            </manifest>
+          </archive>
+        </configuration>
       </plugin>
 
       <!-- Builds a source jar for other developers -->
