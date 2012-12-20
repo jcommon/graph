@@ -3,6 +3,7 @@
 .idea/workspace.xml
 
 release.properties
+*.releaseBackup
 
 *.class
 
