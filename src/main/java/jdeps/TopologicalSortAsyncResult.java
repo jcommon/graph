@@ -8,18 +8,20 @@ import java.util.concurrent.TimeUnit;
 /**
  * @see ITopologicalSortAsyncResult
  */
-class TopologicalSortAsyncResult implements ITopologicalSortAsyncResult {
+final class TopologicalSortAsyncResult implements ITopologicalSortAsyncResult {
   private final Object lock = new Object();
   private final ExecutorService executor;
   private final CountDownLatch latch;
   private boolean done;
   private boolean successful;
+  private boolean discontinue_processing;
 
   public TopologicalSortAsyncResult(ExecutorService executor) {
     this.executor = executor;
     this.latch =  new CountDownLatch(1);
     this.done = false;
     this.successful = false;
+    this.discontinue_processing = false;
   }
 
   @Override
@@ -33,8 +35,21 @@ class TopologicalSortAsyncResult implements ITopologicalSortAsyncResult {
   }
 
   @Override
+  public boolean isProcessingDiscontinued() {
+    return discontinue_processing;
+  }
+
+  @Override
   public ExecutorService getExecutorService() {
     return executor;
+  }
+
+  @Override
+  public boolean discontinueScheduling() {
+    synchronized (lock) {
+      discontinue_processing = true;
+    }
+    return true;
   }
 
   Object getLock() {

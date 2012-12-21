@@ -1,19 +1,20 @@
 package jdeps;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class Solution {
+public class Solution<TVertex extends IVertex> {
   public static final boolean CYCLE_EXPECTED = true;
   public static final boolean CYCLE_NOT_EXPECTED = false;
 
-  private final IGraph graph;
-  private final ValidOrdering[] orderings;
+  private final IGraph<TVertex> graph;
+  private final ValidOrdering<TVertex>[] orderings;
   private final boolean cycle_expected;
   private final String message;
 
-  public Solution(String message, boolean cycle_expected, IGraph graph, ValidOrdering...orderings) {
+  public Solution(String message, boolean cycle_expected, IGraph<TVertex> graph, ValidOrdering<TVertex>...orderings) {
     this.graph = graph;
     this.message = message == null ? "" : message;
     this.orderings = orderings;
@@ -28,31 +29,39 @@ public class Solution {
     return cycle_expected;
   }
 
-  public IGraph getGraph() {
+  public IGraph<TVertex> getGraph() {
     return graph;
   }
 
-  public ValidOrdering[] getValidOrderings() {
+  public ValidOrdering<TVertex>[] getValidOrderings() {
     return orderings;
   }
 
-  public boolean isValidSolution(IVertex...vertices) {
-    for(ValidOrdering o : orderings) {
+  public boolean isValidSolution(List<TVertex> vertices) {
+    for(ValidOrdering<TVertex> o : orderings) {
       if (o.matches(vertices))
         return true;
     }
     return false;
   }
 
-  public boolean anyMatch(IVertex...vertices) {
+  public boolean anyMatch(TVertex...vertices) {
+    return anyMatch(Arrays.asList(vertices));
+  }
+
+  public boolean anyMatch(List<TVertex> vertices) {
     return isValidSolution(vertices);
   }
 
-  public String toString(IVertex...vertices) {
-    return "" + (vertices == null ? null : Arrays.asList(vertices));
+  public String toString(List<TVertex> vertices) {
+    return "" + (vertices == null ? null : vertices);
   }
 
-  public void check(IVertex...vertices) {
+  public void check(TVertex...vertices) {
+    check(Arrays.asList(vertices));
+  }
+
+  public void check(List<TVertex> vertices) {
     if (!isValidSolution(vertices)) {
       StringBuilder sb = new StringBuilder(256);
       sb.append("\n");
@@ -81,19 +90,19 @@ public class Solution {
     }
   }
 
-  public static Solution create(IGraph graph, ValidOrdering...orderings) {
-    return new Solution("", false, graph, orderings);
+  public static <TVertex extends IVertex> Solution<TVertex> create(IGraph<TVertex> graph, ValidOrdering<TVertex>...orderings) {
+    return new Solution<TVertex>("", false, graph, orderings);
   }
 
-  public static Solution create(boolean cycle_expected, IGraph graph, ValidOrdering...orderings) {
-    return new Solution("", cycle_expected, graph, orderings);
+  public static <TVertex extends IVertex> Solution create(boolean cycle_expected, IGraph<TVertex> graph, ValidOrdering<TVertex>...orderings) {
+    return new Solution<TVertex>("", cycle_expected, graph, orderings);
   }
 
-  public static Solution create(String message, IGraph graph, ValidOrdering...orderings) {
-    return new Solution(message, false, graph, orderings);
+  public static <TVertex extends IVertex> Solution create(String message, IGraph<TVertex> graph, ValidOrdering<TVertex>...orderings) {
+    return new Solution<TVertex>(message, false, graph, orderings);
   }
 
-  public static Solution create(String message, boolean cycle_expected, IGraph graph, ValidOrdering...orderings) {
-    return new Solution(message, cycle_expected, graph, orderings);
+  public static <TVertex extends IVertex> Solution create(String message, boolean cycle_expected, IGraph<TVertex> graph, ValidOrdering<TVertex>...orderings) {
+    return new Solution<TVertex>(message, cycle_expected, graph, orderings);
   }
 }

@@ -36,7 +36,7 @@ public class StringVertex implements IVertex {
     return name.hashCode();
   }
 
-  public static IVertex from(String name) {
+  public static StringVertex from(String name) {
     return new StringVertex(name);
   }
 }

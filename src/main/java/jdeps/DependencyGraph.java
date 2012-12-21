@@ -1,5 +1,6 @@
 package jdeps;
 
+import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -15,31 +16,53 @@ public class DependencyGraph<TVertex extends IVertex> implements Cloneable, IGra
   }
 
   @Override
-  protected Object clone() throws CloneNotSupportedException {
-    return copyDependencyGraph();
+  public Set<TVertex> getVertices() {
+    return Collections.unmodifiableSet(vertices);
   }
 
-  public DependencyGraph<TVertex> copyDependencyGraph() {
-    DependencyGraph<TVertex> g = new DependencyGraph<TVertex>();
-    g.vertices = new LinkedHashSet<TVertex>(vertices);
-    g.edges = new LinkedHashSet<IEdge<TVertex>>(edges);
-    return g;
+  @Override
+  public Set<IEdge<TVertex>> getEdges() {
+    return Collections.unmodifiableSet(edges);
+  }
+
+  @Override
+  protected Object clone() throws CloneNotSupportedException {
+    return copyDependencyGraph(this);
+  }
+
+  @SuppressWarnings("unchecked")
+  protected static <TVertex extends IVertex, TGraph extends DependencyGraph<TVertex>> TGraph copyDependencyGraph(TGraph graph) {
+    try {
+      final Class g_class = graph.getClass();
+      final Constructor<? extends DependencyGraph<TVertex>> construct = g_class.getDeclaredConstructor();
+      construct.setAccessible(true);
+
+      final TGraph g = (TGraph)construct.newInstance();
+
+      g.vertices = new LinkedHashSet<TVertex>(graph.vertices);
+      g.edges = new LinkedHashSet<IEdge<TVertex>>(graph.edges);
+      return g;
+    } catch(Throwable t) {
+      return null;
+    }
   }
 
   public IGraph<TVertex> copy() {
-    return copyDependencyGraph();
+    return copyDependencyGraph(this);
   }
 
   public static <TVertex extends IVertex> IGraph<TVertex> build(TVertex...vertices) {
     DependencyGraph<TVertex> g = new DependencyGraph<TVertex>();
-    for(TVertex d : vertices) {
-      g.addVertex(d);
+    if (vertices != null) {
+      for(TVertex d : vertices) {
+        g.addVertex(d);
+      }
     }
     return g;
   }
 
   public static <TVertex extends IVertex> IGraph<TVertex> create() {
-    return build();
+    return build((TVertex[])null);
   }
 
   @Override
@@ -60,13 +83,13 @@ public class DependencyGraph<TVertex extends IVertex> implements Cloneable, IGra
 
   @Override
   public IGraph<TVertex> addEdge(TVertex from, TVertex to) {
-    edges.add(new Edge(from, to));
+    edges.add(new Edge<TVertex>(from, to));
     return this;
   }
 
   @Override
   public IGraph<TVertex> removeEdge(TVertex from, TVertex to) {
-    edges.remove(new Edge(from, to));
+    edges.remove(new Edge<TVertex>(from, to));
     return this;
   }
 
@@ -83,56 +106,62 @@ public class DependencyGraph<TVertex extends IVertex> implements Cloneable, IGra
 
   @Override
   public List<TVertex> sort() throws CyclicGraphException {
-    return sort(new SimpleTopologicalSort());
+    return sort(new SimpleTopologicalSort<TVertex>());
   }
 
   @Override
-  public List<TVertex> sort(ITopologicalSortStrategy strategy) throws CyclicGraphException {
+  public List<TVertex> sort(ITopologicalSortStrategy<TVertex> strategy) throws CyclicGraphException {
     if (strategy == null)
       throw new IllegalArgumentException("strategy cannot be null");
     if (!validate())
       throw new IllegalStateException("The graph is invalid. Please confirm that all vertices are present for every relationship.");
-    return strategy.sort(new AdjacencyList(vertices, edges));
+    return strategy.sort(new AdjacencyList<TVertex>(vertices, edges));
   }
 
   @Override
   public ITopologicalSortAsyncResult sortAsync(ITopologicalSortCallback<TVertex> callback) {
-    return sortAsync(new SimpleTopologicalSort(), callback, null);
+    return sortAsync(new SimpleTopologicalSort<TVertex>(), callback, null);
   }
 
   @Override
   public ITopologicalSortAsyncResult sortAsync(ITopologicalSortCallback<TVertex> callback, ITopologicalSortErrorCallback<TVertex> errorCallback) {
-    return sortAsync(new SimpleTopologicalSort(), callback, errorCallback);
+    return sortAsync(new SimpleTopologicalSort<TVertex>(), callback, errorCallback);
   }
 
   @Override
-  public ITopologicalSortAsyncResult sortAsync(ITopologicalSortStrategy strategy, ITopologicalSortCallback<TVertex> callback) {
+  public ITopologicalSortAsyncResult sortAsync(ITopologicalSortStrategy<TVertex> strategy, ITopologicalSortCallback<TVertex> callback) {
     return sortAsync(strategy, callback, null);
   }
 
   @Override
-  public ITopologicalSortAsyncResult sortAsync(ITopologicalSortStrategy strategy, ITopologicalSortCallback<TVertex> callback, ITopologicalSortErrorCallback<TVertex> errorCallback) {
+  public ITopologicalSortAsyncResult sortAsync(ITopologicalSortStrategy<TVertex> strategy, ITopologicalSortCallback<TVertex> callback, ITopologicalSortErrorCallback<TVertex> errorCallback) {
     ExecutorService executor = Executors.newFixedThreadPool(Math.max(2, Runtime.getRuntime().availableProcessors() + 1));
-    return sortAsync(executor, strategy, callback, errorCallback);
+    ITopologicalSortAsyncResult result = sortAsync(executor, strategy, callback, errorCallback);
+
+    //We don't explicity shutdown b/c we may not be done processing
+    //at this point. If need to abort prematurely, the caller can
+    //access the executor service from the .getExecutorService()
+    //method.
+    return result;
   }
 
   @Override
   public ITopologicalSortAsyncResult sortAsync(ExecutorService executor, ITopologicalSortCallback<TVertex> callback) {
-    return sortAsync(executor, new SimpleTopologicalSort(), callback, null);
+    return sortAsync(executor, new SimpleTopologicalSort<TVertex>(), callback, null);
   }
 
   @Override
   public ITopologicalSortAsyncResult sortAsync(ExecutorService executor, ITopologicalSortCallback<TVertex> callback, ITopologicalSortErrorCallback<TVertex> errorCallback) {
-    return sortAsync(executor, new SimpleTopologicalSort(), callback, errorCallback);
+    return sortAsync(executor, new SimpleTopologicalSort<TVertex>(), callback, errorCallback);
   }
 
   @Override
-  public ITopologicalSortAsyncResult sortAsync(ExecutorService executor, ITopologicalSortStrategy strategy, ITopologicalSortCallback<TVertex> callback) {
+  public ITopologicalSortAsyncResult sortAsync(ExecutorService executor, ITopologicalSortStrategy<TVertex> strategy, ITopologicalSortCallback<TVertex> callback) {
     return sortAsync(executor, strategy, callback, null);
   }
 
   @Override
-  public ITopologicalSortAsyncResult sortAsync(ExecutorService executor, ITopologicalSortStrategy strategy, ITopologicalSortCallback<TVertex> callback, ITopologicalSortErrorCallback<TVertex> errorCallback) {
+  public ITopologicalSortAsyncResult sortAsync(ExecutorService executor, ITopologicalSortStrategy<TVertex> strategy, ITopologicalSortCallback<TVertex> callback, ITopologicalSortErrorCallback<TVertex> errorCallback) {
     if (strategy == null)
       throw new IllegalArgumentException("strategy cannot be null");
     if (callback == null)
@@ -143,7 +172,7 @@ public class DependencyGraph<TVertex extends IVertex> implements Cloneable, IGra
     return strategy.sortAsync(executor, new AdjacencyList<TVertex>(vertices, edges), callback, errorCallback);
   }
 
-  private static class Edge<TVertex extends IVertex> implements IEdge {
+  private static class Edge<TVertex extends IVertex> implements IEdge<TVertex> {
     public final TVertex from;
     public final TVertex to;
 
@@ -241,11 +270,11 @@ public class DependencyGraph<TVertex extends IVertex> implements Cloneable, IGra
     public int[] calculateInDegrees() {
       final int[] in_degrees = new int[size()];
       for(int i = 0; i < size(); ++i) {
-        IAdjacencyListPair<TVertex> p = get(i);
+        IAdjacencyListPair<TVertex> p = pairAt(i);
         TVertex d = p.getVertex();
 
         for(int j = 0; j < size(); ++j) {
-          for(IVertex dep : get(j).getOutNeighbors()) {
+          for(IVertex dep : pairAt(j).getOutNeighbors()) {
             if (d.equals(dep))
               ++in_degrees[i];
           }
@@ -255,12 +284,18 @@ public class DependencyGraph<TVertex extends IVertex> implements Cloneable, IGra
     }
 
     @Override
-    public IAdjacencyListPair<TVertex> get(int index) {
+    public IAdjacencyListPair<TVertex> pairAt(int index) {
       return num_map.get(index);
     }
 
     @Override
-    public List<TVertex> get(TVertex vertex) {
+    public List<TVertex> outNeighborsAt(int index) {
+      IAdjacencyListPair<TVertex> pair = pairAt(index);
+      return pair.getOutNeighbors();
+    }
+
+    @Override
+    public List<TVertex> outNeighborsFor(TVertex vertex) {
       return vertex_map.get(vertex);
     }
 
@@ -281,7 +316,8 @@ public class DependencyGraph<TVertex extends IVertex> implements Cloneable, IGra
 
     @Override
     public int indexOf(IVertex vertex) {
-      return index_map.get(vertex);
+      Integer result = index_map.get(vertex);
+      return (result != null) ? result : -1;
     }
   }
 }

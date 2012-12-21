@@ -14,6 +14,9 @@ public interface ITopologicalSortCallback<T extends IVertex> {
    * invoking the sort.
    *
    * @param dependency Instance of {@link T} that can now be processed.
+   * @param coordinator Instance of {@link ITopologicalSortCoordinator} that allows for communication between
+   *                    asynchronous sorting submissions done by the driver (which is typically done by an instance
+   *                    of {@link ITopologicalSortStrategy}).
    */
-  void handle(T dependency) throws Throwable;
+  void handle(T dependency, ITopologicalSortCoordinator coordinator) throws Throwable;
 }

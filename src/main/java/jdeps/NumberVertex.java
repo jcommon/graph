@@ -36,7 +36,7 @@ public class NumberVertex implements IVertex {
     return value.hashCode();
   }
 
-  public static IVertex from(Number name) {
+  public static NumberVertex from(Number name) {
     return new NumberVertex(name);
   }
 }

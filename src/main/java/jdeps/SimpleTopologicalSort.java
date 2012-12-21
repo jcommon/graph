@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Please see the following for a description of this algorithm:
  *   http://www.cs.washington.edu/education/courses/cse373/02sp/lectures/cse373-21-TopoSort-4up.pdf
  */
-public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITopologicalSortStrategy<TVertex> {
+final class SimpleTopologicalSort<TVertex extends IVertex> implements ITopologicalSortStrategy<TVertex> {
   @Override
   public List<TVertex> sort(IAdjacencyList<TVertex> adjacencyList) throws CyclicGraphException {
     if (adjacencyList.isEmpty())
@@ -23,7 +23,7 @@ public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITo
     //Find all vertices who have an in-degree of zero.
     for(int i = 0; i < in_degrees.length; ++i) {
       if (in_degrees[i] == 0)
-        queue.add(adjacencyList.get(i));
+        queue.add(adjacencyList.pairAt(i));
     }
 
     //If there are no vertices with an in-degree of zero (meaning they have no one pointing to them),
@@ -39,7 +39,7 @@ public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITo
         int index = adjacencyList.indexOf(d);
         //Enqueue any vertex whose in-degree will become zero
         if (in_degrees[index] == 1)
-          queue.add(adjacencyList.get(index));
+          queue.add(adjacencyList.pairAt(index));
         --in_degrees[index];
       }
     }
@@ -65,11 +65,12 @@ public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITo
     final Set<IAdjacencyListPair<TVertex>> remaining = new HashSet<IAdjacencyListPair<TVertex>>();
     final AtomicInteger[] atomics = new AtomicInteger[in_degrees.length];
     final AtomicInteger outstanding_submissions = new AtomicInteger(0);
+    final ITopologicalSortCoordinator coordinator = new TopologicalSortCoordinator(asyncResult);
 
     //Find all vertices who have an in-degree of zero.
     //Also initialize latches to the size of the the in-degree + 1.
     for(int i = 0; i < in_degrees.length; ++i) {
-      final IAdjacencyListPair<TVertex> pair = adjacencyList.get(i);
+      final IAdjacencyListPair<TVertex> pair = adjacencyList.pairAt(i);
       final AtomicInteger atom = atomics[i] = new AtomicInteger(in_degrees[i] == 0 ? 1 : in_degrees[i]);
 
       //Ensure that we add all items in the adjacency list to our list of remaining items.
@@ -84,7 +85,7 @@ public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITo
         public Object call() throws Exception {
           Throwable handled_exception = null;
           boolean handle_all_done = false;
-          TVertex dependency = pair.getVertex();
+          TVertex vertex = pair.getVertex();
 
           try {
 
@@ -94,27 +95,32 @@ public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITo
                 remaining.remove(pair);
               }
 
-              //Call the callback to let him handle this dependency.
+              //Call the callback to let him handle this vertex.
               try {
-                callback.handle(dependency);
+                callback.handle(vertex, coordinator);
               } catch(Throwable t) {
                 //We need to handle the exception later after we've done other work.
                 //Save it off for later evaluation.
                 handled_exception = t;
               }
 
-              //Submit a task for everyone who is dependent on me.
-              //On the next round if all of their dependencies have been evaluated,
-              //the count will be at zero.
-              for(TVertex dep : pair.getOutNeighbors()) {
-                final int index = adjacencyList.indexOf(dep);
-                final Callable<Object> dep_callable = callables.get(index);
+              //Ensure we haven't been asked to stop processing. If so,
+              //we don't want to schedule anything else. We need to let the existing
+              //submissions drain.
+              if (!asyncResult.isProcessingDiscontinued()) {
+                //Submit a task for everyone who is dependent on me.
+                //On the next round if all of their vertices have been evaluated,
+                //the count will be at zero.
+                for(TVertex dep : pair.getOutNeighbors()) {
+                  final int index = adjacencyList.indexOf(dep);
+                  final Callable<Object> dep_callable = callables.get(index);
 
-                //Ensure we track the number of submissions. This will be used to
-                //detect an effective deadlock -- we can't make progress b/c there's
-                //a cycle preventing it.
-                outstanding_submissions.incrementAndGet();
-                executorProcessors.submit(dep_callable);
+                  //Ensure we track the number of submissions. This will be used to
+                  //detect an effective deadlock -- we can't make progress b/c there's
+                  //a cycle preventing it.
+                  outstanding_submissions.incrementAndGet();
+                  executorProcessors.submit(dep_callable);
+                }
               }
             }
 
@@ -143,7 +149,7 @@ public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITo
           } catch(Throwable t) {
             if (errorCallback != null) {
               try {
-                errorCallback.handleError(t, dependency);
+                errorCallback.handleError(vertex, t, coordinator);
               } catch(Throwable t2) {
                 //Swallow any exceptions thrown by our error handler.
               }
@@ -170,7 +176,7 @@ public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITo
     //then this is not a DAG (directed acyclic graph).
     if (queue.isEmpty()) {
       if (errorCallback != null) {
-        errorCallback.handleError(new CyclicGraphException("Cycle detected when topologically sorting the graph"), null);
+        errorCallback.handleError(null, new CyclicGraphException("Cycle detected when topologically sorting the graph"), coordinator);
       }
       asyncResult.asyncComplete(false);
       return asyncResult;
