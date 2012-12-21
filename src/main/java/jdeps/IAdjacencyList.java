@@ -7,9 +7,9 @@ package jdeps;
  */
 public interface IAdjacencyList extends Iterable<IAdjacencyListPair> {
   boolean isEmpty();
-  IDependency[] get(IDependency dependency);
+  IVertex[] get(IVertex vertex);
   IAdjacencyListPair get(int index);
-  int indexOf(IDependency dependency);
+  int indexOf(IVertex vertex);
   int[] calculateInDegrees();
   int size();
 }

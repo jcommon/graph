@@ -3,29 +3,29 @@ package jdeps;
 import java.util.Arrays;
 
 public class ValidOrdering {
-  private final IDependency[] ordering;
+  private final IVertex[] ordering;
 
-  public ValidOrdering(IDependency...dependencies) {
-    this.ordering = dependencies;
+  public ValidOrdering(IVertex...vertices) {
+    this.ordering = vertices;
   }
 
-  public ValidOrdering(String...dependencies) {
-    IDependency[] ordering = new IDependency[dependencies.length];
-    for(int i = 0; i < dependencies.length; ++i) {
-      ordering[i] = StringDependency.from(dependencies[i]);
+  public ValidOrdering(String...vertices) {
+    IVertex[] ordering = new IVertex[vertices.length];
+    for(int i = 0; i < vertices.length; ++i) {
+      ordering[i] = StringVertex.from(vertices[i]);
     }
     this.ordering = ordering;
   }
 
-  public ValidOrdering(Number...dependencies) {
-    IDependency[] ordering = new IDependency[dependencies.length];
-    for(int i = 0; i < dependencies.length; ++i) {
-      ordering[i] = NumberDependency.from(dependencies[i]);
+  public ValidOrdering(Number...vertices) {
+    IVertex[] ordering = new IVertex[vertices.length];
+    for(int i = 0; i < vertices.length; ++i) {
+      ordering[i] = NumberVertex.from(vertices[i]);
     }
     this.ordering = ordering;
   }
 
-  public IDependency[] getOrdering() {
+  public IVertex[] getOrdering() {
     return ordering;
   }
 
@@ -34,24 +34,24 @@ public class ValidOrdering {
     return "" + (ordering == null ? null : Arrays.asList(ordering));
   }
 
-  public static ValidOrdering build(IDependency...dependencies) {
-    return new ValidOrdering(dependencies);
+  public static ValidOrdering build(IVertex...vertices) {
+    return new ValidOrdering(vertices);
   }
 
-  public static ValidOrdering buildFromStrings(String...dependencies) {
-    return new ValidOrdering(dependencies);
+  public static ValidOrdering buildFromStrings(String...vertices) {
+    return new ValidOrdering(vertices);
   }
 
-  public static ValidOrdering buildFromNumbers(Number...dependencies) {
-    return new ValidOrdering(dependencies);
+  public static ValidOrdering buildFromNumbers(Number...vertices) {
+    return new ValidOrdering(vertices);
   }
 
-  public boolean matches(IDependency[] dependencies) {
-    if (ordering.length != dependencies.length)
+  public boolean matches(IVertex[] vertices) {
+    if (ordering.length != vertices.length)
       return false;
 
     for(int i = 0; i < ordering.length; ++i) {
-      if (!ordering[i].equals(dependencies[i]))
+      if (!ordering[i].equals(vertices[i]))
         return false;
     }
 

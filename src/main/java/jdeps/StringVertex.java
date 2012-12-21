@@ -1,9 +1,9 @@
 package jdeps;
 
-public class StringDependency implements IDependency {
+public class StringVertex implements IVertex {
   private final String name;
 
-  public StringDependency(String name) {
+  public StringVertex(String name) {
     if (name == null)
       throw new IllegalArgumentException("name cannot be null");
 
@@ -19,7 +19,7 @@ public class StringDependency implements IDependency {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
-    StringDependency that = (StringDependency) o;
+    StringVertex that = (StringVertex) o;
 
     if (!name.equals(that.name)) return false;
 
@@ -36,7 +36,7 @@ public class StringDependency implements IDependency {
     return name.hashCode();
   }
 
-  public static IDependency from(String name) {
-    return new StringDependency(name);
+  public static IVertex from(String name) {
+    return new StringVertex(name);
   }
 }

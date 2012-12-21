@@ -1,9 +1,9 @@
 package jdeps;
 
-public class NumberDependency implements IDependency {
+public class NumberVertex implements IVertex {
   private final Number value;
 
-  public NumberDependency(Number value) {
+  public NumberVertex(Number value) {
     if (value == null)
       throw new IllegalArgumentException("value cannot be null");
 
@@ -19,7 +19,7 @@ public class NumberDependency implements IDependency {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
-    NumberDependency that = (NumberDependency) o;
+    NumberVertex that = (NumberVertex) o;
 
     if (!value.equals(that.value)) return false;
 
@@ -36,7 +36,7 @@ public class NumberDependency implements IDependency {
     return value.hashCode();
   }
 
-  public static IDependency from(Number name) {
-    return new NumberDependency(name);
+  public static IVertex from(Number name) {
+    return new NumberVertex(name);
   }
 }

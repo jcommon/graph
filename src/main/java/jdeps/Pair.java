@@ -38,7 +38,6 @@ public class Pair<TValue1, TValue2> {
   }
 
   @Override
-
   public String toString() {
     return "(" + (value1 != null ? value1.toString() : "null") + ", " + (value2 != null ? value2.toString() : "null") + ")";
   }

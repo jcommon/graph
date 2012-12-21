@@ -8,12 +8,12 @@ public class Solution {
   public static final boolean CYCLE_EXPECTED = true;
   public static final boolean CYCLE_NOT_EXPECTED = false;
 
-  private final IDependencyGraph graph;
+  private final IGraph graph;
   private final ValidOrdering[] orderings;
   private final boolean cycle_expected;
   private final String message;
 
-  public Solution(String message, boolean cycle_expected, IDependencyGraph graph, ValidOrdering...orderings) {
+  public Solution(String message, boolean cycle_expected, IGraph graph, ValidOrdering...orderings) {
     this.graph = graph;
     this.message = message == null ? "" : message;
     this.orderings = orderings;
@@ -28,7 +28,7 @@ public class Solution {
     return cycle_expected;
   }
 
-  public IDependencyGraph getGraph() {
+  public IGraph getGraph() {
     return graph;
   }
 
@@ -36,29 +36,29 @@ public class Solution {
     return orderings;
   }
 
-  public boolean isValidSolution(IDependency...dependencies) {
+  public boolean isValidSolution(IVertex...vertices) {
     for(ValidOrdering o : orderings) {
-      if (o.matches(dependencies))
+      if (o.matches(vertices))
         return true;
     }
     return false;
   }
 
-  public boolean anyMatch(IDependency...dependencies) {
-    return isValidSolution(dependencies);
+  public boolean anyMatch(IVertex...vertices) {
+    return isValidSolution(vertices);
   }
 
-  public String toString(IDependency...dependencies) {
-    return "" + (dependencies == null ? null : Arrays.asList(dependencies));
+  public String toString(IVertex...vertices) {
+    return "" + (vertices == null ? null : Arrays.asList(vertices));
   }
 
-  public void check(IDependency...dependencies) {
-    if (!isValidSolution(dependencies)) {
+  public void check(IVertex...vertices) {
+    if (!isValidSolution(vertices)) {
       StringBuilder sb = new StringBuilder(256);
       sb.append("\n");
       sb.append("Found: \n");
       sb.append("  ");
-      sb.append(toString(dependencies));
+      sb.append(toString(vertices));
       sb.append("\n");
       sb.append("Expected one of the following: \n");
       for(ValidOrdering o : orderings) {
@@ -81,19 +81,19 @@ public class Solution {
     }
   }
 
-  public static Solution create(IDependencyGraph graph, ValidOrdering...orderings) {
+  public static Solution create(IGraph graph, ValidOrdering...orderings) {
     return new Solution("", false, graph, orderings);
   }
 
-  public static Solution create(boolean cycle_expected, IDependencyGraph graph, ValidOrdering...orderings) {
+  public static Solution create(boolean cycle_expected, IGraph graph, ValidOrdering...orderings) {
     return new Solution("", cycle_expected, graph, orderings);
   }
 
-  public static Solution create(String message, IDependencyGraph graph, ValidOrdering...orderings) {
+  public static Solution create(String message, IGraph graph, ValidOrdering...orderings) {
     return new Solution(message, false, graph, orderings);
   }
 
-  public static Solution create(String message, boolean cycle_expected, IDependencyGraph graph, ValidOrdering...orderings) {
+  public static Solution create(String message, boolean cycle_expected, IGraph graph, ValidOrdering...orderings) {
     return new Solution(message, cycle_expected, graph, orderings);
   }
 }

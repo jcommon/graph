@@ -1,10 +1,15 @@
 package jdeps;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-public class DependencyGraph implements Cloneable, IDependencyGraph, IStringDependencyGraph, INumberDependencyGraph {
-  private Set<IDependency> dependencies = new LinkedHashSet<IDependency>(5, 0.8f);
-  private Set<IDependencyRelationship> edges = new LinkedHashSet<IDependencyRelationship>(8, 0.8f);
+/**
+ * Factory and implementation of a dependency graph that can topologically sort its vertices.
+ */
+public class DependencyGraph implements Cloneable, IGraph, IStringGraph, INumberGraph {
+  private Set<IVertex> vertices = new LinkedHashSet<IVertex>(5, 0.8f);
+  private Set<IEdge> edges = new LinkedHashSet<IEdge>(8, 0.8f);
 
   private DependencyGraph() {
   }
@@ -16,163 +21,211 @@ public class DependencyGraph implements Cloneable, IDependencyGraph, IStringDepe
 
   public DependencyGraph copyDependencyGraph() {
     DependencyGraph g = new DependencyGraph();
-    g.dependencies = new LinkedHashSet<IDependency>(dependencies);
-    g.edges = new LinkedHashSet<IDependencyRelationship>(edges);
+    g.vertices = new LinkedHashSet<IVertex>(vertices);
+    g.edges = new LinkedHashSet<IEdge>(edges);
     return g;
   }
 
-  public IDependencyGraph copy() {
+  public IGraph copy() {
     return copyDependencyGraph();
   }
 
-  public IStringDependencyGraph copyAsStringGraph() {
+  public IStringGraph copyAsStringGraph() {
     return copyDependencyGraph();
   }
 
-  public INumberDependencyGraph copyAsNumberGraph() {
+  public INumberGraph copyAsNumberGraph() {
     return copyDependencyGraph();
   }
 
-  public static IDependencyGraph build(IDependency...dependencies) {
+  public static IGraph build(IVertex...vertices) {
     DependencyGraph g = new DependencyGraph();
-    for(IDependency d : dependencies) {
-      g.addDependency(d);
+    for(IVertex d : vertices) {
+      g.addVertex(d);
     }
     return g;
   }
 
-  public static IStringDependencyGraph buildFromStrings(String...dependencies) {
-    final IStringDependencyGraph g = (IStringDependencyGraph)build();
-    for(String d : dependencies)
-      g.addDependency(d);
+  public static IStringGraph buildFromStrings(String...vertices) {
+    final IStringGraph g = (IStringGraph)build();
+    for(String d : vertices)
+      g.addVertex(d);
     return g;
   }
 
-  public static INumberDependencyGraph buildFromNumbers(Number...dependencies) {
-    final INumberDependencyGraph g = (INumberDependencyGraph)build();
-    for(Number d : dependencies)
-      g.addDependency(d);
+  public static INumberGraph buildFromNumbers(Number...vertices) {
+    final INumberGraph g = (INumberGraph)build();
+    for(Number d : vertices)
+      g.addVertex(d);
     return g;
   }
 
-  public static IDependencyGraph create() {
+  public static IGraph create() {
     return build();
   }
 
-  public static IStringDependencyGraph createForStrings() {
+  public static IStringGraph createForStrings() {
     return buildFromStrings();
   }
 
-  public static INumberDependencyGraph createForNumbers() {
+  public static INumberGraph createForNumbers() {
     return buildFromNumbers();
   }
 
   @Override
-  public IDependencyGraph addDependency(IDependency dependency) {
-    if (dependency == null)
+  public IGraph addVertex(IVertex vertex) {
+    if (vertex == null)
       throw new IllegalArgumentException("dependency must not be null");
-    dependencies.add(dependency);
+    vertices.add(vertex);
     return this;
   }
 
   @Override
-  public IDependencyGraph removeDependency(IDependency dependency) {
-    if (dependency == null)
+  public IGraph removeVertex(IVertex vertex) {
+    if (vertex == null)
       throw new IllegalArgumentException("dependency must not be null");
-    dependencies.remove(dependency);
+    vertices.remove(vertex);
     return this;
   }
 
   @Override
-  public IDependencyGraph addRelationship(IDependency from, IDependency to) {
+  public IGraph addEdge(IVertex from, IVertex to) {
     edges.add(new Edge(from, to));
     return this;
   }
 
   @Override
-  public IDependencyGraph removeRelationship(IDependency from, IDependency to) {
+  public IGraph removeEdge(IVertex from, IVertex to) {
     edges.remove(new Edge(from, to));
     return this;
   }
 
   @Override
-  public IStringDependencyGraph addDependency(String dependency) {
-    addDependency(StringDependency.from(dependency));
+  public IStringGraph addVertex(String vertex) {
+    addVertex(StringVertex.from(vertex));
     return this;
   }
 
   @Override
-  public IStringDependencyGraph removeDependency(String dependency) {
-    removeDependency(StringDependency.from(dependency));
+  public IStringGraph removeVertex(String vertex) {
+    removeVertex(StringVertex.from(vertex));
     return this;
   }
 
   @Override
-  public IStringDependencyGraph addRelationship(String from, String to) {
-    addRelationship(StringDependency.from(from), StringDependency.from(to));
+  public IStringGraph addEdge(String from, String to) {
+    addEdge(StringVertex.from(from), StringVertex.from(to));
     return this;
   }
 
   @Override
-  public IStringDependencyGraph removeRelationship(String from, String to) {
-    removeRelationship(StringDependency.from(from), StringDependency.from(to));
+  public IStringGraph removeEdge(String from, String to) {
+    removeEdge(StringVertex.from(from), StringVertex.from(to));
     return this;
   }
 
   @Override
-  public INumberDependencyGraph addDependency(Number dependency) {
-    addDependency(NumberDependency.from(dependency));
+  public INumberGraph addVertex(Number vertex) {
+    addVertex(NumberVertex.from(vertex));
     return this;
   }
 
   @Override
-  public INumberDependencyGraph removeDependency(Number dependency) {
-    removeDependency(NumberDependency.from(dependency));
+  public INumberGraph removeVertex(Number vertex) {
+    removeVertex(NumberVertex.from(vertex));
     return this;
   }
 
   @Override
-  public INumberDependencyGraph addRelationship(Number from, Number to) {
-    addRelationship(NumberDependency.from(from), NumberDependency.from(to));
+  public INumberGraph addEdge(Number from, Number to) {
+    addEdge(NumberVertex.from(from), NumberVertex.from(to));
     return this;
   }
 
   @Override
-  public INumberDependencyGraph removeRelationship(Number from, Number to) {
-    removeRelationship(NumberDependency.from(from), NumberDependency.from(to));
+  public INumberGraph removeEdge(Number from, Number to) {
+    removeEdge(NumberVertex.from(from), NumberVertex.from(to));
     return this;
   }
 
   @Override
   public boolean validate() {
-    //Ensure that every from/to in a relationship is present in our set of dependencies.
+    //Ensure that every from/to in an edge is present in our set of vertices.
     //If we refer to one that isn't in there, then we've got a problem.
-    for(IDependencyRelationship r : edges) {
-      if (!dependencies.contains(r.getFrom()) || !dependencies.contains(r.getTo()))
+    for(IEdge r : edges) {
+      if (!vertices.contains(r.getFrom()) || !vertices.contains(r.getTo()))
         return false;
     }
     return true;
   }
 
   @Override
-  public IDependency[] sort() throws CyclicGraphException {
+  public IVertex[] sort() throws CyclicGraphException {
     return sort(new SimpleTopologicalSort());
   }
 
   @Override
-  public IDependency[] sort(ITopologicalSortStrategy strategy) throws CyclicGraphException {
+  public IVertex[] sort(ITopologicalSortStrategy strategy) throws CyclicGraphException {
     if (strategy == null)
       throw new IllegalArgumentException("strategy cannot be null");
     if (!validate())
-      throw new IllegalStateException("The graph is invalid. Please confirm that all dependencies are present for every relationship.");
-    return strategy.sort(new AdjacencyList(dependencies, edges));
+      throw new IllegalStateException("The graph is invalid. Please confirm that all vertices are present for every relationship.");
+    return strategy.sort(new AdjacencyList(vertices, edges));
   }
 
-  private static class Edge implements IDependencyRelationship {
-    public final IDependency from;
-    public final IDependency to;
+  @Override
+  public <T extends IVertex> ITopologicalSortAsyncResult sortAsync(ITopologicalSortCallback<T> callback) {
+    return sortAsync(new SimpleTopologicalSort(), callback, null);
+  }
 
-    public Edge(IDependency from, IDependency to) {
+  @Override
+  public <T extends IVertex> ITopologicalSortAsyncResult sortAsync(ITopologicalSortCallback<T> callback, ITopologicalSortErrorCallback<T> errorCallback) {
+    return sortAsync(new SimpleTopologicalSort(), callback, errorCallback);
+  }
+
+  @Override
+  public <T extends IVertex> ITopologicalSortAsyncResult sortAsync(ITopologicalSortStrategy strategy, ITopologicalSortCallback<T> callback) {
+    return sortAsync(strategy, callback, null);
+  }
+
+  @Override
+  public <T extends IVertex> ITopologicalSortAsyncResult sortAsync(ITopologicalSortStrategy strategy, ITopologicalSortCallback<T> callback, ITopologicalSortErrorCallback<T> errorCallback) {
+    ExecutorService executor = Executors.newFixedThreadPool(Math.max(2, Runtime.getRuntime().availableProcessors() + 1));
+    return sortAsync(executor, strategy, callback, errorCallback);
+  }
+
+  @Override
+  public <T extends IVertex> ITopologicalSortAsyncResult sortAsync(ExecutorService executor, ITopologicalSortCallback<T> callback) {
+    return sortAsync(executor, new SimpleTopologicalSort(), callback, null);
+  }
+
+  @Override
+  public <T extends IVertex> ITopologicalSortAsyncResult sortAsync(ExecutorService executor, ITopologicalSortCallback<T> callback, ITopologicalSortErrorCallback<T> errorCallback) {
+    return sortAsync(executor, new SimpleTopologicalSort(), callback, errorCallback);
+  }
+
+  @Override
+  public <T extends IVertex> ITopologicalSortAsyncResult sortAsync(ExecutorService executor, ITopologicalSortStrategy strategy, ITopologicalSortCallback<T> callback) {
+    return sortAsync(executor, strategy, callback, null);
+  }
+
+  @Override
+  public <T extends IVertex> ITopologicalSortAsyncResult sortAsync(ExecutorService executor, ITopologicalSortStrategy strategy, ITopologicalSortCallback<T> callback, ITopologicalSortErrorCallback<T> errorCallback) {
+    if (strategy == null)
+      throw new IllegalArgumentException("strategy cannot be null");
+    if (callback == null)
+      throw new IllegalArgumentException("callback cannot be null");
+    if (!validate())
+      throw new IllegalStateException("The graph is invalid. Please confirm that all vertices are present for every relationship.");
+
+    return strategy.sortAsync(executor, new AdjacencyList(vertices, edges), callback, errorCallback);
+  }
+
+  private static class Edge implements IEdge {
+    public final IVertex from;
+    public final IVertex to;
+
+    public Edge(IVertex from, IVertex to) {
       if (from == null || to == null)
         throw new NullPointerException("from and to both cannot be null");
 
@@ -181,13 +234,20 @@ public class DependencyGraph implements Cloneable, IDependencyGraph, IStringDepe
     }
 
     @Override
-    public IDependency getFrom() {
+    public IVertex getFrom() {
       return from;
     }
 
     @Override
-    public IDependency getTo() {
+    public IVertex getTo() {
       return to;
+    }
+
+    @Override
+    public int hashCode() {
+      int result = from.hashCode();
+      result = 31 * result + to.hashCode();
+      return result;
     }
 
     @Override
@@ -195,50 +255,51 @@ public class DependencyGraph implements Cloneable, IDependencyGraph, IStringDepe
       if (!(obj instanceof Edge))
         return false;
       Edge e = (Edge)obj;
+
       return from.equals(e.from) && to.equals(e.to);
     }
   }
 
-  private static class AdjacencyListPair extends Pair<IDependency, IDependency[]> implements IAdjacencyListPair {
-    public AdjacencyListPair(IDependency value, IDependency[] dependencies) {
-      super(value, dependencies);
+  private static class AdjacencyListPair extends Pair<IVertex, IVertex[]> implements IAdjacencyListPair {
+    public AdjacencyListPair(IVertex value, IVertex[] outNeighbors) {
+      super(value, outNeighbors);
     }
 
     @Override
-    public IDependency getValue() {
+    public IVertex getVertex() {
       return getValue1();
     }
 
     @Override
-    public IDependency[] getDependencies() {
+    public IVertex[] getOutNeighbors() {
       return getValue2();
     }
   }
 
   private static class AdjacencyList implements IAdjacencyList {
     private final List<IAdjacencyListPair> num_map;
-    private final Map<IDependency, Integer> index_map;
-    private final Map<IDependency, IDependency[]> dependency_map;
+    private final Map<IVertex, Integer> index_map;
+    private final Map<IVertex, IVertex[]> vertex_map;
 
-    public AdjacencyList(Set<IDependency> dependencies, Set<IDependencyRelationship> edges) {
+    public AdjacencyList(Set<IVertex> vertices, Set<IEdge> edges) {
       //Create 2 maps.
-      //  One maps from a dependency to all of its dependencies.
-      //  The other just maps from an integer index to the dependencies at that index.
+      //  One maps from a dependency to all of its vertices.
+      //  The other just maps from an integer index to the vertices at that index.
       //  This means that num_map must preserve insertion order! Easy to do w/ an ArrayList.
-      final List<IAdjacencyListPair> num_map = new ArrayList<IAdjacencyListPair>(dependencies.size());
-      final Map<IDependency, IDependency[]> dependency_map = new HashMap<IDependency, IDependency[]>(dependencies.size(), 1.0f);
-      final Map<IDependency, Integer> index_map = new HashMap<IDependency, Integer>(dependencies.size(), 1.0f);
+      final List<IAdjacencyListPair> num_map = new ArrayList<IAdjacencyListPair>(vertices.size());
+      final Map<IVertex, IVertex[]> vertex_map = new HashMap<IVertex, IVertex[]>(vertices.size(), 1.0f);
+      final Map<IVertex, Integer> index_map = new HashMap<IVertex, Integer>(vertices.size(), 1.0f);
 
-      for(IDependency d : dependencies) {
-        final LinkedList<IDependency> ll_to = new LinkedList<IDependency>();
-        for(IDependencyRelationship r : edges) {
+      for(IVertex d : vertices) {
+        final LinkedList<IVertex> ll_to = new LinkedList<IVertex>();
+        for(IEdge r : edges) {
           if (d.equals(r.getFrom())) {
             ll_to.add(r.getTo());
           }
         }
-        IDependency[] arr_to = !ll_to.isEmpty() ? ll_to.toArray(new IDependency[ll_to.size()]) : EMPTY_DEPENDENCIES;
+        IVertex[] arr_to = !ll_to.isEmpty() ? ll_to.toArray(new IVertex[ll_to.size()]) : EMPTY_VERTICES;
 
-        dependency_map.put(d, arr_to);
+        vertex_map.put(d, arr_to);
         num_map.add(new AdjacencyListPair(d, arr_to));
         index_map.put(d, num_map.size() - 1);
       }
@@ -246,7 +307,7 @@ public class DependencyGraph implements Cloneable, IDependencyGraph, IStringDepe
       //Ensure the maps are read-only at this point.
       this.num_map = Collections.unmodifiableList(num_map);
       this.index_map = Collections.unmodifiableMap(index_map);
-      this.dependency_map = Collections.unmodifiableMap(dependency_map);
+      this.vertex_map = Collections.unmodifiableMap(vertex_map);
     }
 
     /**
@@ -257,10 +318,10 @@ public class DependencyGraph implements Cloneable, IDependencyGraph, IStringDepe
       final int[] in_degrees = new int[size()];
       for(int i = 0; i < size(); ++i) {
         IAdjacencyListPair p = get(i);
-        IDependency d = p.getValue();
+        IVertex d = p.getVertex();
 
         for(int j = 0; j < size(); ++j) {
-          for(IDependency dep : get(j).getDependencies()) {
+          for(IVertex dep : get(j).getOutNeighbors()) {
             if (d.equals(dep))
               ++in_degrees[i];
           }
@@ -275,18 +336,18 @@ public class DependencyGraph implements Cloneable, IDependencyGraph, IStringDepe
     }
 
     @Override
-    public IDependency[] get(IDependency dependency) {
-      return dependency_map.get(dependency);
+    public IVertex[] get(IVertex vertex) {
+      return vertex_map.get(vertex);
     }
 
     @Override
     public boolean isEmpty() {
-      return dependency_map.isEmpty();
+      return vertex_map.isEmpty();
     }
 
     @Override
     public int size() {
-      return dependency_map.size();
+      return vertex_map.size();
     }
 
     @Override
@@ -295,8 +356,8 @@ public class DependencyGraph implements Cloneable, IDependencyGraph, IStringDepe
     }
 
     @Override
-    public int indexOf(IDependency dependency) {
-      return index_map.get(dependency);
+    public int indexOf(IVertex vertex) {
+      return index_map.get(vertex);
     }
   }
 }
