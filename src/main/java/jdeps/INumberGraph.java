@@ -1,6 +1,6 @@
 package jdeps;
 
-public interface INumberGraph extends IGraph {
+public interface INumberGraph extends IGraph<NumberVertex> {
   INumberGraph copyAsNumberGraph();
 
   INumberGraph addVertex(Number vertex);

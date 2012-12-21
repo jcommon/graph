@@ -1,6 +1,6 @@
 package jdeps;
 
-public interface IEdge {
-  IVertex getFrom();
-  IVertex getTo();
+public interface IEdge<TVertex extends IVertex> {
+  TVertex getFrom();
+  TVertex getTo();
 }

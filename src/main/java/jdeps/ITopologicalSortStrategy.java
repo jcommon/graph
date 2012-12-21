@@ -1,8 +1,9 @@
 package jdeps;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 
-public interface ITopologicalSortStrategy {
-  IVertex[] sort(IAdjacencyList adjacencyList) throws CyclicGraphException;
-  <T extends IVertex> ITopologicalSortAsyncResult sortAsync(ExecutorService executor, IAdjacencyList adjacencyList, ITopologicalSortCallback<T> callback, ITopologicalSortErrorCallback<T> errorCallback);
+public interface ITopologicalSortStrategy<TVertex extends IVertex> {
+  List<TVertex> sort(IAdjacencyList<TVertex> adjacencyList) throws CyclicGraphException;
+  ITopologicalSortAsyncResult sortAsync(ExecutorService executor, IAdjacencyList<TVertex> adjacencyList, ITopologicalSortCallback<TVertex> callback, ITopologicalSortErrorCallback<TVertex> errorCallback);
 }

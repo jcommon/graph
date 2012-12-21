@@ -1,6 +1,8 @@
 package jdeps;
 
-public interface IAdjacencyListPair {
-  IVertex getVertex();
-  IVertex[] getOutNeighbors();
+import java.util.List;
+
+public interface IAdjacencyListPair<TVertex extends IVertex> {
+  TVertex getVertex();
+  List<TVertex> getOutNeighbors();
 }

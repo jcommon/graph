@@ -8,16 +8,16 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Please see the following for a description of this algorithm:
  *   http://www.cs.washington.edu/education/courses/cse373/02sp/lectures/cse373-21-TopoSort-4up.pdf
  */
-public final class SimpleTopologicalSort implements ITopologicalSortStrategy {
+public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITopologicalSortStrategy<TVertex> {
   @Override
-  public IVertex[] sort(IAdjacencyList adjacencyList) throws CyclicGraphException {
+  public List<TVertex> sort(IAdjacencyList<TVertex> adjacencyList) throws CyclicGraphException {
     if (adjacencyList.isEmpty())
-      return IGraph.EMPTY_VERTICES;
+      return new ArrayList<TVertex>(0);
 
     int ordered_index = 0;
-    IVertex[] ordered = new IVertex[adjacencyList.size()];
+    List<TVertex> ordered = new ArrayList<TVertex>(adjacencyList.size());
 
-    Queue<IAdjacencyListPair> queue = new LinkedList<IAdjacencyListPair>();
+    Queue<IAdjacencyListPair<TVertex>> queue = new LinkedList<IAdjacencyListPair<TVertex>>();
     int[] in_degrees = adjacencyList.calculateInDegrees();
 
     //Find all vertices who have an in-degree of zero.
@@ -31,11 +31,11 @@ public final class SimpleTopologicalSort implements ITopologicalSortStrategy {
     if (queue.isEmpty())
       throw new CyclicGraphException("Cycle detected when topologically sorting the graph");
 
-    IAdjacencyListPair p;
+    IAdjacencyListPair<TVertex> p;
     while((p = queue.poll()) != null) {
-      ordered[ordered_index++] = p.getVertex();
+      ordered.add(p.getVertex());
 
-      for(IVertex d: p.getOutNeighbors()) {
+      for(TVertex d: p.getOutNeighbors()) {
         int index = adjacencyList.indexOf(d);
         //Enqueue any vertex whose in-degree will become zero
         if (in_degrees[index] == 1)
@@ -45,14 +45,14 @@ public final class SimpleTopologicalSort implements ITopologicalSortStrategy {
     }
 
     //If we haven't filled the array, then there's a cycle somewhere.
-    if (ordered_index != ordered.length)
+    if (ordered.size() != adjacencyList.size())
       throw new CyclicGraphException("Cycle detected when topologically sorting the graph");
 
     return ordered;
   }
 
   @Override
-  public <T extends IVertex> ITopologicalSortAsyncResult sortAsync(final ExecutorService executorProcessors, final IAdjacencyList adjacencyList, final ITopologicalSortCallback<T> callback, final ITopologicalSortErrorCallback<T> errorCallback) {
+  public ITopologicalSortAsyncResult sortAsync(final ExecutorService executorProcessors, final IAdjacencyList<TVertex> adjacencyList, final ITopologicalSortCallback<TVertex> callback, final ITopologicalSortErrorCallback<TVertex> errorCallback) {
     final TopologicalSortAsyncResult asyncResult = new TopologicalSortAsyncResult(executorProcessors);
     if (adjacencyList.isEmpty()) {
       asyncResult.asyncComplete(true);
@@ -62,14 +62,14 @@ public final class SimpleTopologicalSort implements ITopologicalSortStrategy {
     final Queue<Callable<Object>> queue = new LinkedList<Callable<Object>>();
     final int[] in_degrees = adjacencyList.calculateInDegrees();
     final ArrayList<Callable<Object>> callables = new ArrayList<Callable<Object>>(in_degrees.length);
-    final Set<IAdjacencyListPair> remaining = new HashSet<IAdjacencyListPair>();
+    final Set<IAdjacencyListPair<TVertex>> remaining = new HashSet<IAdjacencyListPair<TVertex>>();
     final AtomicInteger[] atomics = new AtomicInteger[in_degrees.length];
     final AtomicInteger outstanding_submissions = new AtomicInteger(0);
 
     //Find all vertices who have an in-degree of zero.
     //Also initialize latches to the size of the the in-degree + 1.
     for(int i = 0; i < in_degrees.length; ++i) {
-      final IAdjacencyListPair pair = adjacencyList.get(i);
+      final IAdjacencyListPair<TVertex> pair = adjacencyList.get(i);
       final AtomicInteger atom = atomics[i] = new AtomicInteger(in_degrees[i] == 0 ? 1 : in_degrees[i]);
 
       //Ensure that we add all items in the adjacency list to our list of remaining items.
@@ -84,7 +84,7 @@ public final class SimpleTopologicalSort implements ITopologicalSortStrategy {
         public Object call() throws Exception {
           Throwable handled_exception = null;
           boolean handle_all_done = false;
-          T dependency = (T)pair.getVertex();
+          TVertex dependency = pair.getVertex();
 
           try {
 
@@ -106,7 +106,7 @@ public final class SimpleTopologicalSort implements ITopologicalSortStrategy {
               //Submit a task for everyone who is dependent on me.
               //On the next round if all of their dependencies have been evaluated,
               //the count will be at zero.
-              for(IVertex dep : pair.getOutNeighbors()) {
+              for(TVertex dep : pair.getOutNeighbors()) {
                 final int index = adjacencyList.indexOf(dep);
                 final Callable<Object> dep_callable = callables.get(index);
 
