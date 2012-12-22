@@ -1,3 +1,22 @@
+/*
+  Copyright (C) 2012-2013 the original author or authors.
+
+  See the LICENSE.txt file distributed with this work for additional
+  information regarding copyright ownership.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+*/
+
 package jdeps.impl;
 
 import jdeps.*;
@@ -9,7 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Please see the following for a description of this algorithm:
- *   http://www.cs.washington.edu/education/courses/cse373/02sp/lectures/cse373-21-TopoSort-4up.pdf
+ *   <a href="http://www.cs.washington.edu/education/courses/cse373/02sp/lectures/cse373-21-TopoSort-4up.pdf">http://www.cs.washington.edu/education/courses/cse373/02sp/lectures/cse373-21-TopoSort-4up.pdf</a>
  */
 public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITopologicalSortStrategy<TVertex> {
   @Override
