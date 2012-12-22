@@ -20,11 +20,11 @@
 package jdeps;
 
 /**
- * A callback for when a dependency has been found in topological order.
+ * A callback for when a vertex has been found in topological order.
  *
- * Allows for parallel dependency processing unless a dependency is found that
- * is waiting for processing of 1 or more transitive dependencies. In this
- * case, processing will not proceed until the transitive dependencies have
+ * Allows for parallel vertex processing unless one is found that
+ * is waiting for processing of 1 or more transitive vertices. In this
+ * case, processing will not proceed until the transitive vertices have
  * completed their work.
  */
 public interface ITopologicalSortCallback<T extends IVertex> {

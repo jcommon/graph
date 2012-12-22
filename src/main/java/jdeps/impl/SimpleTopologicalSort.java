@@ -163,7 +163,7 @@ public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITo
               }
             }
 
-            //Now deal with any exception that was thrown upon processing the dependency.
+            //Now deal with any exception that was thrown upon processing the vertex.
             //Will bubble up to the callable-wide handler below.
             if (handled_exception != null)
               throw handled_exception;

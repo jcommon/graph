@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * An adjacency list is essentially an array of size n where A[i] is the list of out-neighbors of node i.
  *
- * Please see http://www.cs.cmu.edu/~avrim/451f08/lectures/lect1002.pdf
+ * Please see <a href="http://www.cs.cmu.edu/~avrim/451f08/lectures/lect1002.pdf">http://www.cs.cmu.edu/~avrim/451f08/lectures/lect1002.pdf</a>
  *
  * @param <TVertex> Type of {@link IVertex}.
  */

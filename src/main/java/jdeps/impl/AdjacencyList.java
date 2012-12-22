@@ -36,7 +36,7 @@ public class AdjacencyList<TVertex extends IVertex> implements IAdjacencyList<TV
 
   public AdjacencyList(Set<TVertex> vertices, Set<IEdge<TVertex>> edges) {
     //Create 2 maps.
-    //  One maps from a dependency to all of its vertices.
+    //  One maps from a vertex to all of its out-neighbors.
     //  The other just maps from an integer index to the vertices at that index.
     //  This means that num_map must preserve insertion order! Easy to do w/ an ArrayList.
     final List<IAdjacencyListPair<TVertex>> num_map = new ArrayList<IAdjacencyListPair<TVertex>>(vertices.size());
@@ -66,7 +66,8 @@ public class AdjacencyList<TVertex extends IVertex> implements IAdjacencyList<TV
   }
 
   /**
-   * Calculates an integer array where the value at each index is the number of times that dependency is referenced.
+   * Calculates an integer array where the value at each index is the number of times that vertex is
+   * referenced elsewhere.
    */
   @Override
   public int[] calculateInDegrees() {
