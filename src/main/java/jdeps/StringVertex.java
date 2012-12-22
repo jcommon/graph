@@ -1,5 +1,10 @@
 package jdeps;
 
+/**
+ * A representation of an {@link IVertex} instance using {@link String}s.
+ *
+ * @see IVertex
+ */
 public class StringVertex implements IVertex {
   private final String name;
 

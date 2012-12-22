@@ -18,10 +18,10 @@ public interface IAdjacencyList<TVertex extends IVertex> extends Iterable<IAdjac
   boolean isEmpty();
 
   /**
-   * Gets the list of out-neighbors for a given vertex of type {@link TVertex}.
+   * Gets the list of out-neighbors for a given vertex of <code>TVertex</code>.
    *
-   * @param vertex A vertex of type {@link TVertex} for whom we wish to retrieve its out-neighbors.
-   * @return A list of {@link TVertex} instances who are the out-neighbors for the provided vertex argument.
+   * @param vertex A vertex of <code>TVertex</code> for whom we wish to retrieve its out-neighbors.
+   * @return A list of <code>TVertex</code> instances who are the out-neighbors for the provided vertex argument.
    *
    * @see jdeps.IAdjacencyListPair#getOutNeighbors()
    */
@@ -38,10 +38,10 @@ public interface IAdjacencyList<TVertex extends IVertex> extends Iterable<IAdjac
   IAdjacencyListPair<TVertex> pairAt(int index);
 
   /**
-   * Gets the list of out-neighbors for a given vertex of type {@link TVertex} at the provided index argument.
+   * Gets the list of out-neighbors for a given vertex of <code>TVertex</code> at the provided index argument.
    *
    * @param index The index in the list for which we wish to get the associated out-neighbors.
-   * @return A list of {@link TVertex} instances who are the out-neighbors for an instance of type {@link TVertex}
+   * @return A list of <code>TVertex</code> instances who are the out-neighbors for an instance of <code>TVertex</code>
    *         at the specified index.
    *
    * @see jdeps.IAdjacencyListPair#getOutNeighbors()
@@ -51,7 +51,7 @@ public interface IAdjacencyList<TVertex extends IVertex> extends Iterable<IAdjac
   /**
    * Find the index in the {@link IAdjacencyList} at which the provided vertex argument can be found.
    *
-   * @param vertex An instance of {@link IVertex} of type {@link TVertex}.
+   * @param vertex An instance of {@link IVertex} of <code>TVertex</code>.
    * @return The index in the {@link IAdjacencyList} at which the provided vertex argument can be found.
    *         <code>-1</code> if the vertex cannot be found.
    */

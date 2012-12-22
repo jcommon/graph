@@ -1,5 +1,10 @@
 package jdeps;
 
+/**
+ * A representation of an {@link IVertex} instance using {@link Number}s.
+ *
+ * @see IVertex
+ */
 public class NumberVertex implements IVertex {
   private final Number value;
 

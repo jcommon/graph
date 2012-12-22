@@ -13,7 +13,7 @@ public interface ITopologicalSortCallback<T extends IVertex> {
    * The callback that will be executed inside a thread other than the one
    * invoking the sort.
    *
-   * @param dependency Instance of {@link T} that can now be processed.
+   * @param dependency Instance of {@link IVertex} that can now be processed.
    * @param coordinator Instance of {@link ITopologicalSortCoordinator} that allows for communication between
    *                    asynchronous sorting submissions done by the driver (which is typically done by an instance
    *                    of {@link ITopologicalSortStrategy}).
