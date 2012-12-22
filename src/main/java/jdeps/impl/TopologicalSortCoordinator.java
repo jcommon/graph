@@ -1,7 +1,10 @@
-package jdeps;
+package jdeps.impl;
+
+import jdeps.ITopologicalSortAsyncResult;
+import jdeps.ITopologicalSortCoordinator;
 
 /**
- * @see ITopologicalSortCoordinator
+ * @see jdeps.ITopologicalSortCoordinator
  */
 final class TopologicalSortCoordinator implements ITopologicalSortCoordinator {
   private final ITopologicalSortAsyncResult asyncResult;

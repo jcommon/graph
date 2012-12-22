@@ -1,9 +1,5 @@
 package jdeps;
 
-import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 /**
  * Factory and implementation of a dependency graph that can topologically sort vertices that are {@link Number}s.
  *

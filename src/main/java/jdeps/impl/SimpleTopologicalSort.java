@@ -1,14 +1,17 @@
-package jdeps;
+package jdeps.impl;
+
+import jdeps.*;
 
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Please see the following for a description of this algorithm:
  *   http://www.cs.washington.edu/education/courses/cse373/02sp/lectures/cse373-21-TopoSort-4up.pdf
  */
-final class SimpleTopologicalSort<TVertex extends IVertex> implements ITopologicalSortStrategy<TVertex> {
+public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITopologicalSortStrategy<TVertex> {
   @Override
   public List<TVertex> sort(IAdjacencyList<TVertex> adjacencyList) throws CyclicGraphException {
     if (adjacencyList.isEmpty())
