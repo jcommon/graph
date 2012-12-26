@@ -3,21 +3,21 @@
 
   <name>jdeps</name>
 
-  <groupId>com.github.davidhoyt</groupId>
+  <groupId>org.jcommon</groupId>
   <artifactId>jdeps</artifactId>
-  <version>1.2-SNAPSHOT</version>
+  <version>1.0-SNAPSHOT</version>
 
   <packaging>jar</packaging>
   <inceptionYear>2012</inceptionYear>
-  <url>https://github.com/davidhoyt/jdeps/</url>
+  <url>https://github.com/jcommon/jdeps/</url>
   <description>
     Java library for simple in-memory topological sorts.
   </description>
 
   <scm>
-    <url>git@github.com:davidhoyt/jdeps.git</url>
-    <connection>scm:git:git@github.com:davidhoyt/jdeps.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/davidhoyt/jdeps.git</developerConnection>
+    <url>git@github.com:jcommon/jdeps.git</url>
+    <connection>scm:git:git@github.com:jcommon/jdeps.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/jcommon/jdeps.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
