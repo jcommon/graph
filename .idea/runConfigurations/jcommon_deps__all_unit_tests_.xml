@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="jdeps [all unit tests]" type="JUnit" factoryName="JUnit">
-    <module name="" />
+  <configuration default="false" name="jcommon-deps [all unit tests]" type="JUnit" factoryName="JUnit">
+    <module name="jcommon-deps" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
     <option name="ALTERNATIVE_JRE_PATH" value="" />
     <option name="PACKAGE_NAME" value="jcommon.deps" />

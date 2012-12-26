@@ -19,7 +19,7 @@
 
 package jcommon.deps.impl;
 
-import jcommon.deps.jdeps.*;
+import jcommon.deps.*;
 
 import java.util.*;
 import java.util.concurrent.Callable;
