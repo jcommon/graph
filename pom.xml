@@ -4,7 +4,7 @@
   <name>jdeps</name>
 
   <groupId>org.jcommon</groupId>
-  <artifactId>jdeps</artifactId>
+  <artifactId>jcommon-deps</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <packaging>jar</packaging>
