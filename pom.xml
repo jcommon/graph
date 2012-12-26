@@ -9,15 +9,15 @@
 
   <packaging>jar</packaging>
   <inceptionYear>2012</inceptionYear>
-  <url>https://github.com/jcommon/jdeps/</url>
+  <url>https://github.com/jcommon/deps/</url>
   <description>
     Java library for simple in-memory topological sorts.
   </description>
 
   <scm>
     <url>git@github.com:jcommon/jdeps.git</url>
-    <connection>scm:git:git@github.com:jcommon/jdeps.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/jcommon/jdeps.git</developerConnection>
+    <connection>scm:git:git@github.com:jcommon/deps.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/jcommon/deps.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
