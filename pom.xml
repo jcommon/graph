@@ -5,7 +5,7 @@
 
   <groupId>org.jcommon</groupId>
   <artifactId>jcommon-graph</artifactId>
-  <version>1.1-SNAPSHOT</version>
+  <version>1.0-SNAPSHOT</version>
 
   <packaging>jar</packaging>
   <inceptionYear>2012</inceptionYear>
@@ -158,7 +158,7 @@
         </property>
       </activation>
       <properties>
-        <gpg.keyname>4E912FE5</gpg.keyname>	<!-- GPG Key ID to use for signing -->
+        <gpg.keyname>ABAF0C8B</gpg.keyname> <!-- GPG Key ID to use for signing -->
       </properties>
       <build>
         <plugins>
