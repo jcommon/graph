@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="jcommon-graph [all unit tests]" type="JUnit" factoryName="JUnit">
-    <module name="jcommon-deps" />
+    <module name="jcommon-graph" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
     <option name="ALTERNATIVE_JRE_PATH" value="" />
     <option name="PACKAGE_NAME" value="jcommon.graph" />

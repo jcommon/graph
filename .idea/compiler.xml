@@ -29,11 +29,13 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="jcommon-deps" />
+        <module name="jcommon-graph" />
         <module name="jdeps" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="jcommon-deps" target="1.6" />
+      <module name="jcommon-graph" target="1.6" />
       <module name="jdeps" target="1.6" />
     </bytecodeTargetLevel>
   </component>
