@@ -26,7 +26,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @see jcommon.graph.jdeps.ITopologicalSortAsyncResult
+ * @see ITopologicalSortAsyncResult
  */
 final class TopologicalSortAsyncResult implements ITopologicalSortAsyncResult {
   private final Object lock = new Object();
@@ -85,7 +85,7 @@ final class TopologicalSortAsyncResult implements ITopologicalSortAsyncResult {
   }
 
   /**
-   * @see jcommon.graph.jdeps.ITopologicalSortAsyncResult#waitForCompletion()
+   * @see ITopologicalSortAsyncResult#waitForCompletion()
    */
   @Override
   public boolean waitForCompletion() {
@@ -93,7 +93,7 @@ final class TopologicalSortAsyncResult implements ITopologicalSortAsyncResult {
   }
 
   /**
-   * @see jcommon.graph.jdeps.ITopologicalSortAsyncResult#waitForCompletion()
+   * @see ITopologicalSortAsyncResult#waitForCompletion()
    */
   @Override
   public boolean waitForCompletion(long timeout, TimeUnit unit) {

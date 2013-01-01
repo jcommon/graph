@@ -23,7 +23,7 @@ import jcommon.graph.ITopologicalSortAsyncResult;
 import jcommon.graph.ITopologicalSortCoordinator;
 
 /**
- * @see jcommon.graph.jdeps.ITopologicalSortCoordinator
+ * @see ITopologicalSortCoordinator
  */
 final class TopologicalSortCoordinator implements ITopologicalSortCoordinator {
   private final ITopologicalSortAsyncResult asyncResult;
