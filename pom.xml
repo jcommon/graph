@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-  <name>jcommon-deps</name>
+  <name>jcommon-graph</name>
 
   <groupId>org.jcommon</groupId>
-  <artifactId>jcommon-deps</artifactId>
+  <artifactId>jcommon-graph</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <packaging>jar</packaging>
   <inceptionYear>2012</inceptionYear>
-  <url>https://github.com/jcommon/deps/</url>
+  <url>https://github.com/jcommon/graph/</url>
   <description>
-    Java library for simple in-memory topological sorts.
+    Java library for simple in-memory graph operations such as iterative and concurrent topological sorts.
   </description>
 
   <scm>
-    <url>git@github.com:jcommon/deps.git</url>
-    <connection>scm:git:git@github.com:jcommon/deps.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/jcommon/deps.git</developerConnection>
+    <url>git@github.com:jcommon/graph.git</url>
+    <connection>scm:git:git@github.com:jcommon/graph.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/jcommon/graph.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
