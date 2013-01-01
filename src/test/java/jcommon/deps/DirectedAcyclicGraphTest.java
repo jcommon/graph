@@ -27,7 +27,7 @@ import java.util.concurrent.Executors;
 import static org.junit.Assert.*;
 
 @SuppressWarnings("unchecked")
-public class DependencyGraphTest {
+public class DirectedAcyclicGraphTest {
   @Test
   public void testAllSolutions() throws CyclicGraphException {
     for(Solution solution : Examples.ALL_SOLUTIONS)
@@ -38,7 +38,8 @@ public class DependencyGraphTest {
   public void testAsync() {
     final ITopologicalSortCallback<IVertex> CALLBACK_NOOP = new ITopologicalSortCallback<IVertex>() {
       @Override
-      public void handle(IVertex vertex, ITopologicalSortCoordinator coordinator) throws Throwable {
+      public Object handle(IVertex vertex, ITopologicalSortInput input, ITopologicalSortCoordinator coordinator) throws Throwable {
+        return null;
       }
     };
 
@@ -50,9 +51,10 @@ public class DependencyGraphTest {
 
     final ITopologicalSortCallback<IVertex> CALLBACK_DEBUG = new ITopologicalSortCallback<IVertex>() {
       @Override
-      public void handle(IVertex vertex, ITopologicalSortCoordinator coordinator) throws Throwable {
-        System.out.println(Thread.currentThread().getName() + ": " + vertex.toString());
+      public Object handle(IVertex vertex, ITopologicalSortInput input, ITopologicalSortCoordinator coordinator) throws Throwable {
+        System.out.println(Thread.currentThread().getName() + ": " + vertex.toString() + ", input: " + input.toString());
         Thread.sleep(1000);
+        return vertex;
       }
     };
 

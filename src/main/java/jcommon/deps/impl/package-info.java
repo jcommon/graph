@@ -21,6 +21,6 @@
  * Contains implementations for key portions of the API.
  *
  * @see jcommon.deps.impl.SimpleTopologicalSort
- * @see AdjacencyList
+ * @see jcommon.deps.impl.AdjacencyList
  */
 package jcommon.deps.impl;

@@ -36,11 +36,11 @@ import java.util.concurrent.Executors;
  *
  * @see IGraph
  */
-public class DependencyGraph<TVertex extends IVertex> implements Cloneable, IGraph<TVertex> {
+public class DirectedAcyclicGraph<TVertex extends IVertex> implements Cloneable, IGraph<TVertex> {
   private Set<TVertex> vertices = new LinkedHashSet<TVertex>(5, 0.8f);
   private Set<IEdge<TVertex>> edges = new LinkedHashSet<IEdge<TVertex>>(8, 0.8f);
 
-  protected DependencyGraph() {
+  protected DirectedAcyclicGraph() {
   }
 
   /**
@@ -64,23 +64,23 @@ public class DependencyGraph<TVertex extends IVertex> implements Cloneable, IGra
    */
   @Override
   protected Object clone() throws CloneNotSupportedException {
-    return copyDependencyGraph(this);
+    return copyGraph(this);
   }
 
   /**
-   * Copies the {@link DependencyGraph} portion of a class that extends {@link DependencyGraph}. Anything else that
+   * Copies the {@link DirectedAcyclicGraph} portion of a class that extends {@link DirectedAcyclicGraph}. Anything else that
    * is specific to a superclass should be added to the returned instance.
    *
-   * @param graph An instance of {@link DependencyGraph} that needs copying.
+   * @param graph An instance of {@link DirectedAcyclicGraph} that needs copying.
    * @param <TVertex> Type of {@link IVertex} of the graph vertices.
-   * @param <TGraph> Type of {@link DependencyGraph} of the graph being copied.
-   * @return A new instance of type {@link TGraph} with {@link DependencyGraph} specific fields already filled in.
+   * @param <TGraph> Type of {@link DirectedAcyclicGraph} of the graph being copied.
+   * @return A new instance of type {@link TGraph} with {@link DirectedAcyclicGraph} specific fields already filled in.
    */
   @SuppressWarnings("unchecked")
-  protected static <TVertex extends IVertex, TGraph extends DependencyGraph<TVertex>> TGraph copyDependencyGraph(TGraph graph) {
+  protected static <TVertex extends IVertex, TGraph extends DirectedAcyclicGraph<TVertex>> TGraph copyGraph(TGraph graph) {
     try {
       final Class g_class = graph.getClass();
-      final Constructor<? extends DependencyGraph<TVertex>> construct = g_class.getDeclaredConstructor();
+      final Constructor<? extends DirectedAcyclicGraph<TVertex>> construct = g_class.getDeclaredConstructor();
       construct.setAccessible(true);
 
       final TGraph g = (TGraph)construct.newInstance();
@@ -97,7 +97,7 @@ public class DependencyGraph<TVertex extends IVertex> implements Cloneable, IGra
    * @see IGraph#copy()
    */
   public IGraph<TVertex> copy() {
-    return copyDependencyGraph(this);
+    return copyGraph(this);
   }
 
   /**
@@ -108,7 +108,7 @@ public class DependencyGraph<TVertex extends IVertex> implements Cloneable, IGra
    * @return A new instance of {@link IGraph} with the provided vertices already added.
    */
   public static <TVertex extends IVertex> IGraph<TVertex> build(TVertex...vertices) {
-    DependencyGraph<TVertex> g = new DependencyGraph<TVertex>();
+    DirectedAcyclicGraph<TVertex> g = new DirectedAcyclicGraph<TVertex>();
     if (vertices != null) {
       for(TVertex d : vertices) {
         g.addVertex(d);

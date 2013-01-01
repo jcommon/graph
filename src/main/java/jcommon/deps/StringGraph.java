@@ -22,22 +22,22 @@ package jcommon.deps;
 /**
  * Factory and implementation of a dependency graph that can topologically sort vertices that are {@link String}s.
  *
- * @see DependencyGraph
+ * @see DirectedAcyclicGraph
  */
-public class StringGraph extends DependencyGraph<StringVertex> {
+public class StringGraph extends DirectedAcyclicGraph<StringVertex> {
   protected StringGraph() {
     super();
   }
 
   /**
-   * @see DependencyGraph#copy()
+   * @see DirectedAcyclicGraph#copy()
    */
   public StringGraph copyAsStringGraph() {
-    return copyDependencyGraph(this);
+    return copyGraph(this);
   }
 
   /**
-   * @see DependencyGraph#build(IVertex[])
+   * @see DirectedAcyclicGraph#build(IVertex[])
    */
   public static StringGraph buildFromStrings(String...vertices) {
     final StringGraph g = new StringGraph();
@@ -47,14 +47,14 @@ public class StringGraph extends DependencyGraph<StringVertex> {
   }
 
   /**
-   * @see DependencyGraph#create()
+   * @see DirectedAcyclicGraph#create()
    */
   public static StringGraph createForStrings() {
     return buildFromStrings();
   }
 
   /**
-   * @see DependencyGraph#addVertex(IVertex)
+   * @see DirectedAcyclicGraph#addVertex(IVertex)
    */
   public StringGraph addVertex(String vertex) {
     addVertex(StringVertex.from(vertex));
@@ -62,7 +62,7 @@ public class StringGraph extends DependencyGraph<StringVertex> {
   }
 
   /**
-   * @see DependencyGraph#removeVertex(IVertex)
+   * @see DirectedAcyclicGraph#removeVertex(IVertex)
    */
   public StringGraph removeVertex(String vertex) {
     removeVertex(StringVertex.from(vertex));
@@ -70,7 +70,7 @@ public class StringGraph extends DependencyGraph<StringVertex> {
   }
 
   /**
-   * @see DependencyGraph#addEdge(IVertex, IVertex)
+   * @see DirectedAcyclicGraph#addEdge(IVertex, IVertex)
    */
   public StringGraph addEdge(String from, String to) {
     addEdge(StringVertex.from(from), StringVertex.from(to));
@@ -78,7 +78,7 @@ public class StringGraph extends DependencyGraph<StringVertex> {
   }
 
   /**
-   * @see DependencyGraph#removeEdge(IVertex, IVertex)
+   * @see DirectedAcyclicGraph#removeEdge(IVertex, IVertex)
    */
   public StringGraph removeEdge(String from, String to) {
     removeEdge(StringVertex.from(from), StringVertex.from(to));

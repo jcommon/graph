@@ -20,15 +20,19 @@
 package jcommon.deps;
 
 /**
- * A representation of an {@link jcommon.deps.IVertex} instance using {@link Object}s.
+ * A representation of an {@link IVertex} instance using {@link Object}s.
  *
- * @see jcommon.deps.IVertex
+ * @see IVertex
  */
 public class ObjectVertex implements IVertex {
   private final Object value;
 
   public ObjectVertex(Object value) {
     this.value = value;
+  }
+
+  public Object get() {
+    return getValue();
   }
 
   public Object getValue() {

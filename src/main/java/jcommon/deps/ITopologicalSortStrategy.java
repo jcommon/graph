@@ -59,7 +59,7 @@ public interface ITopologicalSortStrategy<TVertex extends IVertex> {
    *                      This may be called concurrently depending on the makeup of the graph.
    * @param errorCallback An instance of {@link ITopologicalSortErrorCallback} that will be called if an error during
    *                      processing occurs either in the
-   *                      {@link ITopologicalSortCallback#handle(IVertex, ITopologicalSortCoordinator)} method or in the
+   *                      {@link ITopologicalSortCallback#handle(IVertex, ITopologicalSortInput, ITopologicalSortCoordinator)} method or in the
    *                      {@link ITopologicalSortStrategy#sortAsync(java.util.concurrent.ExecutorService, IAdjacencyList, ITopologicalSortCallback, ITopologicalSortErrorCallback)}
    *                      method.
    * @return              An instance of {@link ITopologicalSortAsyncResult} that allows the caller to coordinate the

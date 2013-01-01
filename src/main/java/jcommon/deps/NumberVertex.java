@@ -34,6 +34,10 @@ public class NumberVertex implements IVertex {
     this.value = value;
   }
 
+  public Number get() {
+    return getValue();
+  }
+
   public Number getValue() {
     return value;
   }

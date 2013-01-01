@@ -27,7 +27,7 @@ public class Examples {
   public static final Solution SOLUTION_VALID_SIMPLE_1 = Solution.create(
       "VALID_SIMPLE_1"
     , CYCLE_NOT_EXPECTED
-    , VALID_SIMPLE_1 = DependencyGraph.create()
+    , VALID_SIMPLE_1 = DirectedAcyclicGraph.create()
     , ValidOrdering.build()
   );
 

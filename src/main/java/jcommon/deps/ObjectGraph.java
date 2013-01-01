@@ -22,22 +22,22 @@ package jcommon.deps;
 /**
  * Factory and implementation of a dependency graph that can topologically sort vertices that are {@link Object}s.
  *
- * @see jcommon.deps.DependencyGraph
+ * @see DirectedAcyclicGraph
  */
-public class ObjectGraph extends DependencyGraph<ObjectVertex> {
+public class ObjectGraph extends DirectedAcyclicGraph<ObjectVertex> {
   protected ObjectGraph() {
     super();
   }
 
   /**
-   * @see jcommon.deps.DependencyGraph#copy()
+   * @see DirectedAcyclicGraph#copy()
    */
   public ObjectGraph copyAsObjectGraph() {
-    return copyDependencyGraph(this);
+    return copyGraph(this);
   }
 
   /**
-   * @see jcommon.deps.DependencyGraph#build(jcommon.deps.IVertex[])
+   * @see DirectedAcyclicGraph#build(jcommon.deps.IVertex[])
    */
   public static ObjectGraph buildFromObjects(Object...vertices) {
     final ObjectGraph g = new ObjectGraph();
@@ -47,14 +47,14 @@ public class ObjectGraph extends DependencyGraph<ObjectVertex> {
   }
 
   /**
-   * @see jcommon.deps.DependencyGraph#create()
+   * @see DirectedAcyclicGraph#create()
    */
   public static ObjectGraph createForObjects() {
     return buildFromObjects();
   }
 
   /**
-   * @see jcommon.deps.DependencyGraph#addVertex(jcommon.deps.IVertex)
+   * @see DirectedAcyclicGraph#addVertex(jcommon.deps.IVertex)
    */
   public ObjectGraph addVertex(Object vertex) {
     addVertex(ObjectVertex.from(vertex));
@@ -62,7 +62,7 @@ public class ObjectGraph extends DependencyGraph<ObjectVertex> {
   }
 
   /**
-   * @see jcommon.deps.DependencyGraph#removeVertex(jcommon.deps.IVertex)
+   * @see DirectedAcyclicGraph#removeVertex(jcommon.deps.IVertex)
    */
   public ObjectGraph removeVertex(Object vertex) {
     removeVertex(ObjectVertex.from(vertex));
@@ -70,7 +70,7 @@ public class ObjectGraph extends DependencyGraph<ObjectVertex> {
   }
 
   /**
-   * @see jcommon.deps.DependencyGraph#addEdge(jcommon.deps.IVertex, jcommon.deps.IVertex)
+   * @see DirectedAcyclicGraph#addEdge(jcommon.deps.IVertex, jcommon.deps.IVertex)
    */
   public ObjectGraph addEdge(ObjectVertex from, ObjectVertex to) {
     addEdge(ObjectVertex.from(from), ObjectVertex.from(to));
@@ -78,7 +78,7 @@ public class ObjectGraph extends DependencyGraph<ObjectVertex> {
   }
 
   /**
-   * @see jcommon.deps.DependencyGraph#removeEdge(jcommon.deps.IVertex, jcommon.deps.IVertex)
+   * @see DirectedAcyclicGraph#removeEdge(jcommon.deps.IVertex, jcommon.deps.IVertex)
    */
   public ObjectGraph removeEdge(ObjectVertex from, ObjectVertex to) {
     removeEdge(ObjectVertex.from(from), ObjectVertex.from(to));

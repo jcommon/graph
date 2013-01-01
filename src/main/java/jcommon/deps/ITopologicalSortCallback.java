@@ -26,16 +26,19 @@ package jcommon.deps;
  * is waiting for processing of 1 or more transitive vertices. In this
  * case, processing will not proceed until the transitive vertices have
  * completed their work.
+ *
+ * @param <TVertex> The type of {@link IVertex} that this callback will operate on.
  */
-public interface ITopologicalSortCallback<T extends IVertex> {
+public interface ITopologicalSortCallback<TVertex extends IVertex> {
   /**
    * The callback that will be executed inside a thread other than the one
    * invoking the sort.
    *
    * @param dependency Instance of {@link IVertex} that can now be processed.
+   * @param input       Instance of {@link ITopologicalSortInput} that provides the in-degree outputs of directly dependent vertices.
    * @param coordinator Instance of {@link ITopologicalSortCoordinator} that allows for communication between
    *                    asynchronous sorting submissions done by the driver (which is typically done by an instance
    *                    of {@link ITopologicalSortStrategy}).
    */
-  void handle(T dependency, ITopologicalSortCoordinator coordinator) throws Throwable;
+  Object handle(TVertex dependency, ITopologicalSortInput<TVertex> input, ITopologicalSortCoordinator coordinator) throws Throwable;
 }

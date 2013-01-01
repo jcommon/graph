@@ -23,8 +23,10 @@ import jcommon.deps.*;
 
 import java.util.*;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicStampedReference;
 
 /**
  * Please see the following for a description of this algorithm:
@@ -86,6 +88,7 @@ public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITo
     final ArrayList<Callable<Object>> callables = new ArrayList<Callable<Object>>(in_degrees.length);
     final Set<IAdjacencyListPair<TVertex>> remaining = new HashSet<IAdjacencyListPair<TVertex>>();
     final AtomicInteger[] atomics = new AtomicInteger[in_degrees.length];
+    final ArrayList<Map<TVertex, Object>> inputs = new ArrayList<Map<TVertex, Object>>(in_degrees.length);
     final AtomicInteger outstanding_submissions = new AtomicInteger(0);
     final ITopologicalSortCoordinator coordinator = new TopologicalSortCoordinator(asyncResult);
 
@@ -94,6 +97,8 @@ public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITo
     for(int i = 0; i < in_degrees.length; ++i) {
       final IAdjacencyListPair<TVertex> pair = adjacencyList.pairAt(i);
       final AtomicInteger atom = atomics[i] = new AtomicInteger(in_degrees[i] == 0 ? 1 : in_degrees[i]);
+      final HashMap<TVertex, Object> my_input = new HashMap<TVertex, Object>(in_degrees[i], 1.0f);
+      inputs.add(my_input);
 
       //Ensure that we add all items in the adjacency list to our list of remaining items.
       //As we discover the proper order to visit them and then process them, we will drain
@@ -108,6 +113,7 @@ public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITo
           Throwable handled_exception = null;
           boolean handle_all_done = false;
           TVertex vertex = pair.getVertex();
+          ITopologicalSortInput<TVertex> input;
 
           try {
 
@@ -117,9 +123,14 @@ public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITo
                 remaining.remove(pair);
               }
 
+              synchronized (my_input) {
+                input = new TopologicalSortInput<TVertex>(my_input);
+              }
+
               //Call the callback to let him handle this vertex.
+              Object result = null;
               try {
-                callback.handle(vertex, coordinator);
+                result = callback.handle(vertex, input, coordinator);
               } catch(Throwable t) {
                 //We need to handle the exception later after we've done other work.
                 //Save it off for later evaluation.
@@ -136,6 +147,11 @@ public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITo
                 for(TVertex dep : pair.getOutNeighbors()) {
                   final int index = adjacencyList.indexOf(dep);
                   final Callable<Object> dep_callable = callables.get(index);
+                  final Map<TVertex, Object> dep_inputs = inputs.get(index);
+
+                  synchronized(dep_inputs) {
+                    dep_inputs.put(vertex, result);
+                  }
 
                   //Ensure we track the number of submissions. This will be used to
                   //detect an effective deadlock -- we can't make progress b/c there's

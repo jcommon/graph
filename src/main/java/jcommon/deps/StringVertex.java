@@ -34,6 +34,10 @@ public class StringVertex implements IVertex {
     this.name = name;
   }
 
+  public String get() {
+    return getName();
+  }
+
   public String getName() {
     return name;
   }

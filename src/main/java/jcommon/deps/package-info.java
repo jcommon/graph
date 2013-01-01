@@ -18,12 +18,12 @@
 */
 
 /**
- * Contains the standard API for interfacing with the jcommon.deps.jdeps library.
+ * Contains the standard API for interfacing with the jcommon-deps library.
  *
- * @see jcommon.deps.jdeps.StringGraph
- * @see jcommon.deps.jdeps.NumberGraph
- * @see jcommon.deps.jdeps.DependencyGraph
- * @see jcommon.deps.jdeps.IGraph
- * @see jcommon.deps.jdeps.IVertex
+ * @see jcommon.deps.StringGraph
+ * @see jcommon.deps.NumberGraph
+ * @see DirectedAcyclicGraph
+ * @see jcommon.deps.IGraph
+ * @see jcommon.deps.IVertex
  */
 package jcommon.deps;

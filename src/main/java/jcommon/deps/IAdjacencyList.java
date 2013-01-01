@@ -42,7 +42,7 @@ public interface IAdjacencyList<TVertex extends IVertex> extends Iterable<IAdjac
    * @param vertex A vertex of <code>TVertex</code> for whom we wish to retrieve its out-neighbors.
    * @return A list of <code>TVertex</code> instances who are the out-neighbors for the provided vertex argument.
    *
-   * @see jcommon.deps.jdeps.IAdjacencyListPair#getOutNeighbors()
+   * @see IAdjacencyListPair#getOutNeighbors()
    */
   List<TVertex> outNeighborsFor(TVertex vertex);
 
@@ -63,7 +63,7 @@ public interface IAdjacencyList<TVertex extends IVertex> extends Iterable<IAdjac
    * @return A list of <code>TVertex</code> instances who are the out-neighbors for an instance of <code>TVertex</code>
    *         at the specified index.
    *
-   * @see jcommon.deps.jdeps.IAdjacencyListPair#getOutNeighbors()
+   * @see IAdjacencyListPair#getOutNeighbors()
    */
   List<TVertex> outNeighborsAt(int index);
 
@@ -79,7 +79,7 @@ public interface IAdjacencyList<TVertex extends IVertex> extends Iterable<IAdjac
   /**
    * Scans the {@link IAdjacencyList} and for each vertex it counts the number of other vertices referencing it.
    *
-   * @return An int array of size {@link jcommon.deps.jdeps.IAdjacencyList#size()} representing the in-degrees for each vertex.
+   * @return An int array of size {@link IAdjacencyList#size()} representing the in-degrees for each vertex.
    */
   int[] calculateInDegrees();
 

@@ -22,22 +22,22 @@ package jcommon.deps;
 /**
  * Factory and implementation of a dependency graph that can topologically sort vertices that are {@link Number}s.
  *
- * @see DependencyGraph
+ * @see DirectedAcyclicGraph
  */
-public class NumberGraph extends DependencyGraph<NumberVertex> {
+public class NumberGraph extends DirectedAcyclicGraph<NumberVertex> {
   protected NumberGraph() {
     super();
   }
 
   /**
-   * @see DependencyGraph#copy()
+   * @see DirectedAcyclicGraph#copy()
    */
   public NumberGraph copyAsNumberGraph() {
-    return copyDependencyGraph(this);
+    return copyGraph(this);
   }
 
   /**
-   * @see DependencyGraph#build(IVertex[])
+   * @see DirectedAcyclicGraph#build(IVertex[])
    */
   public static NumberGraph buildFromNumbers(Number...vertices) {
     final NumberGraph g = new NumberGraph();
@@ -47,14 +47,14 @@ public class NumberGraph extends DependencyGraph<NumberVertex> {
   }
 
   /**
-   * @see DependencyGraph#create()
+   * @see DirectedAcyclicGraph#create()
    */
   public static NumberGraph createForNumbers() {
     return buildFromNumbers();
   }
 
   /**
-   * @see DependencyGraph#addVertex(IVertex)
+   * @see DirectedAcyclicGraph#addVertex(IVertex)
    */
   public NumberGraph addVertex(Number vertex) {
     addVertex(NumberVertex.from(vertex));
@@ -62,7 +62,7 @@ public class NumberGraph extends DependencyGraph<NumberVertex> {
   }
 
   /**
-   * @see DependencyGraph#removeVertex(IVertex)
+   * @see DirectedAcyclicGraph#removeVertex(IVertex)
    */
   public NumberGraph removeVertex(Number vertex) {
     removeVertex(NumberVertex.from(vertex));
@@ -70,7 +70,7 @@ public class NumberGraph extends DependencyGraph<NumberVertex> {
   }
 
   /**
-   * @see DependencyGraph#addEdge(IVertex, IVertex)
+   * @see DirectedAcyclicGraph#addEdge(IVertex, IVertex)
    */
   public NumberGraph addEdge(Number from, Number to) {
     addEdge(NumberVertex.from(from), NumberVertex.from(to));
@@ -78,7 +78,7 @@ public class NumberGraph extends DependencyGraph<NumberVertex> {
   }
 
   /**
-   * @see DependencyGraph#removeEdge(IVertex, IVertex)
+   * @see DirectedAcyclicGraph#removeEdge(IVertex, IVertex)
    */
   public NumberGraph removeEdge(Number from, Number to) {
     removeEdge(NumberVertex.from(from), NumberVertex.from(to));
