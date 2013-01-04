@@ -47,38 +47,41 @@
 <a class="jxr_linenumber" name="37" href="#37">37</a>  <em class="jxr_javadoccomment"> * @see &lt;a href="<a href="http://en.wikipedia.org/wiki/Topological_sorting" target="alexandria_uri">http://en.wikipedia.org/wiki/Topological_sorting</a>"&gt;<a href="http://en.wikipedia.org/wiki/Topological_sorting" target="alexandria_uri">http://en.wikipedia.org/wiki/Topological_sorting</a>&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="38" href="#38">38</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="39" href="#39">39</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> ITopologicalSortStrategy&lt;TVertex <strong class="jxr_keyword">extends</strong> IVertex&gt; {
-<a class="jxr_linenumber" name="40" href="#40">40</a>    <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="41" href="#41">41</a>  <em class="jxr_javadoccomment">   * Given an instance of {@link IAdjacencyList}, topologically sorts the graph.</em>
-<a class="jxr_linenumber" name="42" href="#42">42</a>  <em class="jxr_javadoccomment">   *</em>
-<a class="jxr_linenumber" name="43" href="#43">43</a>  <em class="jxr_javadoccomment">   * @param adjacencyList An instance of {@link IAdjacencyList}.</em>
-<a class="jxr_linenumber" name="44" href="#44">44</a>  <em class="jxr_javadoccomment">   * @return The topologically sorted {@link IGraph}.</em>
-<a class="jxr_linenumber" name="45" href="#45">45</a>  <em class="jxr_javadoccomment">   * @throws CyclicGraphException A {@link CyclicGraphException} is thrown if a cycle is detected during the sort.</em>
-<a class="jxr_linenumber" name="46" href="#46">46</a>  <em class="jxr_javadoccomment">   *</em>
-<a class="jxr_linenumber" name="47" href="#47">47</a>  <em class="jxr_javadoccomment">   * @see &lt;a href="<a href="http://en.wikipedia.org/wiki/Topological_sorting" target="alexandria_uri">http://en.wikipedia.org/wiki/Topological_sorting</a>"&gt;<a href="http://en.wikipedia.org/wiki/Topological_sorting" target="alexandria_uri">http://en.wikipedia.org/wiki/Topological_sorting</a>&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="48" href="#48">48</a>  <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="49" href="#49">49</a>    List&lt;TVertex&gt; sort(IAdjacencyList&lt;TVertex&gt; adjacencyList) <strong class="jxr_keyword">throws</strong> CyclicGraphException;
-<a class="jxr_linenumber" name="50" href="#50">50</a>  
-<a class="jxr_linenumber" name="51" href="#51">51</a>    <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="52" href="#52">52</a>  <em class="jxr_javadoccomment">   * Allows you to asynchronously and in-parallel process the vertices of a graph topologically. Care is taken to</em>
-<a class="jxr_linenumber" name="53" href="#53">53</a>  <em class="jxr_javadoccomment">   * prevent the processing of vertices before their parent vertices have completed processing.</em>
-<a class="jxr_linenumber" name="54" href="#54">54</a>  <em class="jxr_javadoccomment">   *</em>
-<a class="jxr_linenumber" name="55" href="#55">55</a>  <em class="jxr_javadoccomment">   * @param executor      An instance of {@link ExecutorService} that will be used to submit tasks for processing</em>
-<a class="jxr_linenumber" name="56" href="#56">56</a>  <em class="jxr_javadoccomment">   *                      vertices.</em>
-<a class="jxr_linenumber" name="57" href="#57">57</a>  <em class="jxr_javadoccomment">   * @param adjacencyList An instance of {@link IAdjacencyList}.</em>
-<a class="jxr_linenumber" name="58" href="#58">58</a>  <em class="jxr_javadoccomment">   * @param callback      An instance of {@link ITopologicalSortCallback} that will be called to process each vertex.</em>
-<a class="jxr_linenumber" name="59" href="#59">59</a>  <em class="jxr_javadoccomment">   *                      This may be called concurrently depending on the makeup of the graph.</em>
-<a class="jxr_linenumber" name="60" href="#60">60</a>  <em class="jxr_javadoccomment">   * @param errorCallback An instance of {@link ITopologicalSortErrorCallback} that will be called if an error during</em>
-<a class="jxr_linenumber" name="61" href="#61">61</a>  <em class="jxr_javadoccomment">   *                      processing occurs either in the</em>
-<a class="jxr_linenumber" name="62" href="#62">62</a>  <em class="jxr_javadoccomment">   *                      {@link ITopologicalSortCallback#handle(IVertex, ITopologicalSortInput, ITopologicalSortCoordinator)} method or in the</em>
-<a class="jxr_linenumber" name="63" href="#63">63</a>  <em class="jxr_javadoccomment">   *                      {@link ITopologicalSortStrategy#sortAsync(java.util.concurrent.ExecutorService, IAdjacencyList, ITopologicalSortCallback, ITopologicalSortErrorCallback)}</em>
-<a class="jxr_linenumber" name="64" href="#64">64</a>  <em class="jxr_javadoccomment">   *                      method.</em>
-<a class="jxr_linenumber" name="65" href="#65">65</a>  <em class="jxr_javadoccomment">   * @return              An instance of {@link ITopologicalSortAsyncResult} that allows the caller to coordinate the</em>
-<a class="jxr_linenumber" name="66" href="#66">66</a>  <em class="jxr_javadoccomment">   *                      asynchronous processing of the graph.</em>
-<a class="jxr_linenumber" name="67" href="#67">67</a>  <em class="jxr_javadoccomment">   *</em>
-<a class="jxr_linenumber" name="68" href="#68">68</a>  <em class="jxr_javadoccomment">   * @see &lt;a href="<a href="http://en.wikipedia.org/wiki/Topological_sorting" target="alexandria_uri">http://en.wikipedia.org/wiki/Topological_sorting</a>"&gt;<a href="http://en.wikipedia.org/wiki/Topological_sorting" target="alexandria_uri">http://en.wikipedia.org/wiki/Topological_sorting</a>&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="69" href="#69">69</a>  <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="70" href="#70">70</a>    <a href="../../jcommon/graph/ITopologicalSortAsyncResult.html">ITopologicalSortAsyncResult</a> sortAsync(ExecutorService executor, IAdjacencyList&lt;TVertex&gt; adjacencyList, ITopologicalSortCallback&lt;TVertex&gt; callback, ITopologicalSortErrorCallback&lt;TVertex&gt; errorCallback);
-<a class="jxr_linenumber" name="71" href="#71">71</a>  }
+<a class="jxr_linenumber" name="40" href="#40">40</a>    <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> {@link String} available for use when throwing {@link CyclicGraphException}s. */</em>
+<a class="jxr_linenumber" name="41" href="#41">41</a>    String STANDARD_CYCLE_MESSAGE = <span class="jxr_string">"Cycle detected when topologically sorting the graph"</span>;
+<a class="jxr_linenumber" name="42" href="#42">42</a>  
+<a class="jxr_linenumber" name="43" href="#43">43</a>    <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="44" href="#44">44</a>  <em class="jxr_javadoccomment">   * Given an instance of {@link IAdjacencyList}, topologically sorts the graph.</em>
+<a class="jxr_linenumber" name="45" href="#45">45</a>  <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="46" href="#46">46</a>  <em class="jxr_javadoccomment">   * @param adjacencyList An instance of {@link IAdjacencyList}.</em>
+<a class="jxr_linenumber" name="47" href="#47">47</a>  <em class="jxr_javadoccomment">   * @return The topologically sorted {@link IGraph}.</em>
+<a class="jxr_linenumber" name="48" href="#48">48</a>  <em class="jxr_javadoccomment">   * @throws CyclicGraphException A {@link CyclicGraphException} is thrown if a cycle is detected during the sort.</em>
+<a class="jxr_linenumber" name="49" href="#49">49</a>  <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="50" href="#50">50</a>  <em class="jxr_javadoccomment">   * @see &lt;a href="<a href="http://en.wikipedia.org/wiki/Topological_sorting" target="alexandria_uri">http://en.wikipedia.org/wiki/Topological_sorting</a>"&gt;<a href="http://en.wikipedia.org/wiki/Topological_sorting" target="alexandria_uri">http://en.wikipedia.org/wiki/Topological_sorting</a>&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="51" href="#51">51</a>  <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="52" href="#52">52</a>    List&lt;TVertex&gt; sort(IAdjacencyList&lt;TVertex&gt; adjacencyList) <strong class="jxr_keyword">throws</strong> CyclicGraphException;
+<a class="jxr_linenumber" name="53" href="#53">53</a>  
+<a class="jxr_linenumber" name="54" href="#54">54</a>    <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="55" href="#55">55</a>  <em class="jxr_javadoccomment">   * Allows you to asynchronously and in-parallel process the vertices of a graph topologically. Care is taken to</em>
+<a class="jxr_linenumber" name="56" href="#56">56</a>  <em class="jxr_javadoccomment">   * prevent the processing of vertices before their parent vertices have completed processing.</em>
+<a class="jxr_linenumber" name="57" href="#57">57</a>  <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="58" href="#58">58</a>  <em class="jxr_javadoccomment">   * @param executor      An instance of {@link ExecutorService} that will be used to submit tasks for processing</em>
+<a class="jxr_linenumber" name="59" href="#59">59</a>  <em class="jxr_javadoccomment">   *                      vertices.</em>
+<a class="jxr_linenumber" name="60" href="#60">60</a>  <em class="jxr_javadoccomment">   * @param adjacencyList An instance of {@link IAdjacencyList}.</em>
+<a class="jxr_linenumber" name="61" href="#61">61</a>  <em class="jxr_javadoccomment">   * @param callback      An instance of {@link ITopologicalSortCallback} that will be called to process each vertex.</em>
+<a class="jxr_linenumber" name="62" href="#62">62</a>  <em class="jxr_javadoccomment">   *                      This may be called concurrently depending on the makeup of the graph.</em>
+<a class="jxr_linenumber" name="63" href="#63">63</a>  <em class="jxr_javadoccomment">   * @param errorCallback An instance of {@link ITopologicalSortErrorCallback} that will be called if an error during</em>
+<a class="jxr_linenumber" name="64" href="#64">64</a>  <em class="jxr_javadoccomment">   *                      processing occurs either in the</em>
+<a class="jxr_linenumber" name="65" href="#65">65</a>  <em class="jxr_javadoccomment">   *                      {@link ITopologicalSortCallback#handle(IVertex, ITopologicalSortInput, ITopologicalSortCoordinator)} method or in the</em>
+<a class="jxr_linenumber" name="66" href="#66">66</a>  <em class="jxr_javadoccomment">   *                      {@link ITopologicalSortStrategy#sortAsync(java.util.concurrent.ExecutorService, IAdjacencyList, ITopologicalSortCallback, ITopologicalSortErrorCallback)}</em>
+<a class="jxr_linenumber" name="67" href="#67">67</a>  <em class="jxr_javadoccomment">   *                      method.</em>
+<a class="jxr_linenumber" name="68" href="#68">68</a>  <em class="jxr_javadoccomment">   * @return              An instance of {@link ITopologicalSortAsyncResult} that allows the caller to coordinate the</em>
+<a class="jxr_linenumber" name="69" href="#69">69</a>  <em class="jxr_javadoccomment">   *                      asynchronous processing of the graph.</em>
+<a class="jxr_linenumber" name="70" href="#70">70</a>  <em class="jxr_javadoccomment">   *</em>
+<a class="jxr_linenumber" name="71" href="#71">71</a>  <em class="jxr_javadoccomment">   * @see &lt;a href="<a href="http://en.wikipedia.org/wiki/Topological_sorting" target="alexandria_uri">http://en.wikipedia.org/wiki/Topological_sorting</a>"&gt;<a href="http://en.wikipedia.org/wiki/Topological_sorting" target="alexandria_uri">http://en.wikipedia.org/wiki/Topological_sorting</a>&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="72" href="#72">72</a>  <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="73" href="#73">73</a>    <a href="../../jcommon/graph/ITopologicalSortAsyncResult.html">ITopologicalSortAsyncResult</a> sortAsync(ExecutorService executor, IAdjacencyList&lt;TVertex&gt; adjacencyList, ITopologicalSortCallback&lt;TVertex&gt; callback, ITopologicalSortErrorCallback&lt;TVertex&gt; errorCallback);
+<a class="jxr_linenumber" name="74" href="#74">74</a>  }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
