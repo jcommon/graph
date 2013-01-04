@@ -25,6 +25,9 @@ package jcommon.graph;
  * @see DirectedAcyclicGraph
  */
 public class ObjectGraph extends DirectedAcyclicGraph<ObjectVertex> {
+  /**
+   * @see DirectedAcyclicGraph#DirectedAcyclicGraph()
+   */
   protected ObjectGraph() {
     super();
   }
@@ -39,7 +42,7 @@ public class ObjectGraph extends DirectedAcyclicGraph<ObjectVertex> {
   /**
    * @see DirectedAcyclicGraph#build(jcommon.graph.IVertex[])
    */
-  public static ObjectGraph buildFromObjects(Object...vertices) {
+  public static ObjectGraph buildFromObjects(final Object...vertices) {
     final ObjectGraph g = new ObjectGraph();
     for(Object v : vertices)
       g.addVertex(v);
@@ -56,7 +59,7 @@ public class ObjectGraph extends DirectedAcyclicGraph<ObjectVertex> {
   /**
    * @see DirectedAcyclicGraph#addVertex(jcommon.graph.IVertex)
    */
-  public ObjectGraph addVertex(Object vertex) {
+  public ObjectGraph addVertex(final Object vertex) {
     addVertex(ObjectVertex.from(vertex));
     return this;
   }
@@ -64,7 +67,7 @@ public class ObjectGraph extends DirectedAcyclicGraph<ObjectVertex> {
   /**
    * @see DirectedAcyclicGraph#removeVertex(jcommon.graph.IVertex)
    */
-  public ObjectGraph removeVertex(Object vertex) {
+  public ObjectGraph removeVertex(final Object vertex) {
     removeVertex(ObjectVertex.from(vertex));
     return this;
   }
@@ -72,7 +75,7 @@ public class ObjectGraph extends DirectedAcyclicGraph<ObjectVertex> {
   /**
    * @see DirectedAcyclicGraph#addEdge(jcommon.graph.IVertex, jcommon.graph.IVertex)
    */
-  public ObjectGraph addEdge(ObjectVertex from, ObjectVertex to) {
+  public ObjectGraph addEdge(final ObjectVertex from, final ObjectVertex to) {
     addEdge(ObjectVertex.from(from), ObjectVertex.from(to));
     return this;
   }
@@ -80,7 +83,7 @@ public class ObjectGraph extends DirectedAcyclicGraph<ObjectVertex> {
   /**
    * @see DirectedAcyclicGraph#removeEdge(jcommon.graph.IVertex, jcommon.graph.IVertex)
    */
-  public ObjectGraph removeEdge(ObjectVertex from, ObjectVertex to) {
+  public ObjectGraph removeEdge(final ObjectVertex from, final ObjectVertex to) {
     removeEdge(ObjectVertex.from(from), ObjectVertex.from(to));
     return this;
   }

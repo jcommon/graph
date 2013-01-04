@@ -28,7 +28,7 @@ import jcommon.graph.ITopologicalSortCoordinator;
 final class TopologicalSortCoordinator implements ITopologicalSortCoordinator {
   private final ITopologicalSortAsyncResult asyncResult;
 
-  public TopologicalSortCoordinator(ITopologicalSortAsyncResult asyncResult) {
+  public TopologicalSortCoordinator(final ITopologicalSortAsyncResult asyncResult) {
     this.asyncResult = asyncResult;
   }
 

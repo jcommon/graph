@@ -21,6 +21,8 @@ package jcommon.graph;
 
 /**
  * A callback for when an error has occurred during asynchronous processing.
+ *
+ * @param <TVertex> The type of {@link IVertex} that this error callback will operate on.
  */
 public interface ITopologicalSortErrorCallback<TVertex extends IVertex> {
   /**

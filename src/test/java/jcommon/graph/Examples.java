@@ -19,7 +19,8 @@
 
 package jcommon.graph;
 
-import static jcommon.graph.Solution.*;
+import static jcommon.graph.Solution.CYCLE_EXPECTED;
+import static jcommon.graph.Solution.CYCLE_NOT_EXPECTED;
 
 @SuppressWarnings("unchecked")
 public class Examples {

@@ -27,44 +27,74 @@ package jcommon.graph;
 public class NumberVertex implements IVertex {
   private final Number value;
 
-  public NumberVertex(Number value) {
+  /**
+   * Instantiates a new instance of {@link NumberVertex}.
+   *
+   * @param value The value which this {@link NumberVertex} will represent.
+   */
+  public NumberVertex(final Number value) {
     if (value == null)
       throw new IllegalArgumentException("value cannot be null");
 
     this.value = value;
   }
 
+  /**
+   * Retrieves the value that this {@link NumberVertex} represents.
+   *
+   * @return An instance of a {@link Number} that this {@link NumberVertex} represents.
+   */
   public Number get() {
     return getValue();
   }
 
+  /**
+   * Retrieves the value that this {@link NumberVertex} represents.
+   *
+   * @return An instance of a {@link Number} that this {@link NumberVertex} represents.
+   */
   public Number getValue() {
     return value;
   }
 
+  /**
+   * @see Object#equals(Object)
+   */
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
-    NumberVertex that = (NumberVertex) o;
+    final NumberVertex that = (NumberVertex) o;
 
     if (!value.equals(that.value)) return false;
 
     return true;
   }
 
+  /**
+   * @see Object#toString()
+   */
   @Override
   public String toString() {
     return value.toString();
   }
 
+  /**
+   * @see Object#hashCode()
+   */
   @Override
   public int hashCode() {
     return value.hashCode();
   }
 
-  public static NumberVertex from(Number name) {
-    return new NumberVertex(name);
+  /**
+   * Convenience method for instantiating a new {@link NumberVertex}.
+   *
+   * @param value The value which this {@link NumberVertex} will represent.
+   * @return A new instance of {@link NumberVertex}.
+   */
+  public static NumberVertex from(final Number value) {
+    return new NumberVertex(value);
   }
 }

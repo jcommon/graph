@@ -25,6 +25,9 @@ package jcommon.graph;
  * @see DirectedAcyclicGraph
  */
 public class NumberGraph extends DirectedAcyclicGraph<NumberVertex> {
+  /**
+   * @see DirectedAcyclicGraph#DirectedAcyclicGraph()
+   */
   protected NumberGraph() {
     super();
   }
@@ -39,7 +42,7 @@ public class NumberGraph extends DirectedAcyclicGraph<NumberVertex> {
   /**
    * @see DirectedAcyclicGraph#build(IVertex[])
    */
-  public static NumberGraph buildFromNumbers(Number...vertices) {
+  public static NumberGraph buildFromNumbers(final Number...vertices) {
     final NumberGraph g = new NumberGraph();
     for(Number d : vertices)
       g.addVertex(d);
@@ -56,7 +59,7 @@ public class NumberGraph extends DirectedAcyclicGraph<NumberVertex> {
   /**
    * @see DirectedAcyclicGraph#addVertex(IVertex)
    */
-  public NumberGraph addVertex(Number vertex) {
+  public NumberGraph addVertex(final Number vertex) {
     addVertex(NumberVertex.from(vertex));
     return this;
   }
@@ -64,7 +67,7 @@ public class NumberGraph extends DirectedAcyclicGraph<NumberVertex> {
   /**
    * @see DirectedAcyclicGraph#removeVertex(IVertex)
    */
-  public NumberGraph removeVertex(Number vertex) {
+  public NumberGraph removeVertex(final Number vertex) {
     removeVertex(NumberVertex.from(vertex));
     return this;
   }
@@ -72,7 +75,7 @@ public class NumberGraph extends DirectedAcyclicGraph<NumberVertex> {
   /**
    * @see DirectedAcyclicGraph#addEdge(IVertex, IVertex)
    */
-  public NumberGraph addEdge(Number from, Number to) {
+  public NumberGraph addEdge(final Number from, final Number to) {
     addEdge(NumberVertex.from(from), NumberVertex.from(to));
     return this;
   }
@@ -80,7 +83,7 @@ public class NumberGraph extends DirectedAcyclicGraph<NumberVertex> {
   /**
    * @see DirectedAcyclicGraph#removeEdge(IVertex, IVertex)
    */
-  public NumberGraph removeEdge(Number from, Number to) {
+  public NumberGraph removeEdge(final Number from, final Number to) {
     removeEdge(NumberVertex.from(from), NumberVertex.from(to));
     return this;
   }

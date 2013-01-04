@@ -39,7 +39,7 @@ public interface IGraph<TVertex extends IVertex> {
    * Reference for an array of empty vertices that can be reused instead
    * of having to allocate a new empty array on the heap every time.
    */
-  public static final IVertex[] EMPTY_VERTICES = new IVertex[0];
+  IVertex[] EMPTY_VERTICES = new IVertex[0];
 
   /**
    * Retrieves the set of {@link IVertex} vertices of <code>TVertex</code> represented by this {@link IGraph}.

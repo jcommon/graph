@@ -36,7 +36,7 @@ final class TopologicalSortAsyncResult implements ITopologicalSortAsyncResult {
   private boolean successful;
   private boolean discontinue_processing;
 
-  public TopologicalSortAsyncResult(ExecutorService executor) {
+  public TopologicalSortAsyncResult(final ExecutorService executor) {
     this.executor = executor;
     this.latch =  new CountDownLatch(1);
     this.done = false;
@@ -76,7 +76,7 @@ final class TopologicalSortAsyncResult implements ITopologicalSortAsyncResult {
     return lock;
   }
 
-  void asyncComplete(boolean successful) {
+  void asyncComplete(final boolean successful) {
     synchronized (lock) {
       this.done = true;
       this.successful = successful;
@@ -96,7 +96,7 @@ final class TopologicalSortAsyncResult implements ITopologicalSortAsyncResult {
    * @see ITopologicalSortAsyncResult#waitForCompletion()
    */
   @Override
-  public boolean waitForCompletion(long timeout, TimeUnit unit) {
+  public boolean waitForCompletion(final long timeout, final TimeUnit unit) {
     return awaitUninterruptibly(timeout, unit) && isSuccessful();
   }
 
@@ -115,7 +115,7 @@ final class TopologicalSortAsyncResult implements ITopologicalSortAsyncResult {
   }
 
   @Override
-  public boolean awaitUninterruptibly(long timeout, TimeUnit unit) {
+  public boolean awaitUninterruptibly(final long timeout, final TimeUnit unit) {
     try {
       return await(timeout, unit);
     } catch(InterruptedException ie) {
@@ -130,7 +130,7 @@ final class TopologicalSortAsyncResult implements ITopologicalSortAsyncResult {
   }
 
   @Override
-  public boolean await(long timeout, TimeUnit unit) throws InterruptedException {
+  public boolean await(final long timeout, final TimeUnit unit) throws InterruptedException {
     return latch.await(timeout, unit);
   }
 }

@@ -23,13 +23,25 @@ import jcommon.graph.IEdge;
 import jcommon.graph.IVertex;
 
 /**
+ * @param <TVertex> Type of {@link IVertex} instances that this edge will connect.
+ *
  * @see IEdge
  */
 public class Edge<TVertex extends IVertex> implements IEdge<TVertex> {
+  /** The object we are connecting from. */
   public final TVertex from;
+
+  /** The object we are connecting to. */
   public final TVertex to;
 
-  public Edge(TVertex from, TVertex to) {
+  /**
+   * Create a new directed edge for a graph that defines the relationship between
+   * two graph vertices.
+   *
+   * @param from The object we are connecting from.
+   * @param to The object we are connecting to.
+   */
+  public Edge(final TVertex from, final TVertex to) {
     if (from == null || to == null)
       throw new NullPointerException("from and to both cannot be null");
 
@@ -37,16 +49,29 @@ public class Edge<TVertex extends IVertex> implements IEdge<TVertex> {
     this.to = to;
   }
 
+  /**
+   * Retrieves the {@link Edge#from} instance.
+   *
+   * @return The provided {@link Edge#from} instance.
+   */
   @Override
   public TVertex getFrom() {
     return from;
   }
 
+  /**
+   * Retrieves the {@link Edge#to} instance.
+   *
+   * @return The provided {@link Edge#to} instance.
+   */
   @Override
   public TVertex getTo() {
     return to;
   }
 
+  /**
+   * @see Object#hashCode()
+   */
   @Override
   public int hashCode() {
     int result = from.hashCode();
@@ -54,11 +79,14 @@ public class Edge<TVertex extends IVertex> implements IEdge<TVertex> {
     return result;
   }
 
+  /**
+   * @see Object#equals(Object)
+   */
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (!(obj instanceof Edge))
       return false;
-    Edge e = (Edge)obj;
+    final Edge e = (Edge)obj;
 
     return from.equals(e.from) && to.equals(e.to);
   }

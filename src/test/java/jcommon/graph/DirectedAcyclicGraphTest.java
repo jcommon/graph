@@ -24,7 +24,8 @@ import org.junit.Test;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @SuppressWarnings("unchecked")
 public class DirectedAcyclicGraphTest {

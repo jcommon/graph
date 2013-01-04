@@ -35,7 +35,7 @@ public class Pair<TValue1, TValue2> {
    * @param value1 The first value.
    * @param value2 The second value.
    */
-  public Pair(TValue1 value1, TValue2 value2) {
+  public Pair(final TValue1 value1, final TValue2 value2) {
     this.value1 = value1;
     this.value2 = value2;
   }
@@ -65,14 +65,24 @@ public class Pair<TValue1, TValue2> {
    * @return <code>true</code> if this object is the same as the obj argument; <code>false</code> otherwise.
    */
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null || getClass() != obj.getClass()) return false;
+  public boolean equals(final Object obj) {
+    if (this == obj) {
+      return true;
+    }
 
-    Pair pair = (Pair) obj;
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
 
-    if (value1 != null ? !value1.equals(pair.value1) : pair.value1 != null) return false;
-    if (value2 != null ? !value2.equals(pair.value2) : pair.value2 != null) return false;
+    final Pair pair = (Pair) obj;
+
+    if (value1 != null ? !value1.equals(pair.value1) : pair.value1 != null) {
+      return false;
+    }
+
+    if (value2 != null ? !value2.equals(pair.value2) : pair.value2 != null) {
+      return false;
+    }
 
     return true;
   }

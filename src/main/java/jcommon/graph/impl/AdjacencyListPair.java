@@ -29,15 +29,24 @@ import java.util.List;
  * @see IAdjacencyListPair
  */
 public class AdjacencyListPair<TVertex extends IVertex> extends Pair<TVertex, List<TVertex>> implements IAdjacencyListPair<TVertex> {
-  public AdjacencyListPair(TVertex value, List<TVertex> outNeighbors) {
+  /**
+   * @see IAdjacencyListPair
+   */
+  public AdjacencyListPair(final TVertex value, final List<TVertex> outNeighbors) {
     super(value, outNeighbors);
   }
 
+  /**
+   * @see IAdjacencyListPair#getVertex()
+   */
   @Override
   public TVertex getVertex() {
     return getValue1();
   }
 
+  /**
+   * @see IAdjacencyListPair#getOutNeighbors()
+   */
   @Override
   public List<TVertex> getOutNeighbors() {
     return getValue2();

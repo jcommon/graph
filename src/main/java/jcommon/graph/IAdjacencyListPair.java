@@ -26,6 +26,7 @@ import java.util.List;
  * out-neighbors ({@link #getOutNeighbors()}). Meant for use in conjunction with {@link Pair}.
  *
  * @param <TVertex> Type of {@link IVertex}.
+ *
  * @see Pair
  */
 public interface IAdjacencyListPair<TVertex extends IVertex> {

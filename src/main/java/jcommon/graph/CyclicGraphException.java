@@ -39,7 +39,7 @@ public class CyclicGraphException extends Exception {
    * @param message the detail message. The detail message is saved for
    *                later retrieval by the {@link #getMessage()} method.
    */
-  public CyclicGraphException(String message) {
+  public CyclicGraphException(final String message) {
     super(message);
   }
 
@@ -57,7 +57,7 @@ public class CyclicGraphException extends Exception {
    *                unknown.)
    * @since 1.4
    */
-  public CyclicGraphException(String message, Throwable cause) {
+  public CyclicGraphException(final String message, final Throwable cause) {
     super(message, cause);
   }
 
@@ -75,7 +75,7 @@ public class CyclicGraphException extends Exception {
    *              unknown.)
    * @since 1.4
    */
-  public CyclicGraphException(Throwable cause) {
+  public CyclicGraphException(final Throwable cause) {
     super(cause);
   }
 }

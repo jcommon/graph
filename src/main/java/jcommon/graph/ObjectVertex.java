@@ -27,41 +27,71 @@ package jcommon.graph;
 public class ObjectVertex implements IVertex {
   private final Object value;
 
-  public ObjectVertex(Object value) {
+  /**
+   * Instantiates a new instance of {@link ObjectVertex}.
+   *
+   * @param value The value which this {@link ObjectVertex} will represent.
+   */
+  public ObjectVertex(final Object value) {
     this.value = value;
   }
 
+  /**
+   * Retrieves the value that this {@link ObjectVertex} represents.
+   *
+   * @return An instance of a {@link Object} that this {@link ObjectVertex} represents.
+   */
   public Object get() {
     return getValue();
   }
 
+  /**
+   * Retrieves the value that this {@link ObjectVertex} represents.
+   *
+   * @return An instance of a {@link Object} that this {@link ObjectVertex} represents.
+   */
   public Object getValue() {
     return value;
   }
 
+  /**
+   * @see Object#equals(Object)
+   */
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
-    ObjectVertex that = (ObjectVertex) o;
+    final ObjectVertex that = (ObjectVertex) o;
 
     if (value != null ? !value.equals(that.value) : that.value != null) return false;
 
     return true;
   }
 
+  /**
+   * @see Object#toString()
+   */
   @Override
   public String toString() {
     return "" + value;
   }
 
+  /**
+   * @see Object#hashCode()
+   */
   @Override
   public int hashCode() {
     return value != null ? value.hashCode() : 0;
   }
 
-  public static ObjectVertex from(Object value) {
+  /**
+   * Convenience method for instantiating a new {@link ObjectVertex}.
+   *
+   * @param value The value which this {@link ObjectVertex} will represent.
+   * @return A new instance of {@link ObjectVertex}.
+   */
+  public static ObjectVertex from(final Object value) {
     return new ObjectVertex(value);
   }
 }

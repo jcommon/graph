@@ -27,44 +27,74 @@ package jcommon.graph;
 public class StringVertex implements IVertex {
   private final String name;
 
-  public StringVertex(String name) {
+  /**
+   * Instantiates a new instance of {@link StringVertex}.
+   *
+   * @param name The value which this {@link StringVertex} will represent.
+   */
+  public StringVertex(final String name) {
     if (name == null)
       throw new IllegalArgumentException("name cannot be null");
 
     this.name = name;
   }
 
+  /**
+   * Retrieves the value that this {@link StringVertex} represents.
+   *
+   * @return An instance of a {@link String} that this {@link StringVertex} represents.
+   */
   public String get() {
     return getName();
   }
 
+  /**
+   * Retrieves the value that this {@link StringVertex} represents.
+   *
+   * @return An instance of a {@link String} that this {@link StringVertex} represents.
+   */
   public String getName() {
     return name;
   }
 
+  /**
+   * @see Object#equals(Object)
+   */
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
-    StringVertex that = (StringVertex) o;
+    final StringVertex that = (StringVertex) o;
 
     if (!name.equals(that.name)) return false;
 
     return true;
   }
 
+  /**
+   * @see Object#toString()
+   */
   @Override
   public String toString() {
     return name;
   }
 
+  /**
+   * @see Object#hashCode()
+   */
   @Override
   public int hashCode() {
     return name.hashCode();
   }
 
-  public static StringVertex from(String name) {
+  /**
+   * Convenience method for instantiating a new {@link StringVertex}.
+   *
+   * @param name The value which this {@link StringVertex} will represent.
+   * @return A new instance of {@link StringVertex}.
+   */
+  public static StringVertex from(final String name) {
     return new StringVertex(name);
   }
 }

@@ -25,6 +25,9 @@ package jcommon.graph;
  * @see DirectedAcyclicGraph
  */
 public class StringGraph extends DirectedAcyclicGraph<StringVertex> {
+  /**
+   * @see DirectedAcyclicGraph#DirectedAcyclicGraph()
+   */
   protected StringGraph() {
     super();
   }
@@ -39,10 +42,11 @@ public class StringGraph extends DirectedAcyclicGraph<StringVertex> {
   /**
    * @see DirectedAcyclicGraph#build(IVertex[])
    */
-  public static StringGraph buildFromStrings(String...vertices) {
+  public static StringGraph buildFromStrings(final String...vertices) {
     final StringGraph g = new StringGraph();
-    for(String d : vertices)
+    for(String d : vertices) {
       g.addVertex(d);
+    }
     return g;
   }
 
@@ -56,32 +60,32 @@ public class StringGraph extends DirectedAcyclicGraph<StringVertex> {
   /**
    * @see DirectedAcyclicGraph#addVertex(IVertex)
    */
-  public StringGraph addVertex(String vertex) {
-    addVertex(StringVertex.from(vertex));
+  public StringGraph addVertex(final String vertex) {
+    this.addVertex(StringVertex.from(vertex));
     return this;
   }
 
   /**
    * @see DirectedAcyclicGraph#removeVertex(IVertex)
    */
-  public StringGraph removeVertex(String vertex) {
-    removeVertex(StringVertex.from(vertex));
+  public StringGraph removeVertex(final String vertex) {
+    this.removeVertex(StringVertex.from(vertex));
     return this;
   }
 
   /**
    * @see DirectedAcyclicGraph#addEdge(IVertex, IVertex)
    */
-  public StringGraph addEdge(String from, String to) {
-    addEdge(StringVertex.from(from), StringVertex.from(to));
+  public StringGraph addEdge(final String from, final String to) {
+    this.addEdge(StringVertex.from(from), StringVertex.from(to));
     return this;
   }
 
   /**
    * @see DirectedAcyclicGraph#removeEdge(IVertex, IVertex)
    */
-  public StringGraph removeEdge(String from, String to) {
-    removeEdge(StringVertex.from(from), StringVertex.from(to));
+  public StringGraph removeEdge(final String from, final String to) {
+    this.removeEdge(StringVertex.from(from), StringVertex.from(to));
     return this;
   }
 }

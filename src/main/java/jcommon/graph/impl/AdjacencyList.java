@@ -24,7 +24,13 @@ import jcommon.graph.IAdjacencyListPair;
 import jcommon.graph.IEdge;
 import jcommon.graph.IVertex;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @see IAdjacencyList
@@ -34,7 +40,10 @@ public class AdjacencyList<TVertex extends IVertex> implements IAdjacencyList<TV
   private final Map<TVertex, Integer> index_map;
   private final Map<TVertex, List<TVertex>> vertex_map;
 
-  public AdjacencyList(Set<TVertex> vertices, Set<IEdge<TVertex>> edges) {
+  /**
+   * @see IAdjacencyList
+   */
+  public AdjacencyList(final Set<TVertex> vertices, final Set<IEdge<TVertex>> edges) {
     //Create 2 maps.
     //  One maps from a vertex to all of its out-neighbors.
     //  The other just maps from an integer index to the vertices at that index.
@@ -42,17 +51,17 @@ public class AdjacencyList<TVertex extends IVertex> implements IAdjacencyList<TV
     final List<IAdjacencyListPair<TVertex>> num_map = new ArrayList<IAdjacencyListPair<TVertex>>(vertices.size());
     final Map<TVertex, List<TVertex>> vertex_map = new HashMap<TVertex, List<TVertex>>(vertices.size(), 1.0f);
     final Map<TVertex, Integer> index_map = new HashMap<TVertex, Integer>(vertices.size(), 1.0f);
-    final ArrayList<TVertex> EMPTY_VERTICES_ARRAYLIST = new ArrayList<TVertex>(0);
+    final List<TVertex> EMPTY_VERTICES_ARRAYLIST = new ArrayList<TVertex>(0);
 
     for(TVertex d : vertices) {
-      final ArrayList<TVertex> al_to = new ArrayList<TVertex>();
+      final List<TVertex> al_to = new ArrayList<TVertex>();
       for(IEdge<TVertex> r : edges) {
         if (d.equals(r.getFrom())) {
           al_to.add(r.getTo());
         }
       }
 
-      ArrayList<TVertex> arr_to = !al_to.isEmpty() ? al_to : EMPTY_VERTICES_ARRAYLIST;
+      final List<TVertex> arr_to = !al_to.isEmpty() ? al_to : EMPTY_VERTICES_ARRAYLIST;
 
       vertex_map.put(d, arr_to);
       num_map.add(new AdjacencyListPair<TVertex>(d, arr_to));
@@ -73,8 +82,8 @@ public class AdjacencyList<TVertex extends IVertex> implements IAdjacencyList<TV
   public int[] calculateInDegrees() {
     final int[] in_degrees = new int[size()];
     for(int i = 0; i < size(); ++i) {
-      IAdjacencyListPair<TVertex> p = pairAt(i);
-      TVertex d = p.getVertex();
+      final IAdjacencyListPair<TVertex> p = pairAt(i);
+      final TVertex d = p.getVertex();
 
       for(int j = 0; j < size(); ++j) {
         for(IVertex dep : pairAt(j).getOutNeighbors()) {
@@ -87,18 +96,18 @@ public class AdjacencyList<TVertex extends IVertex> implements IAdjacencyList<TV
   }
 
   @Override
-  public IAdjacencyListPair<TVertex> pairAt(int index) {
+  public IAdjacencyListPair<TVertex> pairAt(final int index) {
     return num_map.get(index);
   }
 
   @Override
-  public List<TVertex> outNeighborsAt(int index) {
-    IAdjacencyListPair<TVertex> pair = pairAt(index);
+  public List<TVertex> outNeighborsAt(final int index) {
+    final IAdjacencyListPair<TVertex> pair = pairAt(index);
     return pair.getOutNeighbors();
   }
 
   @Override
-  public List<TVertex> outNeighborsFor(TVertex vertex) {
+  public List<TVertex> outNeighborsFor(final TVertex vertex) {
     return vertex_map.get(vertex);
   }
 
@@ -118,8 +127,8 @@ public class AdjacencyList<TVertex extends IVertex> implements IAdjacencyList<TV
   }
 
   @Override
-  public int indexOf(IVertex vertex) {
-    Integer result = index_map.get(vertex);
+  public int indexOf(final IVertex vertex) {
+    final Integer result = index_map.get(vertex);
     return (result != null) ? result : -1;
   }
 }

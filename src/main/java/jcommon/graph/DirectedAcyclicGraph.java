@@ -34,12 +34,17 @@ import java.util.concurrent.Executors;
 /**
  * Factory and implementation of a dependency graph that can topologically sort its vertices.
  *
+ * @param <TVertex> Type of {@link IVertex} vertices that this graph contains.
+ *
  * @see IGraph
  */
 public class DirectedAcyclicGraph<TVertex extends IVertex> implements Cloneable, IGraph<TVertex> {
   private Set<TVertex> vertices = new LinkedHashSet<TVertex>(5, 0.8f);
   private Set<IEdge<TVertex>> edges = new LinkedHashSet<IEdge<TVertex>>(8, 0.8f);
 
+  /**
+   * Protected constructor to prevent public instantiation.
+   */
   protected DirectedAcyclicGraph() {
   }
 
@@ -77,7 +82,7 @@ public class DirectedAcyclicGraph<TVertex extends IVertex> implements Cloneable,
    * @return A new instance of type {@link TGraph} with {@link DirectedAcyclicGraph} specific fields already filled in.
    */
   @SuppressWarnings("unchecked")
-  protected static <TVertex extends IVertex, TGraph extends DirectedAcyclicGraph<TVertex>> TGraph copyGraph(TGraph graph) {
+  protected static <TVertex extends IVertex, TGraph extends DirectedAcyclicGraph<TVertex>> TGraph copyGraph(final TGraph graph) {
     try {
       final Class g_class = graph.getClass();
       final Constructor<? extends DirectedAcyclicGraph<TVertex>> construct = g_class.getDeclaredConstructor();
@@ -107,8 +112,8 @@ public class DirectedAcyclicGraph<TVertex extends IVertex> implements Cloneable,
    * @param <TVertex> Type of {@link IVertex} of the vertices in the new {@link IGraph}.
    * @return A new instance of {@link IGraph} with the provided vertices already added.
    */
-  public static <TVertex extends IVertex> IGraph<TVertex> build(TVertex...vertices) {
-    DirectedAcyclicGraph<TVertex> g = new DirectedAcyclicGraph<TVertex>();
+  public static <TVertex extends IVertex> IGraph<TVertex> build(final TVertex...vertices) {
+    final DirectedAcyclicGraph<TVertex> g = new DirectedAcyclicGraph<TVertex>();
     if (vertices != null) {
       for(TVertex d : vertices) {
         g.addVertex(d);
@@ -131,7 +136,7 @@ public class DirectedAcyclicGraph<TVertex extends IVertex> implements Cloneable,
    * @see IGraph#addVertex(IVertex)
    */
   @Override
-  public IGraph<TVertex> addVertex(TVertex vertex) {
+  public IGraph<TVertex> addVertex(final TVertex vertex) {
     if (vertex == null)
       throw new IllegalArgumentException("vertex must not be null");
     vertices.add(vertex);
@@ -142,7 +147,7 @@ public class DirectedAcyclicGraph<TVertex extends IVertex> implements Cloneable,
    * @see IGraph#removeVertex(IVertex)
    */
   @Override
-  public IGraph<TVertex> removeVertex(TVertex vertex) {
+  public IGraph<TVertex> removeVertex(final TVertex vertex) {
     if (vertex == null)
       throw new IllegalArgumentException("vertex must not be null");
     vertices.remove(vertex);
@@ -153,7 +158,7 @@ public class DirectedAcyclicGraph<TVertex extends IVertex> implements Cloneable,
    * @see IGraph#addEdge(IVertex, IVertex)
    */
   @Override
-  public IGraph<TVertex> addEdge(TVertex from, TVertex to) {
+  public IGraph<TVertex> addEdge(final TVertex from, final TVertex to) {
     edges.add(new Edge<TVertex>(from, to));
     return this;
   }
@@ -162,7 +167,7 @@ public class DirectedAcyclicGraph<TVertex extends IVertex> implements Cloneable,
    * @see IGraph#removeEdge(IVertex, IVertex)
    */
   @Override
-  public IGraph<TVertex> removeEdge(TVertex from, TVertex to) {
+  public IGraph<TVertex> removeEdge(final TVertex from, final TVertex to) {
     edges.remove(new Edge<TVertex>(from, to));
     return this;
   }
@@ -193,7 +198,7 @@ public class DirectedAcyclicGraph<TVertex extends IVertex> implements Cloneable,
    * @see IGraph#sort(ITopologicalSortStrategy)
    */
   @Override
-  public List<TVertex> sort(ITopologicalSortStrategy<TVertex> strategy) throws CyclicGraphException {
+  public List<TVertex> sort(final ITopologicalSortStrategy<TVertex> strategy) throws CyclicGraphException {
     if (strategy == null)
       throw new IllegalArgumentException("strategy cannot be null");
     if (!validate())
@@ -205,7 +210,7 @@ public class DirectedAcyclicGraph<TVertex extends IVertex> implements Cloneable,
    * @see IGraph#sortAsync(ITopologicalSortCallback)
    */
   @Override
-  public ITopologicalSortAsyncResult sortAsync(ITopologicalSortCallback<TVertex> callback) {
+  public ITopologicalSortAsyncResult sortAsync(final ITopologicalSortCallback<TVertex> callback) {
     return sortAsync(new SimpleTopologicalSort<TVertex>(), callback, null);
   }
 
@@ -213,7 +218,7 @@ public class DirectedAcyclicGraph<TVertex extends IVertex> implements Cloneable,
    * @see IGraph#sortAsync(ITopologicalSortCallback, ITopologicalSortErrorCallback)
    */
   @Override
-  public ITopologicalSortAsyncResult sortAsync(ITopologicalSortCallback<TVertex> callback, ITopologicalSortErrorCallback<TVertex> errorCallback) {
+  public ITopologicalSortAsyncResult sortAsync(final ITopologicalSortCallback<TVertex> callback, final ITopologicalSortErrorCallback<TVertex> errorCallback) {
     return sortAsync(new SimpleTopologicalSort<TVertex>(), callback, errorCallback);
   }
 
@@ -221,7 +226,7 @@ public class DirectedAcyclicGraph<TVertex extends IVertex> implements Cloneable,
    * @see IGraph#sortAsync(ITopologicalSortStrategy, ITopologicalSortCallback)
    */
   @Override
-  public ITopologicalSortAsyncResult sortAsync(ITopologicalSortStrategy<TVertex> strategy, ITopologicalSortCallback<TVertex> callback) {
+  public ITopologicalSortAsyncResult sortAsync(final ITopologicalSortStrategy<TVertex> strategy, final ITopologicalSortCallback<TVertex> callback) {
     return sortAsync(strategy, callback, null);
   }
 
@@ -229,9 +234,9 @@ public class DirectedAcyclicGraph<TVertex extends IVertex> implements Cloneable,
    * @see IGraph#sortAsync(ITopologicalSortStrategy, ITopologicalSortCallback, ITopologicalSortErrorCallback)
    */
   @Override
-  public ITopologicalSortAsyncResult sortAsync(ITopologicalSortStrategy<TVertex> strategy, ITopologicalSortCallback<TVertex> callback, ITopologicalSortErrorCallback<TVertex> errorCallback) {
-    ExecutorService executor = Executors.newFixedThreadPool(Math.max(2, Runtime.getRuntime().availableProcessors() + 1));
-    ITopologicalSortAsyncResult result = sortAsync(executor, strategy, callback, errorCallback);
+  public ITopologicalSortAsyncResult sortAsync(final ITopologicalSortStrategy<TVertex> strategy, final ITopologicalSortCallback<TVertex> callback, final ITopologicalSortErrorCallback<TVertex> errorCallback) {
+    final ExecutorService executor = Executors.newFixedThreadPool(Math.max(2, Runtime.getRuntime().availableProcessors() + 1));
+    final ITopologicalSortAsyncResult result = sortAsync(executor, strategy, callback, errorCallback);
 
     //We don't explicity shutdown b/c we may not be done processing
     //at this point. If need to abort prematurely, the caller can
@@ -244,7 +249,7 @@ public class DirectedAcyclicGraph<TVertex extends IVertex> implements Cloneable,
    * @see IGraph#sortAsync(java.util.concurrent.ExecutorService, ITopologicalSortCallback)
    */
   @Override
-  public ITopologicalSortAsyncResult sortAsync(ExecutorService executor, ITopologicalSortCallback<TVertex> callback) {
+  public ITopologicalSortAsyncResult sortAsync(final ExecutorService executor, final ITopologicalSortCallback<TVertex> callback) {
     return sortAsync(executor, new SimpleTopologicalSort<TVertex>(), callback, null);
   }
 
@@ -252,7 +257,7 @@ public class DirectedAcyclicGraph<TVertex extends IVertex> implements Cloneable,
    * @see IGraph#sortAsync(java.util.concurrent.ExecutorService, ITopologicalSortCallback, ITopologicalSortErrorCallback)
    */
   @Override
-  public ITopologicalSortAsyncResult sortAsync(ExecutorService executor, ITopologicalSortCallback<TVertex> callback, ITopologicalSortErrorCallback<TVertex> errorCallback) {
+  public ITopologicalSortAsyncResult sortAsync(final ExecutorService executor, final ITopologicalSortCallback<TVertex> callback, final ITopologicalSortErrorCallback<TVertex> errorCallback) {
     return sortAsync(executor, new SimpleTopologicalSort<TVertex>(), callback, errorCallback);
   }
 
@@ -260,7 +265,7 @@ public class DirectedAcyclicGraph<TVertex extends IVertex> implements Cloneable,
    * @see IGraph#sortAsync(java.util.concurrent.ExecutorService, ITopologicalSortStrategy, ITopologicalSortCallback)
    */
   @Override
-  public ITopologicalSortAsyncResult sortAsync(ExecutorService executor, ITopologicalSortStrategy<TVertex> strategy, ITopologicalSortCallback<TVertex> callback) {
+  public ITopologicalSortAsyncResult sortAsync(final ExecutorService executor, final ITopologicalSortStrategy<TVertex> strategy, final ITopologicalSortCallback<TVertex> callback) {
     return sortAsync(executor, strategy, callback, null);
   }
 
@@ -268,7 +273,7 @@ public class DirectedAcyclicGraph<TVertex extends IVertex> implements Cloneable,
    * @see IGraph#sortAsync(java.util.concurrent.ExecutorService, ITopologicalSortStrategy, ITopologicalSortCallback, ITopologicalSortErrorCallback)
    */
   @Override
-  public ITopologicalSortAsyncResult sortAsync(ExecutorService executor, ITopologicalSortStrategy<TVertex> strategy, ITopologicalSortCallback<TVertex> callback, ITopologicalSortErrorCallback<TVertex> errorCallback) {
+  public ITopologicalSortAsyncResult sortAsync(final ExecutorService executor, final ITopologicalSortStrategy<TVertex> strategy, final ITopologicalSortCallback<TVertex> callback, final ITopologicalSortErrorCallback<TVertex> errorCallback) {
     if (strategy == null)
       throw new IllegalArgumentException("strategy cannot be null");
     if (callback == null)

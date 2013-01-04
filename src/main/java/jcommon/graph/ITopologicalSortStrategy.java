@@ -37,6 +37,9 @@ import java.util.concurrent.ExecutorService;
  * @see <a href="http://en.wikipedia.org/wiki/Topological_sorting">http://en.wikipedia.org/wiki/Topological_sorting</a>
  */
 public interface ITopologicalSortStrategy<TVertex extends IVertex> {
+  /** {@link String} available for use when throwing {@link CyclicGraphException}s. */
+  String STANDARD_CYCLE_MESSAGE = "Cycle detected when topologically sorting the graph";
+
   /**
    * Given an instance of {@link IAdjacencyList}, topologically sorts the graph.
    *

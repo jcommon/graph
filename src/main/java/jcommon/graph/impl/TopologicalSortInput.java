@@ -38,7 +38,7 @@ public class TopologicalSortInput<TVertex extends IVertex> implements ITopologic
    * @param inputs An instance of a {@link Map} that maps between a {@link IVertex} and the output from
    *               processing it.
    */
-  public TopologicalSortInput(Map<TVertex, Object> inputs) {
+  public TopologicalSortInput(final Map<TVertex, Object> inputs) {
     if (inputs == null)
       throw new IllegalArgumentException("inputs cannot be empty");
 
@@ -58,7 +58,7 @@ public class TopologicalSortInput<TVertex extends IVertex> implements ITopologic
    * @see ITopologicalSortInput#get(IVertex)
    */
   @Override
-  public Object get(TVertex vertex) {
+  public Object get(final TVertex vertex) {
     return inputs.get(vertex);
   }
 
@@ -74,7 +74,7 @@ public class TopologicalSortInput<TVertex extends IVertex> implements ITopologic
    * @see ITopologicalSortInput#containsVertex(IVertex)
    */
   @Override
-  public boolean containsVertex(TVertex vertex) {
+  public boolean containsVertex(final TVertex vertex) {
     return inputs.containsKey(vertex);
   }
 
