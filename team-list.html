@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="Date-Revision-yyyymmdd" content="20130103" />
     <meta http-equiv="Content-Language" content="en" />
-    <title>JCommon Graph - Welcome</title>
+    <title>JCommon Graph - Team list</title>
     <link rel="stylesheet" href="./css/apache-maven-fluido-1.3.0.min.css" />
     <link rel="stylesheet" href="./css/site.css" />
     <link rel="stylesheet" href="./css/print.css" media="print" />
@@ -153,10 +153,12 @@
                 <ul class="nav nav-list">
                     <li class="nav-header">Project</li>
                                 
-      <li class="active">
+      <li>
     
-            <a href="#"><i class="none"></i>Home</a>
-          </li>
+                          <a href="index.html" title="Home">
+          <i class="none"></i>
+        Home</a>
+            </li>
                   
       <li>
     
@@ -222,12 +224,10 @@
         Dependencies</a>
             </li>
                   
-      <li>
+      <li class="active">
     
-                          <a href="team-list.html" title="Team">
-          <i class="none"></i>
-        Team</a>
-            </li>
+            <a href="#"><i class="none"></i>Team</a>
+          </li>
                   
       <li>
     
@@ -263,15 +263,22 @@
                 
         <div id="bodyColumn"  class="span9" >
                                   
-            <p></p><div class="section"><h2>JCommon Graph<a name="JCommon_Graph"></a></h2><p>Provides an API for manipulating simple in-memory graphs. Currently its most useful function is to run concurrent topological sorts that allow for parallel graph vertex processing when possible. If a vertex depends on others, it will wait to be processed until its dependencies are satisfied.</p><p>Please see the documentation for more information.</p><p>To use this library, add the following snippet to your <i>pom</i> file:</p>
-<div class="source"><pre class="prettyprint">&lt;dependencies&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.jcommon&lt;/groupId&gt;
-        &lt;artifactId&gt;graph&lt;/artifactId&gt;
-        &lt;version&gt;1.0&lt;/version&gt;
-    &lt;/dependency&gt;
-&lt;/dependencies&gt;
-</pre></div></div>
+            <div class="section"><h2>The Team<a name="The_Team"></a></h2><a name="The_Team"></a><p>A successful project requires many people to play many roles. Some members write code or documentation, while others are valuable as testers, submitting patches and suggestions.</p><p>The team is comprised of Members and Contributors. Members have direct access to the source of a project and actively evolve the code-base. Contributors improve the project through submission of patches and suggestions to the Members. The number of Contributors to the project is unbounded. Get involved today. All contributions to the project are greatly appreciated.</p><div class="section"><h3>Members<a name="Members"></a></h3><a name="Members"></a><p>The following is a list of developers with commit privileges that have directly contributed to the project in one way or another.</p><table border="0" class="table table-striped"><tr class="a"><th>Image</th><th>Id</th><th>Name</th><th>Email</th><th>URL</th><th>Organization</th><th>Organization URL</th><th>Roles</th></tr><tr class="b"><td><img src="http://www.gravatar.com/avatar/1c02065dfbdeaefe441523864c049552?d=mm&amp;s=60" alt="" /></td><td><a name="David Hoyt"></a>David Hoyt</td><td>David Hoyt</td><td><a class="externalLink" href="mailto:dhoyt@hoytsoft.org">dhoyt@hoytsoft.org</a></td><td><a class="externalLink" href="http://www.hoytsoft.org/">http://www.hoytsoft.org/</a></td><td>HoytSoft</td><td><a class="externalLink" href="http://www.hoytsoft.org/">http://www.hoytsoft.org/</a></td><td>architect, developer</td></tr></table></div><div class="section"><h3>Contributors<a name="Contributors"></a></h3><a name="Contributors"></a><p>There are no contributors listed for this project. Please check back again later.</p><script type="text/javascript">
+function offsetDate(id, offset) {
+    var now = new Date();
+    var nowTime = now.getTime();
+    var localOffset = now.getTimezoneOffset();
+    var developerTime = nowTime + ( offset * 60 * 60 * 1000 )+ ( localOffset * 60 * 1000 );
+    var developerDate = new Date(developerTime);
+
+    document.getElementById(id).innerHTML = developerDate;
+}
+
+function init(){
+}
+
+window.onLoad = init();
+</script></div></div>
                   </div>
             </div>
           </div>
