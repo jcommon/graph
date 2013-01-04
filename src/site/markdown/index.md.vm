@@ -1,0 +1,22 @@
+<head><title>Welcome</title></head>
+
+JCommon Graph
+-------------
+
+Provides an API for manipulating simple in-memory graphs. Currently its most useful function is to run concurrent
+topological sorts that allow for parallel graph vertex processing when possible. If a vertex depends on others, it will
+wait to be processed until its dependencies are satisfied.
+
+Please see the documentation for more information.
+
+To use this library, add the following snippet to your _pom_ file:
+
+```xml
+<dependencies>
+    <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>${project.artifactId}</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+</dependencies>
+```
