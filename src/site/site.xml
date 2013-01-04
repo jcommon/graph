@@ -45,8 +45,9 @@
 
     <menu name="Project">
       <item name="Home" href="index.html" />
-      <item name="GitHub Home" href="http://github.com/jcommon/graph/" />
       <item name="Downloads" href="downloads.html" />
+      <item name="Issue Report" href="github-report.html" />
+      <item name="GitHub Home" href="http://github.com/jcommon/graph/" />
     </menu>
 
     <menu name="Documentation">
@@ -56,6 +57,7 @@
       <item name="Checkstyle" href="checkstyle-aggregate.html" />
       <item name="FindBugs Report" href="findbugs.html" />
       <item name="Surefire Report" href="surefire.html" />
+
       <item name="Dependencies" href="dependencies.html" />
       <item name="Team" href="team-list.html" />
       <item name="License" href="license.html" />
