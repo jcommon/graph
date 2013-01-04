@@ -24,7 +24,7 @@ package jcommon.graph;
  *
  * @see DirectedAcyclicGraph
  */
-public class ObjectGraph extends DirectedAcyclicGraph<ObjectVertex> {
+public class ObjectGraph extends DirectedAcyclicGraph<IVertex> {
   /**
    * @see DirectedAcyclicGraph#DirectedAcyclicGraph()
    */
@@ -75,16 +75,20 @@ public class ObjectGraph extends DirectedAcyclicGraph<ObjectVertex> {
   /**
    * @see DirectedAcyclicGraph#addEdge(jcommon.graph.IVertex, jcommon.graph.IVertex)
    */
-  public ObjectGraph addEdge(final ObjectVertex from, final ObjectVertex to) {
-    super.addEdge(ObjectVertex.from(from), ObjectVertex.from(to));
+  public ObjectGraph addEdge(final Object from, final Object to) {
+    final IVertex t = (to instanceof IVertex) ? (IVertex)to : ObjectVertex.from(to);
+    final IVertex f = (from instanceof IVertex) ? (IVertex)from : ObjectVertex.from(from);
+    super.addEdge(f, t);
     return this;
   }
 
   /**
    * @see DirectedAcyclicGraph#removeEdge(jcommon.graph.IVertex, jcommon.graph.IVertex)
    */
-  public ObjectGraph removeEdge(final ObjectVertex from, final ObjectVertex to) {
-    super.removeEdge(ObjectVertex.from(from), ObjectVertex.from(to));
+  public ObjectGraph removeEdge(final Object from, final Object to) {
+    final IVertex t = (to instanceof IVertex) ? (IVertex)to : ObjectVertex.from(to);
+    final IVertex f = (from instanceof IVertex) ? (IVertex)from : ObjectVertex.from(from);
+    super.removeEdge(f, t);
     return this;
   }
 }
