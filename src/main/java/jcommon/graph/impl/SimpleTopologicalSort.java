@@ -189,7 +189,14 @@ public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITo
                   //detect an effective deadlock -- we can't make progress b/c there's
                   //a cycle preventing it.
                   outstanding_submissions.incrementAndGet();
-                  executorProcessors.submit(dep_callable);
+                  try {
+                    executorProcessors.submit(dep_callable);
+                  } catch(Throwable t) {
+                    //If the submission was rejected, then decrement the count we just incremented.
+                    //This should result in a leftover and the remaining.size() will be > 0 and
+                    //will thus fail later on.
+                    outstanding_submissions.decrementAndGet();
+                  }
                 }
               }
             }
@@ -258,8 +265,16 @@ public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITo
     outstanding_submissions.set(queue.size());
 
     Callable<Object> callable;
+
     while ((callable = queue.poll()) != null) {
-      executorProcessors.submit(callable);
+      try {
+        executorProcessors.submit(callable);
+      } catch(Throwable t) {
+        if (errorCallback != null)
+          errorCallback.handleError(null, new CyclicGraphException(STANDARD_CYCLE_MESSAGE), coordinator);
+        asyncResult.asyncComplete(false);
+        return asyncResult;
+      }
     }
 
     return asyncResult;

@@ -148,6 +148,17 @@
         </configuration>
       </plugin>
 
+      <!-- Findbugs -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>findbugs-maven-plugin</artifactId>
+        <version>2.5.2</version>
+        <configuration>
+          <xmlOutput>false</xmlOutput>
+          <excludeFilterFile>findbugs.xml</excludeFilterFile>
+        </configuration>
+      </plugin>
+
       <!-- Release plugin -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -289,6 +300,7 @@
               <version>2.5.2</version>
               <configuration>
                 <xmlOutput>true</xmlOutput>
+                <excludeFilterFile>findbugs.xml</excludeFilterFile>
               </configuration>
             </plugin>
           </reportPlugins>

@@ -60,7 +60,7 @@ public class ObjectGraph extends DirectedAcyclicGraph<ObjectVertex> {
    * @see DirectedAcyclicGraph#addVertex(jcommon.graph.IVertex)
    */
   public ObjectGraph addVertex(final Object vertex) {
-    addVertex(ObjectVertex.from(vertex));
+    super.addVertex(ObjectVertex.from(vertex));
     return this;
   }
 
@@ -68,7 +68,7 @@ public class ObjectGraph extends DirectedAcyclicGraph<ObjectVertex> {
    * @see DirectedAcyclicGraph#removeVertex(jcommon.graph.IVertex)
    */
   public ObjectGraph removeVertex(final Object vertex) {
-    removeVertex(ObjectVertex.from(vertex));
+    super.removeVertex(ObjectVertex.from(vertex));
     return this;
   }
 
@@ -76,7 +76,7 @@ public class ObjectGraph extends DirectedAcyclicGraph<ObjectVertex> {
    * @see DirectedAcyclicGraph#addEdge(jcommon.graph.IVertex, jcommon.graph.IVertex)
    */
   public ObjectGraph addEdge(final ObjectVertex from, final ObjectVertex to) {
-    addEdge(ObjectVertex.from(from), ObjectVertex.from(to));
+    super.addEdge(ObjectVertex.from(from), ObjectVertex.from(to));
     return this;
   }
 
@@ -84,7 +84,7 @@ public class ObjectGraph extends DirectedAcyclicGraph<ObjectVertex> {
    * @see DirectedAcyclicGraph#removeEdge(jcommon.graph.IVertex, jcommon.graph.IVertex)
    */
   public ObjectGraph removeEdge(final ObjectVertex from, final ObjectVertex to) {
-    removeEdge(ObjectVertex.from(from), ObjectVertex.from(to));
+    super.removeEdge(ObjectVertex.from(from), ObjectVertex.from(to));
     return this;
   }
 }

@@ -61,7 +61,7 @@ public class StringGraph extends DirectedAcyclicGraph<StringVertex> {
    * @see DirectedAcyclicGraph#addVertex(IVertex)
    */
   public StringGraph addVertex(final String vertex) {
-    this.addVertex(StringVertex.from(vertex));
+    super.addVertex(StringVertex.from(vertex));
     return this;
   }
 
@@ -69,7 +69,7 @@ public class StringGraph extends DirectedAcyclicGraph<StringVertex> {
    * @see DirectedAcyclicGraph#removeVertex(IVertex)
    */
   public StringGraph removeVertex(final String vertex) {
-    this.removeVertex(StringVertex.from(vertex));
+    super.removeVertex(StringVertex.from(vertex));
     return this;
   }
 
@@ -77,7 +77,7 @@ public class StringGraph extends DirectedAcyclicGraph<StringVertex> {
    * @see DirectedAcyclicGraph#addEdge(IVertex, IVertex)
    */
   public StringGraph addEdge(final String from, final String to) {
-    this.addEdge(StringVertex.from(from), StringVertex.from(to));
+    super.addEdge(StringVertex.from(from), StringVertex.from(to));
     return this;
   }
 
@@ -85,7 +85,7 @@ public class StringGraph extends DirectedAcyclicGraph<StringVertex> {
    * @see DirectedAcyclicGraph#removeEdge(IVertex, IVertex)
    */
   public StringGraph removeEdge(final String from, final String to) {
-    this.removeEdge(StringVertex.from(from), StringVertex.from(to));
+    super.removeEdge(StringVertex.from(from), StringVertex.from(to));
     return this;
   }
 }

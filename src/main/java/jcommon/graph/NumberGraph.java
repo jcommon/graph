@@ -60,7 +60,7 @@ public class NumberGraph extends DirectedAcyclicGraph<NumberVertex> {
    * @see DirectedAcyclicGraph#addVertex(IVertex)
    */
   public NumberGraph addVertex(final Number vertex) {
-    addVertex(NumberVertex.from(vertex));
+    super.addVertex(NumberVertex.from(vertex));
     return this;
   }
 
@@ -68,7 +68,7 @@ public class NumberGraph extends DirectedAcyclicGraph<NumberVertex> {
    * @see DirectedAcyclicGraph#removeVertex(IVertex)
    */
   public NumberGraph removeVertex(final Number vertex) {
-    removeVertex(NumberVertex.from(vertex));
+    super.removeVertex(NumberVertex.from(vertex));
     return this;
   }
 
@@ -76,7 +76,7 @@ public class NumberGraph extends DirectedAcyclicGraph<NumberVertex> {
    * @see DirectedAcyclicGraph#addEdge(IVertex, IVertex)
    */
   public NumberGraph addEdge(final Number from, final Number to) {
-    addEdge(NumberVertex.from(from), NumberVertex.from(to));
+    super.addEdge(NumberVertex.from(from), NumberVertex.from(to));
     return this;
   }
 
@@ -84,7 +84,7 @@ public class NumberGraph extends DirectedAcyclicGraph<NumberVertex> {
    * @see DirectedAcyclicGraph#removeEdge(IVertex, IVertex)
    */
   public NumberGraph removeEdge(final Number from, final Number to) {
-    removeEdge(NumberVertex.from(from), NumberVertex.from(to));
+    super.removeEdge(NumberVertex.from(from), NumberVertex.from(to));
     return this;
   }
 }
