@@ -60,16 +60,16 @@ public class StringGraph extends ObjectGraph<String, String> {
   /**
    * @see ObjectGraph#addVertex(IVertex)
    */
-  public StringGraph addVertex(final String vertex) {
-    super.addVertex(ObjectVertex.from(vertex));
+  public StringGraph addVertex(final String value) {
+    super.addVertex(ObjectVertex.from(value));
     return this;
   }
 
   /**
    * @see ObjectGraph#removeVertex(IVertex)
    */
-  public StringGraph removeVertex(final String vertex) {
-    super.removeVertex(ObjectVertex.from(vertex));
+  public StringGraph removeVertex(final String value) {
+    super.removeVertex(ObjectVertex.from(value));
     return this;
   }
 

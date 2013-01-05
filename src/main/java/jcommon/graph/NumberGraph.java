@@ -62,16 +62,16 @@ public class NumberGraph<TNumber extends Number> extends ObjectGraph<TNumber, TN
   /**
    * @see ObjectGraph#addVertex(IVertex)
    */
-  public NumberGraph<TNumber> addVertex(final TNumber vertex) {
-    super.addVertex(ObjectVertex.from(vertex));
+  public NumberGraph<TNumber> addVertex(final TNumber value) {
+    super.addVertex(ObjectVertex.from(value));
     return this;
   }
 
   /**
    * @see ObjectGraph#removeVertex(IVertex)
    */
-  public NumberGraph<TNumber> removeVertex(final TNumber vertex) {
-    super.removeVertex(ObjectVertex.from(vertex));
+  public NumberGraph<TNumber> removeVertex(final TNumber value) {
+    super.removeVertex(ObjectVertex.from(value));
     return this;
   }
 
