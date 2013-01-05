@@ -47,8 +47,8 @@ public class ValidList<TValue extends Object> {
     return new ValidList<String>(values);
   }
 
-  public static ValidList<Number> buildFromNumbers(Number...values) {
-    return new ValidList<Number>(values);
+  public static <TValue extends Number> ValidList<TValue> buildFromNumbers(TValue...values) {
+    return new ValidList<TValue>(values);
   }
 
   public boolean matches(TValue...values) {

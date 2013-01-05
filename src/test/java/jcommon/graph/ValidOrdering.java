@@ -46,8 +46,8 @@ public class ValidOrdering<TValue extends Object> {
     return new ValidOrdering<String>(values);
   }
 
-  public static ValidOrdering<Number> buildFromNumbers(Number...values) {
-    return new ValidOrdering<Number>(values);
+  public static <TValue extends Number> ValidOrdering<TValue> buildFromNumbers(TValue...values) {
+    return new ValidOrdering<TValue>(values);
   }
 
   public boolean matches(TValue...values) {

@@ -22,69 +22,72 @@ package jcommon.graph;
 /**
  * Factory and implementation of a dependency graph that can topologically sort vertices that are {@link Number}s.
  *
+ * @param <TNumber> The type of number this graph operates on.
+ *
  * @see DirectedAcyclicGraph
  */
-public class NumberGraph extends DirectedAcyclicGraph<NumberVertex, Number> {
+public class NumberGraph<TNumber extends Number> extends ObjectGraph<TNumber> {
   /**
-   * @see DirectedAcyclicGraph#DirectedAcyclicGraph()
+   * @see ObjectGraph#ObjectGraph()
    */
   protected NumberGraph() {
     super();
   }
 
   /**
-   * @see DirectedAcyclicGraph#copy()
+   * @see ObjectGraph#copy()
    */
-  public NumberGraph copyAsNumberGraph() {
+  public NumberGraph<TNumber> copyAsNumberGraph() {
     return copyGraph(this);
   }
 
   /**
-   * @see DirectedAcyclicGraph#build(IVertex[])
+   * @see ObjectGraph#build(IVertex[])
    */
-  public static NumberGraph buildFromNumbers(final Number...vertices) {
-    final NumberGraph g = new NumberGraph();
-    for(Number d : vertices)
+  public static <TNumber extends Number> NumberGraph<TNumber> buildFromNumbers(final TNumber...values) {
+    final NumberGraph<TNumber> g = new NumberGraph<TNumber>();
+    for(TNumber d : values)
       g.addVertex(d);
     return g;
   }
 
   /**
-   * @see DirectedAcyclicGraph#create()
+   * @see ObjectGraph#create()
    */
-  public static NumberGraph createForNumbers() {
+  @SuppressWarnings("unchecked")
+  public static <TNumber extends Number> NumberGraph<TNumber> createForNumbers() {
     return buildFromNumbers();
   }
 
   /**
-   * @see DirectedAcyclicGraph#addVertex(IVertex)
+   * @see ObjectGraph#addVertex(IVertex)
    */
-  public NumberGraph addVertex(final Number vertex) {
-    super.addVertex(NumberVertex.from(vertex));
+  public NumberGraph<TNumber> addVertex(final TNumber vertex) {
+    super.addVertex(ObjectVertex.from(vertex));
     return this;
   }
 
   /**
-   * @see DirectedAcyclicGraph#removeVertex(IVertex)
+   * @see ObjectGraph#removeVertex(IVertex)
    */
-  public NumberGraph removeVertex(final Number vertex) {
-    super.removeVertex(NumberVertex.from(vertex));
+  public NumberGraph<TNumber> removeVertex(final TNumber vertex) {
+    super.removeVertex(ObjectVertex.from(vertex));
     return this;
   }
 
   /**
-   * @see DirectedAcyclicGraph#addEdge(IVertex, IVertex)
+   * @see ObjectGraph#addEdge(IVertex, IVertex)
    */
-  public NumberGraph addEdge(final Number from, final Number to) {
-    super.addEdge(NumberVertex.from(from), NumberVertex.from(to));
+  public NumberGraph<TNumber> addEdge(final TNumber from, final TNumber to) {
+    super.addEdge(ObjectVertex.from(from), ObjectVertex.from(to));
     return this;
   }
 
   /**
-   * @see DirectedAcyclicGraph#removeEdge(IVertex, IVertex)
+   * @see ObjectGraph#removeEdge(IVertex, IVertex)
    */
-  public NumberGraph removeEdge(final Number from, final Number to) {
-    super.removeEdge(NumberVertex.from(from), NumberVertex.from(to));
+  public NumberGraph<TNumber> removeEdge(final TNumber from, final TNumber to) {
+    super.removeEdge(ObjectVertex.from(from), ObjectVertex.from(to));
     return this;
   }
 }

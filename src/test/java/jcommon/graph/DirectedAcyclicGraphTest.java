@@ -90,31 +90,31 @@ public class DirectedAcyclicGraphTest {
       solution.checkSortAsync(CALLBACK_NOOP);
 
     //Create a graph like: 1 -> 2 -> 3 -> 4 -> 5
-    final NumberGraph ng_1 = Examples.VALID_5;
+    final NumberGraph<Integer> ng_1 = Examples.VALID_5;
 
     //Sum up the values as they're processed.
-    ITopologicalSortAsyncResult<Number> ng_result = ng_1.sortAsync(new ITopologicalSortCallback<Number>() {
+    ITopologicalSortAsyncResult<Integer> ng_result = ng_1.sortAsync(new ITopologicalSortCallback<Integer>() {
       @Override
-      public Number handle(Number number, ITopologicalSortInput<Number> input, IVertex<Number> vertex, ITopologicalSortCoordinator coordinator) throws Throwable {
-        int prev_val = (Integer)(input.isStart() ? 0 : input.first());
-        int val = (Integer)number;
+      public Integer handle(Integer number, ITopologicalSortInput<Integer> input, IVertex<Integer> vertex, ITopologicalSortCoordinator coordinator) throws Throwable {
+        int prev_val = (input.isStart() ? 0 : input.first());
+        int val = number;
         return prev_val + val;
       }
     });
     assertTrue(ng_result.waitForCompletion(10L, TimeUnit.SECONDS));
-    assertEquals(15, ng_result.first());
+    assertEquals(15, (int)ng_result.first());
 
     //Take the product of the values as they're processed.
-    ng_result = ng_1.sortAsync(new ITopologicalSortCallback<Number>() {
+    ng_result = ng_1.sortAsync(new ITopologicalSortCallback<Integer>() {
       @Override
-      public Number handle(Number number, ITopologicalSortInput<Number> input, IVertex<Number> vertex, ITopologicalSortCoordinator coordinator) throws Throwable {
-        int prev_val = (Integer)(input.isStart() ? 1 : input.first());
-        int val = (Integer)number;
+      public Integer handle(Integer number, ITopologicalSortInput<Integer> input, IVertex<Integer> vertex, ITopologicalSortCoordinator coordinator) throws Throwable {
+        int prev_val = (input.isStart() ? 1 : input.first());
+        int val = number;
         return prev_val * val;
       }
     });
     assertTrue(ng_result.waitForCompletion(10L, TimeUnit.SECONDS));
-    assertEquals(120, ng_result.first());
+    assertEquals(120, (int)ng_result.first());
   }
 
   private boolean allSuccessfullyCompleted(ITopologicalSortAsyncResult[] results) {

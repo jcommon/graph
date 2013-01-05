@@ -22,17 +22,19 @@ package jcommon.graph;
 /**
  * A representation of an {@link IVertex} instance using {@link Object}s.
  *
+ * @param <TValue> The type of object this class will hold.
+ *
  * @see IVertex
  */
-public class ObjectVertex implements IVertex<Object> {
-  private final Object value;
+public class ObjectVertex<TValue extends Object> implements IVertex<TValue> {
+  private final TValue value;
 
   /**
    * Instantiates a new instance of {@link ObjectVertex}.
    *
    * @param value The value which this {@link ObjectVertex} will represent.
    */
-  public ObjectVertex(final Object value) {
+  public ObjectVertex(final TValue value) {
     this.value = value;
   }
 
@@ -42,7 +44,7 @@ public class ObjectVertex implements IVertex<Object> {
    * @return An instance of a {@link Object} that this {@link ObjectVertex} represents.
    */
   @Override
-  public Object get() {
+  public TValue get() {
     return getValue();
   }
 
@@ -52,7 +54,7 @@ public class ObjectVertex implements IVertex<Object> {
    * @return An instance of a {@link Object} that this {@link ObjectVertex} represents.
    */
   @Override
-  public Object getValue() {
+  public TValue getValue() {
     return value;
   }
 
@@ -93,7 +95,7 @@ public class ObjectVertex implements IVertex<Object> {
    * @param value The value which this {@link ObjectVertex} will represent.
    * @return A new instance of {@link ObjectVertex}.
    */
-  public static ObjectVertex from(final Object value) {
-    return new ObjectVertex(value);
+  public static <TValue extends Object> IVertex<TValue> from(final TValue value) {
+    return new ObjectVertex<TValue>(value);
   }
 }

@@ -24,23 +24,23 @@ package jcommon.graph;
  *
  * @see DirectedAcyclicGraph
  */
-public class StringGraph extends DirectedAcyclicGraph<StringVertex, String> {
+public class StringGraph extends ObjectGraph<String> {
   /**
-   * @see DirectedAcyclicGraph#DirectedAcyclicGraph()
+   * @see ObjectGraph#ObjectGraph()
    */
   protected StringGraph() {
     super();
   }
 
   /**
-   * @see DirectedAcyclicGraph#copy()
+   * @see ObjectGraph#copy()
    */
   public StringGraph copyAsStringGraph() {
     return copyGraph(this);
   }
 
   /**
-   * @see DirectedAcyclicGraph#build(IVertex[])
+   * @see ObjectGraph#build(IVertex[])
    */
   public static StringGraph buildFromStrings(final String...vertices) {
     final StringGraph g = new StringGraph();
@@ -51,41 +51,41 @@ public class StringGraph extends DirectedAcyclicGraph<StringVertex, String> {
   }
 
   /**
-   * @see DirectedAcyclicGraph#create()
+   * @see ObjectGraph#create()
    */
   public static StringGraph createForStrings() {
     return buildFromStrings();
   }
 
   /**
-   * @see DirectedAcyclicGraph#addVertex(IVertex)
+   * @see ObjectGraph#addVertex(IVertex)
    */
   public StringGraph addVertex(final String vertex) {
-    super.addVertex(StringVertex.from(vertex));
+    super.addVertex(ObjectVertex.from(vertex));
     return this;
   }
 
   /**
-   * @see DirectedAcyclicGraph#removeVertex(IVertex)
+   * @see ObjectGraph#removeVertex(IVertex)
    */
   public StringGraph removeVertex(final String vertex) {
-    super.removeVertex(StringVertex.from(vertex));
+    super.removeVertex(ObjectVertex.from(vertex));
     return this;
   }
 
   /**
-   * @see DirectedAcyclicGraph#addEdge(IVertex, IVertex)
+   * @see ObjectGraph#addEdge(IVertex, IVertex)
    */
   public StringGraph addEdge(final String from, final String to) {
-    super.addEdge(StringVertex.from(from), StringVertex.from(to));
+    super.addEdge(ObjectVertex.from(from), ObjectVertex.from(to));
     return this;
   }
 
   /**
-   * @see DirectedAcyclicGraph#removeEdge(IVertex, IVertex)
+   * @see ObjectGraph#removeEdge(IVertex, IVertex)
    */
   public StringGraph removeEdge(final String from, final String to) {
-    super.removeEdge(StringVertex.from(from), StringVertex.from(to));
+    super.removeEdge(ObjectVertex.from(from), ObjectVertex.from(to));
     return this;
   }
 }

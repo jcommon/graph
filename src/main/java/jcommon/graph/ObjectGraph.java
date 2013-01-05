@@ -24,7 +24,7 @@ package jcommon.graph;
  *
  * @see DirectedAcyclicGraph
  */
-public class ObjectGraph extends DirectedAcyclicGraph<IVertex<Object>, Object> {
+public class ObjectGraph<TValue extends Object> extends DirectedAcyclicGraph<IVertex<TValue>, TValue> {
   /**
    * @see DirectedAcyclicGraph#DirectedAcyclicGraph()
    */
@@ -35,16 +35,16 @@ public class ObjectGraph extends DirectedAcyclicGraph<IVertex<Object>, Object> {
   /**
    * @see DirectedAcyclicGraph#copy()
    */
-  public ObjectGraph copyAsObjectGraph() {
+  public ObjectGraph<TValue> copyAsObjectGraph() {
     return copyGraph(this);
   }
 
   /**
-   * @see DirectedAcyclicGraph#build(jcommon.graph.IVertex[])
+   * @see DirectedAcyclicGraph#build(IVertex[])
    */
-  public static ObjectGraph buildFromObjects(final Object...vertices) {
-    final ObjectGraph g = new ObjectGraph();
-    for(Object v : vertices)
+  public static <TValue extends Object> ObjectGraph<TValue> buildFromObjects(final TValue...vertices) {
+    final ObjectGraph<TValue> g = new ObjectGraph<TValue>();
+    for(TValue v : vertices)
       g.addVertex(v);
     return g;
   }
@@ -52,14 +52,15 @@ public class ObjectGraph extends DirectedAcyclicGraph<IVertex<Object>, Object> {
   /**
    * @see DirectedAcyclicGraph#create()
    */
-  public static ObjectGraph createForObjects() {
+  @SuppressWarnings("unchecked")
+  public static <TValue extends Object> ObjectGraph<TValue> createForObjects() {
     return buildFromObjects();
   }
 
   /**
    * @see DirectedAcyclicGraph#addVertex(jcommon.graph.IVertex)
    */
-  public ObjectGraph addVertex(final Object vertex) {
+  public ObjectGraph<TValue> addVertex(final TValue vertex) {
     super.addVertex(ObjectVertex.from(vertex));
     return this;
   }
@@ -67,7 +68,7 @@ public class ObjectGraph extends DirectedAcyclicGraph<IVertex<Object>, Object> {
   /**
    * @see DirectedAcyclicGraph#removeVertex(jcommon.graph.IVertex)
    */
-  public ObjectGraph removeVertex(final Object vertex) {
+  public ObjectGraph<TValue> removeVertex(final TValue vertex) {
     super.removeVertex(ObjectVertex.from(vertex));
     return this;
   }
@@ -76,9 +77,9 @@ public class ObjectGraph extends DirectedAcyclicGraph<IVertex<Object>, Object> {
    * @see DirectedAcyclicGraph#addEdge(jcommon.graph.IVertex, jcommon.graph.IVertex)
    */
   @SuppressWarnings("unchecked")
-  public ObjectGraph addEdge(final Object from, final Object to) {
-    final IVertex t = (to instanceof IVertex) ? (IVertex<Object>)to : ObjectVertex.from(to);
-    final IVertex f = (from instanceof IVertex) ? (IVertex<Object>)from : ObjectVertex.from(from);
+  public ObjectGraph<TValue> addEdge(final TValue from, final TValue to) {
+    final IVertex<TValue> t = (to instanceof IVertex) ? (IVertex<TValue>)to : ObjectVertex.from(to);
+    final IVertex<TValue> f = (from instanceof IVertex) ? (IVertex<TValue>)from : ObjectVertex.from(from);
     super.addEdge(f, t);
     return this;
   }
@@ -87,9 +88,9 @@ public class ObjectGraph extends DirectedAcyclicGraph<IVertex<Object>, Object> {
    * @see DirectedAcyclicGraph#removeEdge(jcommon.graph.IVertex, jcommon.graph.IVertex)
    */
   @SuppressWarnings("unchecked")
-  public ObjectGraph removeEdge(final Object from, final Object to) {
-    final IVertex t = (to instanceof IVertex) ? (IVertex<Object>)to : ObjectVertex.from(to);
-    final IVertex f = (from instanceof IVertex) ? (IVertex<Object>)from : ObjectVertex.from(from);
+  public ObjectGraph<TValue> removeEdge(final TValue from, final TValue to) {
+    final IVertex<TValue> t = (to instanceof IVertex) ? (IVertex<TValue>)to : ObjectVertex.from(to);
+    final IVertex<TValue> f = (from instanceof IVertex) ? (IVertex<TValue>)from : ObjectVertex.from(from);
     super.removeEdge(f, t);
     return this;
   }
