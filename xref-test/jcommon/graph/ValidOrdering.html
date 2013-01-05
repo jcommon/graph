@@ -32,14 +32,14 @@
 <a class="jxr_linenumber" name="22" href="#22">22</a>  <strong class="jxr_keyword">import</strong> java.util.Arrays;
 <a class="jxr_linenumber" name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> java.util.List;
 <a class="jxr_linenumber" name="24" href="#24">24</a>  
-<a class="jxr_linenumber" name="25" href="#25">25</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> ValidOrdering&lt;TVertex <strong class="jxr_keyword">extends</strong> IVertex&gt; {
-<a class="jxr_linenumber" name="26" href="#26">26</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> TVertex[] ordering;
+<a class="jxr_linenumber" name="25" href="#25">25</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> ValidOrdering&lt;TValue <strong class="jxr_keyword">extends</strong> Object&gt; {
+<a class="jxr_linenumber" name="26" href="#26">26</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> TValue[] ordering;
 <a class="jxr_linenumber" name="27" href="#27">27</a>  
-<a class="jxr_linenumber" name="28" href="#28">28</a>    <strong class="jxr_keyword">public</strong> <a href="../../jcommon/graph/ValidOrdering.html">ValidOrdering</a>(TVertex...vertices) {
-<a class="jxr_linenumber" name="29" href="#29">29</a>      <strong class="jxr_keyword">this</strong>.ordering = vertices;
+<a class="jxr_linenumber" name="28" href="#28">28</a>    <strong class="jxr_keyword">public</strong> <a href="../../jcommon/graph/ValidOrdering.html">ValidOrdering</a>(TValue...values) {
+<a class="jxr_linenumber" name="29" href="#29">29</a>      <strong class="jxr_keyword">this</strong>.ordering = values;
 <a class="jxr_linenumber" name="30" href="#30">30</a>    }
 <a class="jxr_linenumber" name="31" href="#31">31</a>  
-<a class="jxr_linenumber" name="32" href="#32">32</a>    <strong class="jxr_keyword">public</strong> IVertex[] getOrdering() {
+<a class="jxr_linenumber" name="32" href="#32">32</a>    <strong class="jxr_keyword">public</strong> TValue[] getOrdering() {
 <a class="jxr_linenumber" name="33" href="#33">33</a>      <strong class="jxr_keyword">return</strong> ordering;
 <a class="jxr_linenumber" name="34" href="#34">34</a>    }
 <a class="jxr_linenumber" name="35" href="#35">35</a>  
@@ -48,42 +48,34 @@
 <a class="jxr_linenumber" name="38" href="#38">38</a>      <strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span> + (ordering == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : Arrays.asList(ordering));
 <a class="jxr_linenumber" name="39" href="#39">39</a>    }
 <a class="jxr_linenumber" name="40" href="#40">40</a>  
-<a class="jxr_linenumber" name="41" href="#41">41</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;TVertex <strong class="jxr_keyword">extends</strong> IVertex&gt; <a href="../../jcommon/graph/ValidOrdering.html">ValidOrdering</a> build(TVertex...vertices) {
-<a class="jxr_linenumber" name="42" href="#42">42</a>      <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ValidOrdering&lt;TVertex&gt;(vertices);
+<a class="jxr_linenumber" name="41" href="#41">41</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;TValue <strong class="jxr_keyword">extends</strong> Object&gt; <a href="../../jcommon/graph/ValidOrdering.html">ValidOrdering</a> build(TValue...values) {
+<a class="jxr_linenumber" name="42" href="#42">42</a>      <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ValidOrdering&lt;TValue&gt;(values);
 <a class="jxr_linenumber" name="43" href="#43">43</a>    }
 <a class="jxr_linenumber" name="44" href="#44">44</a>  
-<a class="jxr_linenumber" name="45" href="#45">45</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> ValidOrdering&lt;StringVertex&gt; buildFromStrings(String...vertices) {
-<a class="jxr_linenumber" name="46" href="#46">46</a>      StringVertex[] ordering = <strong class="jxr_keyword">new</strong> StringVertex[vertices.length];
-<a class="jxr_linenumber" name="47" href="#47">47</a>      <strong class="jxr_keyword">for</strong>(<strong class="jxr_keyword">int</strong> i = 0; i &lt; vertices.length; ++i) {
-<a class="jxr_linenumber" name="48" href="#48">48</a>        ordering[i] = StringVertex.from(vertices[i]);
-<a class="jxr_linenumber" name="49" href="#49">49</a>      }
-<a class="jxr_linenumber" name="50" href="#50">50</a>      <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ValidOrdering&lt;StringVertex&gt;(ordering);
+<a class="jxr_linenumber" name="45" href="#45">45</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> ValidOrdering&lt;String&gt; buildFromStrings(String...values) {
+<a class="jxr_linenumber" name="46" href="#46">46</a>      <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ValidOrdering&lt;String&gt;(values);
+<a class="jxr_linenumber" name="47" href="#47">47</a>    }
+<a class="jxr_linenumber" name="48" href="#48">48</a>  
+<a class="jxr_linenumber" name="49" href="#49">49</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> ValidOrdering&lt;Number&gt; buildFromNumbers(Number...values) {
+<a class="jxr_linenumber" name="50" href="#50">50</a>      <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ValidOrdering&lt;Number&gt;(values);
 <a class="jxr_linenumber" name="51" href="#51">51</a>    }
 <a class="jxr_linenumber" name="52" href="#52">52</a>  
-<a class="jxr_linenumber" name="53" href="#53">53</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> ValidOrdering&lt;NumberVertex&gt; buildFromNumbers(Number...vertices) {
-<a class="jxr_linenumber" name="54" href="#54">54</a>      NumberVertex[] ordering = <strong class="jxr_keyword">new</strong> NumberVertex[vertices.length];
-<a class="jxr_linenumber" name="55" href="#55">55</a>      <strong class="jxr_keyword">for</strong>(<strong class="jxr_keyword">int</strong> i = 0; i &lt; vertices.length; ++i) {
-<a class="jxr_linenumber" name="56" href="#56">56</a>        ordering[i] = NumberVertex.from(vertices[i]);
-<a class="jxr_linenumber" name="57" href="#57">57</a>      }
-<a class="jxr_linenumber" name="58" href="#58">58</a>      <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ValidOrdering&lt;NumberVertex&gt;(ordering);
-<a class="jxr_linenumber" name="59" href="#59">59</a>    }
+<a class="jxr_linenumber" name="53" href="#53">53</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> matches(TValue...values) {
+<a class="jxr_linenumber" name="54" href="#54">54</a>      <strong class="jxr_keyword">return</strong> matches(Arrays.asList(values));
+<a class="jxr_linenumber" name="55" href="#55">55</a>    }
+<a class="jxr_linenumber" name="56" href="#56">56</a>  
+<a class="jxr_linenumber" name="57" href="#57">57</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> matches(List&lt;TValue&gt; values) {
+<a class="jxr_linenumber" name="58" href="#58">58</a>      <strong class="jxr_keyword">if</strong> (ordering.length != values.size())
+<a class="jxr_linenumber" name="59" href="#59">59</a>        <strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="60" href="#60">60</a>  
-<a class="jxr_linenumber" name="61" href="#61">61</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> matches(TVertex...vertices) {
-<a class="jxr_linenumber" name="62" href="#62">62</a>      <strong class="jxr_keyword">return</strong> matches(Arrays.asList(vertices));
-<a class="jxr_linenumber" name="63" href="#63">63</a>    }
-<a class="jxr_linenumber" name="64" href="#64">64</a>  
-<a class="jxr_linenumber" name="65" href="#65">65</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> matches(List&lt;TVertex&gt; vertices) {
-<a class="jxr_linenumber" name="66" href="#66">66</a>      <strong class="jxr_keyword">if</strong> (ordering.length != vertices.size())
-<a class="jxr_linenumber" name="67" href="#67">67</a>        <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="68" href="#68">68</a>  
-<a class="jxr_linenumber" name="69" href="#69">69</a>      <strong class="jxr_keyword">for</strong>(<strong class="jxr_keyword">int</strong> i = 0; i &lt; ordering.length; ++i) {
-<a class="jxr_linenumber" name="70" href="#70">70</a>        <strong class="jxr_keyword">if</strong> (!ordering[i].equals(vertices.get(i)))
-<a class="jxr_linenumber" name="71" href="#71">71</a>          <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="72" href="#72">72</a>      }
-<a class="jxr_linenumber" name="73" href="#73">73</a>  
-<a class="jxr_linenumber" name="74" href="#74">74</a>      <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="75" href="#75">75</a>    }
-<a class="jxr_linenumber" name="76" href="#76">76</a>  }
+<a class="jxr_linenumber" name="61" href="#61">61</a>      <strong class="jxr_keyword">for</strong>(<strong class="jxr_keyword">int</strong> i = 0; i &lt; ordering.length; ++i) {
+<a class="jxr_linenumber" name="62" href="#62">62</a>        <strong class="jxr_keyword">if</strong> ((ordering[i] == <strong class="jxr_keyword">null</strong> &amp;&amp; values.get(i) != <strong class="jxr_keyword">null</strong>) || !ordering[i].equals(values.get(i)))
+<a class="jxr_linenumber" name="63" href="#63">63</a>          <strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="64" href="#64">64</a>      }
+<a class="jxr_linenumber" name="65" href="#65">65</a>  
+<a class="jxr_linenumber" name="66" href="#66">66</a>      <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="67" href="#67">67</a>    }
+<a class="jxr_linenumber" name="68" href="#68">68</a>  }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
