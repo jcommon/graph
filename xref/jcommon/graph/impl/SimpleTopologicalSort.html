@@ -63,7 +63,7 @@
 <a class="jxr_linenumber" name="53" href="#53">53</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="54" href="#54">54</a>  <em class="jxr_javadoccomment"> * @see &lt;a href="<a href="http://www.cs.washington.edu/education/courses/cse373/02sp/lectures/cse373-21-TopoSort-4up.pdf" target="alexandria_uri">http://www.cs.washington.edu/education/courses/cse373/02sp/lectures/cse373-21-TopoSort-4up.pdf</a>"&gt;<a href="http://www.cs.washington.edu/education/courses/cse373/02sp/lectures/cse373-21-TopoSort-4up.pdf" target="alexandria_uri">http://www.cs.washington.edu/education/courses/cse373/02sp/lectures/cse373-21-TopoSort-4up.pdf</a>&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="55" href="#55">55</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="56" href="#56">56</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> SimpleTopologicalSort&lt;TVertex <strong class="jxr_keyword">extends</strong> IVertex&lt;TValue&gt;, TValue <strong class="jxr_keyword">extends</strong> Object&gt; <strong class="jxr_keyword">implements</strong> ITopologicalSortStrategy&lt;TVertex, TValue&gt; {
+<a class="jxr_linenumber" name="56" href="#56">56</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> SimpleTopologicalSort&lt;TVertex <strong class="jxr_keyword">extends</strong> IVertex&lt;TValue&gt;, TValue <strong class="jxr_keyword">extends</strong> Object, TProcessedValue <strong class="jxr_keyword">extends</strong> Object&gt; <strong class="jxr_keyword">implements</strong> ITopologicalSortStrategy&lt;TVertex, TValue, TProcessedValue&gt; {
 <a class="jxr_linenumber" name="57" href="#57">57</a>    <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="58" href="#58">58</a>  <em class="jxr_javadoccomment">   * @see ITopologicalSortStrategy</em>
 <a class="jxr_linenumber" name="59" href="#59">59</a>  <em class="jxr_javadoccomment">   */</em>
@@ -74,7 +74,7 @@
 <a class="jxr_linenumber" name="64" href="#64">64</a>  <em class="jxr_javadoccomment">   * @see ITopologicalSortStrategy#sort(IAdjacencyList)</em>
 <a class="jxr_linenumber" name="65" href="#65">65</a>  <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="66" href="#66">66</a>    @Override
-<a class="jxr_linenumber" name="67" href="#67">67</a>    <strong class="jxr_keyword">public</strong> List&lt;TValue&gt; sort(<strong class="jxr_keyword">final</strong> IAdjacencyList&lt;TVertex, TValue&gt; adjacencyList) <strong class="jxr_keyword">throws</strong> CyclicGraphException {
+<a class="jxr_linenumber" name="67" href="#67">67</a>    <strong class="jxr_keyword">public</strong> List&lt;TValue&gt; sort(<strong class="jxr_keyword">final</strong> IAdjacencyList&lt;TVertex, TValue, TProcessedValue&gt; adjacencyList) <strong class="jxr_keyword">throws</strong> CyclicGraphException {
 <a class="jxr_linenumber" name="68" href="#68">68</a>      <strong class="jxr_keyword">if</strong> (adjacencyList.isEmpty())
 <a class="jxr_linenumber" name="69" href="#69">69</a>        <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ArrayList&lt;TValue&gt;(0);
 <a class="jxr_linenumber" name="70" href="#70">70</a>  
@@ -123,8 +123,8 @@
 <a class="jxr_linenumber" name="113" href="#113">113</a> <em class="jxr_javadoccomment">   * @see ITopologicalSortStrategy#sortAsync(ExecutorService, IAdjacencyList, ITopologicalSortCallback, ITopologicalSortErrorCallback)</em>
 <a class="jxr_linenumber" name="114" href="#114">114</a> <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="115" href="#115">115</a>   @Override
-<a class="jxr_linenumber" name="116" href="#116">116</a>   <strong class="jxr_keyword">public</strong> ITopologicalSortAsyncResult&lt;TValue&gt; sortAsync(<strong class="jxr_keyword">final</strong> ExecutorService executorProcessors, <strong class="jxr_keyword">final</strong> IAdjacencyList&lt;TVertex, TValue&gt; adjacencyList, <strong class="jxr_keyword">final</strong> ITopologicalSortCallback&lt;TValue&gt; callback, <strong class="jxr_keyword">final</strong> ITopologicalSortErrorCallback&lt;TValue&gt; errorCallback) {
-<a class="jxr_linenumber" name="117" href="#117">117</a>     <strong class="jxr_keyword">final</strong> TopologicalSortAsyncResult&lt;TValue&gt; asyncResult = <strong class="jxr_keyword">new</strong> TopologicalSortAsyncResult&lt;TValue&gt;(executorProcessors);
+<a class="jxr_linenumber" name="116" href="#116">116</a>   <strong class="jxr_keyword">public</strong> ITopologicalSortAsyncResult&lt;TValue, TProcessedValue&gt; sortAsync(<strong class="jxr_keyword">final</strong> ExecutorService executorProcessors, <strong class="jxr_keyword">final</strong> IAdjacencyList&lt;TVertex, TValue, TProcessedValue&gt; adjacencyList, <strong class="jxr_keyword">final</strong> ITopologicalSortCallback&lt;TValue, TProcessedValue&gt; callback, <strong class="jxr_keyword">final</strong> ITopologicalSortErrorCallback&lt;TValue&gt; errorCallback) {
+<a class="jxr_linenumber" name="117" href="#117">117</a>     <strong class="jxr_keyword">final</strong> TopologicalSortAsyncResult&lt;TValue, TProcessedValue&gt; asyncResult = <strong class="jxr_keyword">new</strong> TopologicalSortAsyncResult&lt;TValue, TProcessedValue&gt;(executorProcessors);
 <a class="jxr_linenumber" name="118" href="#118">118</a>     <strong class="jxr_keyword">if</strong> (adjacencyList.isEmpty()) {
 <a class="jxr_linenumber" name="119" href="#119">119</a>       asyncResult.asyncComplete(adjacencyList.createResultMap(), <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="120" href="#120">120</a>       <strong class="jxr_keyword">return</strong> asyncResult;
@@ -135,17 +135,17 @@
 <a class="jxr_linenumber" name="125" href="#125">125</a>     <strong class="jxr_keyword">final</strong> List&lt;Callable&lt;Object&gt;&gt; callables = <strong class="jxr_keyword">new</strong> ArrayList&lt;Callable&lt;Object&gt;&gt;(in_degrees.length);
 <a class="jxr_linenumber" name="126" href="#126">126</a>     <strong class="jxr_keyword">final</strong> Set&lt;IAdjacencyListPair&lt;TVertex&gt;&gt; remaining = <strong class="jxr_keyword">new</strong> HashSet&lt;IAdjacencyListPair&lt;TVertex&gt;&gt;();
 <a class="jxr_linenumber" name="127" href="#127">127</a>     <strong class="jxr_keyword">final</strong> AtomicInteger[] atomics = <strong class="jxr_keyword">new</strong> AtomicInteger[in_degrees.length];
-<a class="jxr_linenumber" name="128" href="#128">128</a>     <strong class="jxr_keyword">final</strong> List&lt;Map&lt;IVertex, TValue&gt;&gt; inputs = <strong class="jxr_keyword">new</strong> ArrayList&lt;Map&lt;IVertex, TValue&gt;&gt;(in_degrees.length);
+<a class="jxr_linenumber" name="128" href="#128">128</a>     <strong class="jxr_keyword">final</strong> List&lt;Map&lt;TValue, TProcessedValue&gt;&gt; inputs = <strong class="jxr_keyword">new</strong> ArrayList&lt;Map&lt;TValue, TProcessedValue&gt;&gt;(in_degrees.length);
 <a class="jxr_linenumber" name="129" href="#129">129</a>     <strong class="jxr_keyword">final</strong> AtomicInteger outstanding_submissions = <strong class="jxr_keyword">new</strong> AtomicInteger(0);
 <a class="jxr_linenumber" name="130" href="#130">130</a>     <strong class="jxr_keyword">final</strong> <a href="../../../jcommon/graph/ITopologicalSortCoordinator.html">ITopologicalSortCoordinator</a> coordinator = <strong class="jxr_keyword">new</strong> <a href="../../../jcommon/graph/impl/TopologicalSortCoordinator.html">TopologicalSortCoordinator</a>(asyncResult);
-<a class="jxr_linenumber" name="131" href="#131">131</a>     <strong class="jxr_keyword">final</strong> Map&lt;TValue, TValue&gt; results = adjacencyList.createResultMap();
+<a class="jxr_linenumber" name="131" href="#131">131</a>     <strong class="jxr_keyword">final</strong> Map&lt;TValue, TProcessedValue&gt; results = adjacencyList.createResultMap();
 <a class="jxr_linenumber" name="132" href="#132">132</a> 
 <a class="jxr_linenumber" name="133" href="#133">133</a>     <em class="jxr_comment">//Find all vertices who have an in-degree of zero.</em>
 <a class="jxr_linenumber" name="134" href="#134">134</a>     <em class="jxr_comment">//Also initialize latches to the size of the the in-degree + 1.</em>
 <a class="jxr_linenumber" name="135" href="#135">135</a>     <strong class="jxr_keyword">for</strong>(<strong class="jxr_keyword">int</strong> i = 0; i &lt; in_degrees.length; ++i) {
 <a class="jxr_linenumber" name="136" href="#136">136</a>       <strong class="jxr_keyword">final</strong> IAdjacencyListPair&lt;TVertex&gt; pair = adjacencyList.pairAt(i);
 <a class="jxr_linenumber" name="137" href="#137">137</a>       <strong class="jxr_keyword">final</strong> AtomicInteger atom = atomics[i] = <strong class="jxr_keyword">new</strong> AtomicInteger(in_degrees[i] == 0 ? 1 : in_degrees[i]);
-<a class="jxr_linenumber" name="138" href="#138">138</a>       <strong class="jxr_keyword">final</strong> Map&lt;IVertex, TValue&gt; my_input = <strong class="jxr_keyword">new</strong> HashMap&lt;IVertex, TValue&gt;(in_degrees[i], 1.0f);
+<a class="jxr_linenumber" name="138" href="#138">138</a>       <strong class="jxr_keyword">final</strong> Map&lt;TValue, TProcessedValue&gt; my_input = <strong class="jxr_keyword">new</strong> HashMap&lt;TValue, TProcessedValue&gt;(in_degrees[i], 1.0f);
 <a class="jxr_linenumber" name="139" href="#139">139</a>       <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> has_no_one_pointing_to_me = (in_degrees[i] == 0);
 <a class="jxr_linenumber" name="140" href="#140">140</a>       inputs.add(my_input);
 <a class="jxr_linenumber" name="141" href="#141">141</a> 
@@ -162,7 +162,7 @@
 <a class="jxr_linenumber" name="152" href="#152">152</a>           Throwable handled_exception = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="153" href="#153">153</a>           <strong class="jxr_keyword">boolean</strong> handle_all_done = false;
 <a class="jxr_linenumber" name="154" href="#154">154</a>           <strong class="jxr_keyword">final</strong> TVertex vertex = pair.getVertex();
-<a class="jxr_linenumber" name="155" href="#155">155</a>           ITopologicalSortInput&lt;TValue&gt; input;
+<a class="jxr_linenumber" name="155" href="#155">155</a>           ITopologicalSortInput&lt;TValue, TProcessedValue&gt; input;
 <a class="jxr_linenumber" name="156" href="#156">156</a> 
 <a class="jxr_linenumber" name="157" href="#157">157</a>           <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="158" href="#158">158</a> 
@@ -173,12 +173,12 @@
 <a class="jxr_linenumber" name="163" href="#163">163</a>               }
 <a class="jxr_linenumber" name="164" href="#164">164</a> 
 <a class="jxr_linenumber" name="165" href="#165">165</a>               <strong class="jxr_keyword">synchronized</strong> (my_input) {
-<a class="jxr_linenumber" name="166" href="#166">166</a>                 input = <strong class="jxr_keyword">new</strong> TopologicalSortInput&lt;TValue&gt;(has_no_one_pointing_to_me, my_input);
+<a class="jxr_linenumber" name="166" href="#166">166</a>                 input = <strong class="jxr_keyword">new</strong> TopologicalSortInput&lt;TValue, TProcessedValue&gt;(has_no_one_pointing_to_me, my_input);
 <a class="jxr_linenumber" name="167" href="#167">167</a>               }
 <a class="jxr_linenumber" name="168" href="#168">168</a> 
 <a class="jxr_linenumber" name="169" href="#169">169</a>               <em class="jxr_comment">//Call the callback to let him handle this vertex.</em>
 <a class="jxr_linenumber" name="170" href="#170">170</a>               <strong class="jxr_keyword">final</strong> TValue vertex_value = vertex.get();
-<a class="jxr_linenumber" name="171" href="#171">171</a>               TValue result = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="171" href="#171">171</a>               TProcessedValue result = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="172" href="#172">172</a>               <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="173" href="#173">173</a>                 result = callback.handle(vertex_value, input, vertex, coordinator);
 <a class="jxr_linenumber" name="174" href="#174">174</a>               } <strong class="jxr_keyword">catch</strong>(Throwable t) {
@@ -207,10 +207,10 @@
 <a class="jxr_linenumber" name="197" href="#197">197</a>                 <strong class="jxr_keyword">for</strong>(TVertex dep : pair.getOutNeighbors()) {
 <a class="jxr_linenumber" name="198" href="#198">198</a>                   <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> index = adjacencyList.indexOf(dep);
 <a class="jxr_linenumber" name="199" href="#199">199</a>                   <strong class="jxr_keyword">final</strong> Callable&lt;Object&gt; dep_callable = callables.get(index);
-<a class="jxr_linenumber" name="200" href="#200">200</a>                   <strong class="jxr_keyword">final</strong> Map&lt;IVertex, TValue&gt; dep_inputs = inputs.get(index);
+<a class="jxr_linenumber" name="200" href="#200">200</a>                   <strong class="jxr_keyword">final</strong> Map&lt;TValue, TProcessedValue&gt; dep_inputs = inputs.get(index);
 <a class="jxr_linenumber" name="201" href="#201">201</a> 
 <a class="jxr_linenumber" name="202" href="#202">202</a>                   <strong class="jxr_keyword">synchronized</strong> (dep_inputs) {
-<a class="jxr_linenumber" name="203" href="#203">203</a>                     dep_inputs.put(vertex, result);
+<a class="jxr_linenumber" name="203" href="#203">203</a>                     dep_inputs.put(vertex_value, result);
 <a class="jxr_linenumber" name="204" href="#204">204</a>                   }
 <a class="jxr_linenumber" name="205" href="#205">205</a> 
 <a class="jxr_linenumber" name="206" href="#206">206</a>                   <em class="jxr_comment">//Ensure we track the number of submissions. This will be used to</em>

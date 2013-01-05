@@ -39,7 +39,7 @@
 <a class="jxr_linenumber" name="29" href="#29">29</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="30" href="#30">30</a>  <em class="jxr_javadoccomment"> * @see IAdjacencyList</em>
 <a class="jxr_linenumber" name="31" href="#31">31</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="32" href="#32">32</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> AdjacencyList&lt;TVertex <strong class="jxr_keyword">extends</strong> IVertex&lt;TValue&gt;, TValue <strong class="jxr_keyword">extends</strong> Object&gt; <strong class="jxr_keyword">implements</strong> IAdjacencyList&lt;TVertex, TValue&gt; {
+<a class="jxr_linenumber" name="32" href="#32">32</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> AdjacencyList&lt;TVertex <strong class="jxr_keyword">extends</strong> IVertex&lt;TValue&gt;, TValue <strong class="jxr_keyword">extends</strong> Object, TProcessedValue <strong class="jxr_keyword">extends</strong> Object&gt; <strong class="jxr_keyword">implements</strong> IAdjacencyList&lt;TVertex, TValue, TProcessedValue&gt; {
 <a class="jxr_linenumber" name="33" href="#33">33</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;IAdjacencyListPair&lt;TVertex&gt;&gt; num_map;
 <a class="jxr_linenumber" name="34" href="#34">34</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;TVertex, Integer&gt; index_map;
 <a class="jxr_linenumber" name="35" href="#35">35</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;TVertex, List&lt;TVertex&gt;&gt; vertex_map;
@@ -157,8 +157,8 @@
 <a class="jxr_linenumber" name="147" href="#147">147</a>   }
 <a class="jxr_linenumber" name="148" href="#148">148</a> 
 <a class="jxr_linenumber" name="149" href="#149">149</a>   @Override
-<a class="jxr_linenumber" name="150" href="#150">150</a>   <strong class="jxr_keyword">public</strong> Map&lt;TValue, TValue&gt; createResultMap() {
-<a class="jxr_linenumber" name="151" href="#151">151</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> HashMap&lt;TValue, TValue&gt;(end_vertices.size());
+<a class="jxr_linenumber" name="150" href="#150">150</a>   <strong class="jxr_keyword">public</strong> Map&lt;TValue, TProcessedValue&gt; createResultMap() {
+<a class="jxr_linenumber" name="151" href="#151">151</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> HashMap&lt;TValue, TProcessedValue&gt;(end_vertices.size());
 <a class="jxr_linenumber" name="152" href="#152">152</a>   }
 <a class="jxr_linenumber" name="153" href="#153">153</a> }
 </pre>

@@ -49,9 +49,9 @@
 <a class="jxr_linenumber" name="39" href="#39">39</a>  
 <a class="jxr_linenumber" name="40" href="#40">40</a>    @Test
 <a class="jxr_linenumber" name="41" href="#41">41</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testAsync() {
-<a class="jxr_linenumber" name="42" href="#42">42</a>      <strong class="jxr_keyword">final</strong> ITopologicalSortCallback&lt;Object&gt; CALLBACK_NOOP = <strong class="jxr_keyword">new</strong> ITopologicalSortCallback&lt;Object&gt;() {
+<a class="jxr_linenumber" name="42" href="#42">42</a>      <strong class="jxr_keyword">final</strong> ITopologicalSortCallback&lt;Object, Object&gt; CALLBACK_NOOP = <strong class="jxr_keyword">new</strong> ITopologicalSortCallback&lt;Object, Object&gt;() {
 <a class="jxr_linenumber" name="43" href="#43">43</a>        @Override
-<a class="jxr_linenumber" name="44" href="#44">44</a>        <strong class="jxr_keyword">public</strong> Object handle(Object o, ITopologicalSortInput&lt;Object&gt; input, IVertex&lt;Object&gt; vertex, ITopologicalSortCoordinator coordinator) <strong class="jxr_keyword">throws</strong> Throwable {
+<a class="jxr_linenumber" name="44" href="#44">44</a>        <strong class="jxr_keyword">public</strong> Object handle(Object o, ITopologicalSortInput&lt;Object, Object&gt; input, IVertex&lt;Object&gt; vertex, ITopologicalSortCoordinator coordinator) <strong class="jxr_keyword">throws</strong> Throwable {
 <a class="jxr_linenumber" name="45" href="#45">45</a>          <strong class="jxr_keyword">return</strong> o;
 <a class="jxr_linenumber" name="46" href="#46">46</a>        }
 <a class="jxr_linenumber" name="47" href="#47">47</a>      };
@@ -62,9 +62,9 @@
 <a class="jxr_linenumber" name="52" href="#52">52</a>        }
 <a class="jxr_linenumber" name="53" href="#53">53</a>      };
 <a class="jxr_linenumber" name="54" href="#54">54</a>  
-<a class="jxr_linenumber" name="55" href="#55">55</a>      <strong class="jxr_keyword">final</strong> ITopologicalSortCallback&lt;Object&gt; CALLBACK_DEBUG = <strong class="jxr_keyword">new</strong> ITopologicalSortCallback&lt;Object&gt;() {
+<a class="jxr_linenumber" name="55" href="#55">55</a>      <strong class="jxr_keyword">final</strong> ITopologicalSortCallback&lt;Object, Object&gt; CALLBACK_DEBUG = <strong class="jxr_keyword">new</strong> ITopologicalSortCallback&lt;Object, Object&gt;() {
 <a class="jxr_linenumber" name="56" href="#56">56</a>        @Override
-<a class="jxr_linenumber" name="57" href="#57">57</a>        <strong class="jxr_keyword">public</strong> Object handle(Object o, ITopologicalSortInput&lt;Object&gt; input, IVertex&lt;Object&gt; vertex, ITopologicalSortCoordinator coordinator) <strong class="jxr_keyword">throws</strong> Throwable {
+<a class="jxr_linenumber" name="57" href="#57">57</a>        <strong class="jxr_keyword">public</strong> Object handle(Object o, ITopologicalSortInput&lt;Object, Object&gt; input, IVertex&lt;Object&gt; vertex, ITopologicalSortCoordinator coordinator) <strong class="jxr_keyword">throws</strong> Throwable {
 <a class="jxr_linenumber" name="58" href="#58">58</a>          System.out.println(Thread.currentThread().getName() + <span class="jxr_string">": "</span> + o.toString() + <span class="jxr_string">", input: "</span> + input.toString());
 <a class="jxr_linenumber" name="59" href="#59">59</a>          Thread.sleep(1000);
 <a class="jxr_linenumber" name="60" href="#60">60</a>          <strong class="jxr_keyword">return</strong> vertex;
@@ -100,31 +100,31 @@
 <a class="jxr_linenumber" name="90" href="#90">90</a>        solution.checkSortAsync(CALLBACK_NOOP);
 <a class="jxr_linenumber" name="91" href="#91">91</a>  
 <a class="jxr_linenumber" name="92" href="#92">92</a>      <em class="jxr_comment">//Create a graph like: 1 -&gt; 2 -&gt; 3 -&gt; 4 -&gt; 5</em>
-<a class="jxr_linenumber" name="93" href="#93">93</a>      <strong class="jxr_keyword">final</strong> NumberGraph ng_1 = Examples.VALID_5;
+<a class="jxr_linenumber" name="93" href="#93">93</a>      <strong class="jxr_keyword">final</strong> NumberGraph&lt;Integer&gt; ng_1 = Examples.VALID_5;
 <a class="jxr_linenumber" name="94" href="#94">94</a>  
 <a class="jxr_linenumber" name="95" href="#95">95</a>      <em class="jxr_comment">//Sum up the values as they're processed.</em>
-<a class="jxr_linenumber" name="96" href="#96">96</a>      ITopologicalSortAsyncResult&lt;Number&gt; ng_result = ng_1.sortAsync(<strong class="jxr_keyword">new</strong> ITopologicalSortCallback&lt;Number&gt;() {
+<a class="jxr_linenumber" name="96" href="#96">96</a>      ITopologicalSortAsyncResult&lt;Integer, Integer&gt; ng_result = ng_1.sortAsync(<strong class="jxr_keyword">new</strong> ITopologicalSortCallback&lt;Integer, Integer&gt;() {
 <a class="jxr_linenumber" name="97" href="#97">97</a>        @Override
-<a class="jxr_linenumber" name="98" href="#98">98</a>        <strong class="jxr_keyword">public</strong> Number handle(Number number, ITopologicalSortInput&lt;Number&gt; input, IVertex&lt;Number&gt; vertex, ITopologicalSortCoordinator coordinator) <strong class="jxr_keyword">throws</strong> Throwable {
-<a class="jxr_linenumber" name="99" href="#99">99</a>          <strong class="jxr_keyword">int</strong> prev_val = (Integer)(input.isStart() ? 0 : input.first());
-<a class="jxr_linenumber" name="100" href="#100">100</a>         <strong class="jxr_keyword">int</strong> val = (Integer)number;
+<a class="jxr_linenumber" name="98" href="#98">98</a>        <strong class="jxr_keyword">public</strong> Integer handle(Integer number, ITopologicalSortInput&lt;Integer, Integer&gt; input, IVertex&lt;Integer&gt; vertex, ITopologicalSortCoordinator coordinator) <strong class="jxr_keyword">throws</strong> Throwable {
+<a class="jxr_linenumber" name="99" href="#99">99</a>          <strong class="jxr_keyword">int</strong> prev_val = (input.isStart() ? 0 : input.first());
+<a class="jxr_linenumber" name="100" href="#100">100</a>         <strong class="jxr_keyword">int</strong> val = number;
 <a class="jxr_linenumber" name="101" href="#101">101</a>         <strong class="jxr_keyword">return</strong> prev_val + val;
 <a class="jxr_linenumber" name="102" href="#102">102</a>       }
 <a class="jxr_linenumber" name="103" href="#103">103</a>     });
 <a class="jxr_linenumber" name="104" href="#104">104</a>     assertTrue(ng_result.waitForCompletion(10L, TimeUnit.SECONDS));
-<a class="jxr_linenumber" name="105" href="#105">105</a>     assertEquals(15, ng_result.first());
+<a class="jxr_linenumber" name="105" href="#105">105</a>     assertEquals(15, (<strong class="jxr_keyword">int</strong>)ng_result.first());
 <a class="jxr_linenumber" name="106" href="#106">106</a> 
 <a class="jxr_linenumber" name="107" href="#107">107</a>     <em class="jxr_comment">//Take the product of the values as they're processed.</em>
-<a class="jxr_linenumber" name="108" href="#108">108</a>     ng_result = ng_1.sortAsync(<strong class="jxr_keyword">new</strong> ITopologicalSortCallback&lt;Number&gt;() {
+<a class="jxr_linenumber" name="108" href="#108">108</a>     ng_result = ng_1.sortAsync(<strong class="jxr_keyword">new</strong> ITopologicalSortCallback&lt;Integer, Integer&gt;() {
 <a class="jxr_linenumber" name="109" href="#109">109</a>       @Override
-<a class="jxr_linenumber" name="110" href="#110">110</a>       <strong class="jxr_keyword">public</strong> Number handle(Number number, ITopologicalSortInput&lt;Number&gt; input, IVertex&lt;Number&gt; vertex, ITopologicalSortCoordinator coordinator) <strong class="jxr_keyword">throws</strong> Throwable {
-<a class="jxr_linenumber" name="111" href="#111">111</a>         <strong class="jxr_keyword">int</strong> prev_val = (Integer)(input.isStart() ? 1 : input.first());
-<a class="jxr_linenumber" name="112" href="#112">112</a>         <strong class="jxr_keyword">int</strong> val = (Integer)number;
+<a class="jxr_linenumber" name="110" href="#110">110</a>       <strong class="jxr_keyword">public</strong> Integer handle(Integer number, ITopologicalSortInput&lt;Integer, Integer&gt; input, IVertex&lt;Integer&gt; vertex, ITopologicalSortCoordinator coordinator) <strong class="jxr_keyword">throws</strong> Throwable {
+<a class="jxr_linenumber" name="111" href="#111">111</a>         <strong class="jxr_keyword">int</strong> prev_val = (input.isStart() ? 1 : input.first());
+<a class="jxr_linenumber" name="112" href="#112">112</a>         <strong class="jxr_keyword">int</strong> val = number;
 <a class="jxr_linenumber" name="113" href="#113">113</a>         <strong class="jxr_keyword">return</strong> prev_val * val;
 <a class="jxr_linenumber" name="114" href="#114">114</a>       }
 <a class="jxr_linenumber" name="115" href="#115">115</a>     });
 <a class="jxr_linenumber" name="116" href="#116">116</a>     assertTrue(ng_result.waitForCompletion(10L, TimeUnit.SECONDS));
-<a class="jxr_linenumber" name="117" href="#117">117</a>     assertEquals(120, ng_result.first());
+<a class="jxr_linenumber" name="117" href="#117">117</a>     assertEquals(120, (<strong class="jxr_keyword">int</strong>)ng_result.first());
 <a class="jxr_linenumber" name="118" href="#118">118</a>   }
 <a class="jxr_linenumber" name="119" href="#119">119</a> 
 <a class="jxr_linenumber" name="120" href="#120">120</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> allSuccessfullyCompleted(ITopologicalSortAsyncResult[] results) {

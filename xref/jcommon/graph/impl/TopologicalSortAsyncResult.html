@@ -40,14 +40,14 @@
 <a class="jxr_linenumber" name="30" href="#30">30</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="31" href="#31">31</a>  <em class="jxr_javadoccomment"> * @see ITopologicalSortAsyncResult</em>
 <a class="jxr_linenumber" name="32" href="#32">32</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="33" href="#33">33</a>  <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> TopologicalSortAsyncResult&lt;TValue <strong class="jxr_keyword">extends</strong> Object&gt; <strong class="jxr_keyword">implements</strong> ITopologicalSortAsyncResult&lt;TValue&gt; {
+<a class="jxr_linenumber" name="33" href="#33">33</a>  <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> TopologicalSortAsyncResult&lt;TValue <strong class="jxr_keyword">extends</strong> Object, TProcessedValue <strong class="jxr_keyword">extends</strong> Object&gt; <strong class="jxr_keyword">implements</strong> ITopologicalSortAsyncResult&lt;TValue, TProcessedValue&gt; {
 <a class="jxr_linenumber" name="34" href="#34">34</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Object lock = <strong class="jxr_keyword">new</strong> Object();
 <a class="jxr_linenumber" name="35" href="#35">35</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ExecutorService executor;
 <a class="jxr_linenumber" name="36" href="#36">36</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> CountDownLatch latch;
 <a class="jxr_linenumber" name="37" href="#37">37</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> done;
 <a class="jxr_linenumber" name="38" href="#38">38</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> successful;
 <a class="jxr_linenumber" name="39" href="#39">39</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> discontinue_processing;
-<a class="jxr_linenumber" name="40" href="#40">40</a>    <strong class="jxr_keyword">private</strong> Map&lt;TValue, TValue&gt; results;
+<a class="jxr_linenumber" name="40" href="#40">40</a>    <strong class="jxr_keyword">private</strong> Map&lt;TValue, TProcessedValue&gt; results;
 <a class="jxr_linenumber" name="41" href="#41">41</a>  
 <a class="jxr_linenumber" name="42" href="#42">42</a>    <strong class="jxr_keyword">public</strong> <a href="../../../jcommon/graph/impl/TopologicalSortAsyncResult.html">TopologicalSortAsyncResult</a>(<strong class="jxr_keyword">final</strong> ExecutorService executor) {
 <a class="jxr_linenumber" name="43" href="#43">43</a>      <strong class="jxr_keyword">this</strong>.executor = executor;
@@ -89,7 +89,7 @@
 <a class="jxr_linenumber" name="79" href="#79">79</a>      <strong class="jxr_keyword">return</strong> lock;
 <a class="jxr_linenumber" name="80" href="#80">80</a>    }
 <a class="jxr_linenumber" name="81" href="#81">81</a>  
-<a class="jxr_linenumber" name="82" href="#82">82</a>    <strong class="jxr_keyword">void</strong> asyncComplete(<strong class="jxr_keyword">final</strong> Map&lt;TValue, TValue&gt; results, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> successful) {
+<a class="jxr_linenumber" name="82" href="#82">82</a>    <strong class="jxr_keyword">void</strong> asyncComplete(<strong class="jxr_keyword">final</strong> Map&lt;TValue, TProcessedValue&gt; results, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> successful) {
 <a class="jxr_linenumber" name="83" href="#83">83</a>      <strong class="jxr_keyword">synchronized</strong> (lock) {
 <a class="jxr_linenumber" name="84" href="#84">84</a>        <strong class="jxr_keyword">this</strong>.results = results;
 <a class="jxr_linenumber" name="85" href="#85">85</a>        <strong class="jxr_keyword">this</strong>.successful = successful;
@@ -154,19 +154,19 @@
 <a class="jxr_linenumber" name="144" href="#144">144</a>   }
 <a class="jxr_linenumber" name="145" href="#145">145</a> 
 <a class="jxr_linenumber" name="146" href="#146">146</a>   @Override
-<a class="jxr_linenumber" name="147" href="#147">147</a>   <strong class="jxr_keyword">public</strong> TValue get(<strong class="jxr_keyword">final</strong> TValue value) {
+<a class="jxr_linenumber" name="147" href="#147">147</a>   <strong class="jxr_keyword">public</strong> TProcessedValue get(<strong class="jxr_keyword">final</strong> TValue value) {
 <a class="jxr_linenumber" name="148" href="#148">148</a>     <strong class="jxr_keyword">return</strong> resultFor(value);
 <a class="jxr_linenumber" name="149" href="#149">149</a>   }
 <a class="jxr_linenumber" name="150" href="#150">150</a> 
 <a class="jxr_linenumber" name="151" href="#151">151</a>   @Override
-<a class="jxr_linenumber" name="152" href="#152">152</a>   <strong class="jxr_keyword">public</strong> TValue first() {
+<a class="jxr_linenumber" name="152" href="#152">152</a>   <strong class="jxr_keyword">public</strong> TProcessedValue first() {
 <a class="jxr_linenumber" name="153" href="#153">153</a>     <strong class="jxr_keyword">if</strong> (!isDone() || results.isEmpty())
 <a class="jxr_linenumber" name="154" href="#154">154</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="155" href="#155">155</a>     <strong class="jxr_keyword">return</strong> results.values().iterator().next();
 <a class="jxr_linenumber" name="156" href="#156">156</a>   }
 <a class="jxr_linenumber" name="157" href="#157">157</a> 
 <a class="jxr_linenumber" name="158" href="#158">158</a>   @Override
-<a class="jxr_linenumber" name="159" href="#159">159</a>   <strong class="jxr_keyword">public</strong> TValue resultFor(<strong class="jxr_keyword">final</strong> TValue value) {
+<a class="jxr_linenumber" name="159" href="#159">159</a>   <strong class="jxr_keyword">public</strong> TProcessedValue resultFor(<strong class="jxr_keyword">final</strong> TValue value) {
 <a class="jxr_linenumber" name="160" href="#160">160</a>     <strong class="jxr_keyword">return</strong> isDone() ? results.get(value) : <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="161" href="#161">161</a>   }
 <a class="jxr_linenumber" name="162" href="#162">162</a> 
@@ -181,8 +181,8 @@
 <a class="jxr_linenumber" name="171" href="#171">171</a>   }
 <a class="jxr_linenumber" name="172" href="#172">172</a> 
 <a class="jxr_linenumber" name="173" href="#173">173</a>   @Override
-<a class="jxr_linenumber" name="174" href="#174">174</a>   <strong class="jxr_keyword">public</strong> Iterable&lt;TValue&gt; results() {
-<a class="jxr_linenumber" name="175" href="#175">175</a>     <strong class="jxr_keyword">return</strong> isDone() ? results.values() : <strong class="jxr_keyword">new</strong> ArrayList&lt;TValue&gt;(0);
+<a class="jxr_linenumber" name="174" href="#174">174</a>   <strong class="jxr_keyword">public</strong> Iterable&lt;TProcessedValue&gt; results() {
+<a class="jxr_linenumber" name="175" href="#175">175</a>     <strong class="jxr_keyword">return</strong> isDone() ? results.values() : <strong class="jxr_keyword">new</strong> ArrayList&lt;TProcessedValue&gt;(0);
 <a class="jxr_linenumber" name="176" href="#176">176</a>   }
 <a class="jxr_linenumber" name="177" href="#177">177</a> 
 <a class="jxr_linenumber" name="178" href="#178">178</a>   @Override
