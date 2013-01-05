@@ -30,14 +30,14 @@ import java.util.concurrent.TimeUnit;
 /**
  * @see ITopologicalSortAsyncResult
  */
-final class TopologicalSortAsyncResult<TValue extends Object> implements ITopologicalSortAsyncResult<TValue> {
+final class TopologicalSortAsyncResult<TValue extends Object, TProcessedValue extends Object> implements ITopologicalSortAsyncResult<TValue, TProcessedValue> {
   private final Object lock = new Object();
   private final ExecutorService executor;
   private final CountDownLatch latch;
   private boolean done;
   private boolean successful;
   private boolean discontinue_processing;
-  private Map<TValue, TValue> results;
+  private Map<TValue, TProcessedValue> results;
 
   public TopologicalSortAsyncResult(final ExecutorService executor) {
     this.executor = executor;
@@ -79,7 +79,7 @@ final class TopologicalSortAsyncResult<TValue extends Object> implements ITopolo
     return lock;
   }
 
-  void asyncComplete(final Map<TValue, TValue> results, final boolean successful) {
+  void asyncComplete(final Map<TValue, TProcessedValue> results, final boolean successful) {
     synchronized (lock) {
       this.results = results;
       this.successful = successful;
@@ -144,19 +144,19 @@ final class TopologicalSortAsyncResult<TValue extends Object> implements ITopolo
   }
 
   @Override
-  public TValue get(final TValue value) {
+  public TProcessedValue get(final TValue value) {
     return resultFor(value);
   }
 
   @Override
-  public TValue first() {
+  public TProcessedValue first() {
     if (!isDone() || results.isEmpty())
       return null;
     return results.values().iterator().next();
   }
 
   @Override
-  public TValue resultFor(final TValue value) {
+  public TProcessedValue resultFor(final TValue value) {
     return isDone() ? results.get(value) : null;
   }
 
@@ -171,8 +171,8 @@ final class TopologicalSortAsyncResult<TValue extends Object> implements ITopolo
   }
 
   @Override
-  public Iterable<TValue> results() {
-    return isDone() ? results.values() : new ArrayList<TValue>(0);
+  public Iterable<TProcessedValue> results() {
+    return isDone() ? results.values() : new ArrayList<TProcessedValue>(0);
   }
 
   @Override

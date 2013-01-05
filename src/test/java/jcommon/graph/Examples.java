@@ -27,7 +27,7 @@ public class Examples {
 
   //Expected ending vertices: <empty>
   public static final IGraph VALID_SIMPLE_1;
-  public static final Solution<ObjectVertex<Object>, Object> SOLUTION_VALID_SIMPLE_1 = Solution.create(
+  public static final Solution<ObjectVertex<Object>, Object, Object> SOLUTION_VALID_SIMPLE_1 = Solution.create(
       "VALID_SIMPLE_1"
     , CYCLE_NOT_EXPECTED
     , VALID_SIMPLE_1 = ObjectGraph.buildFromObjects()
@@ -37,7 +37,7 @@ public class Examples {
 
   //Expected ending vertices: A
   public static final StringGraph VALID_SIMPLE_2;
-  public static final Solution<ObjectVertex<String>, String> SOLUTION_VALID_SIMPLE_2 = Solution.create(
+  public static final Solution<ObjectVertex<String>, String, String> SOLUTION_VALID_SIMPLE_2 = Solution.create(
       "VALID_SIMPLE_2"
     , CYCLE_NOT_EXPECTED
     , VALID_SIMPLE_2 = StringGraph.buildFromStrings("A")
@@ -47,7 +47,7 @@ public class Examples {
 
   //Expected ending vertices: A, B
   public static final StringGraph VALID_SIMPLE_3;
-  public static final Solution<ObjectVertex<String>, String> SOLUTION_VALID_SIMPLE_3 = Solution.create(
+  public static final Solution<ObjectVertex<String>, String, String> SOLUTION_VALID_SIMPLE_3 = Solution.create(
       "VALID_SIMPLE_2"
     , CYCLE_NOT_EXPECTED
     , VALID_SIMPLE_3 = StringGraph.buildFromStrings("A", "B")
@@ -57,7 +57,7 @@ public class Examples {
 
   //Expected ending vertices: A
   public static final StringGraph VALID_SIMPLE_4;
-  public static final Solution<ObjectVertex<String>, String> SOLUTION_VALID_SIMPLE_4 = Solution.create(
+  public static final Solution<ObjectVertex<String>, String, String> SOLUTION_VALID_SIMPLE_4 = Solution.create(
       "VALID_SIMPLE_4"
     , CYCLE_NOT_EXPECTED
     , VALID_SIMPLE_4 = StringGraph.buildFromStrings("A", "B")
@@ -70,7 +70,7 @@ public class Examples {
   //Valid order: A, B, C, D, E, F
   //Expected ending vertices: E, F
   public static final StringGraph VALID_1;
-  public static final Solution<ObjectVertex<String>, String> SOLUTION_VALID_1 = Solution.create(
+  public static final Solution<ObjectVertex<String>, String, String> SOLUTION_VALID_1 = Solution.create(
       "VALID_1"
     , CYCLE_NOT_EXPECTED
     , VALID_1 = StringGraph.buildFromStrings("A", "B", "C", "D", "E", "F")
@@ -91,7 +91,7 @@ public class Examples {
   //Valid order: 1, 2, 9, 7, 4, 6, 3, 5, 8
   //Expected ending vertices: 3, 7, 8
   public static final NumberGraph<Integer> VALID_2;
-  public static final Solution<ObjectVertex<Integer>, Integer> SOLUTION_VALID_2 = Solution.create(
+  public static final Solution<ObjectVertex<Integer>, Integer, Integer> SOLUTION_VALID_2 = Solution.create(
       "VALID_2"
     , CYCLE_NOT_EXPECTED
     , VALID_2 = NumberGraph.buildFromNumbers(1, 2, 3, 4, 5, 6, 7, 8, 9)
@@ -124,7 +124,7 @@ public class Examples {
   //Valid ordering: A, F, B, C, D, E
   //Expected ending vertices: C, E
   public static final StringGraph VALID_3;
-  public static final Solution<ObjectVertex<String>, String> SOLUTION_VALID_3 = Solution.create(
+  public static final Solution<ObjectVertex<String>, String, String> SOLUTION_VALID_3 = Solution.create(
       "VALID_3"
     , CYCLE_NOT_EXPECTED
     , VALID_3 = StringGraph.createForStrings()
@@ -149,7 +149,7 @@ public class Examples {
   //Valid order: 1, 6, 2, 5, 3, 4
   //Expected ending vertices: 4
   public static final NumberGraph<Integer> VALID_4;
-  public static final Solution<ObjectVertex<Integer>, Integer> SOLUTION_VALID_4 = Solution.create(
+  public static final Solution<ObjectVertex<Integer>, Integer, Integer> SOLUTION_VALID_4 = Solution.create(
       "VALID_4"
     , CYCLE_NOT_EXPECTED
     , VALID_4 = NumberGraph.buildFromNumbers(1, 2, 3, 4, 5, 6)
@@ -169,7 +169,7 @@ public class Examples {
   //Valid order: 1, 2, 3, 4, 5
   //Expected ending vertices: 5
   public static final NumberGraph<Integer> VALID_5;
-  public static final Solution<ObjectVertex<Integer>, Integer> SOLUTION_VALID_5 = Solution.create(
+  public static final Solution<ObjectVertex<Integer>, Integer, Integer> SOLUTION_VALID_5 = Solution.create(
       "VALID_5"
     , CYCLE_NOT_EXPECTED
     , VALID_5 = NumberGraph.buildFromNumbers(1, 2, 3, 4, 5)
@@ -182,7 +182,7 @@ public class Examples {
   );
 
   public static final StringGraph CYCLE_1;
-  public static final Solution<ObjectVertex<String>, String> SOLUTION_CYCLE_1 = Solution.create(
+  public static final Solution<ObjectVertex<String>, String, String> SOLUTION_CYCLE_1 = Solution.create(
       "CYCLE_1"
     , CYCLE_EXPECTED
     , CYCLE_1 = StringGraph.buildFromStrings("A", "B")
@@ -191,7 +191,7 @@ public class Examples {
   );
 
   public static final StringGraph CYCLE_2;
-  public static final Solution<ObjectVertex<String>, String> SOLUTION_CYCLE_2 = Solution.create(
+  public static final Solution<ObjectVertex<String>, String, String> SOLUTION_CYCLE_2 = Solution.create(
       "CYCLE_2"
     , CYCLE_EXPECTED
     , CYCLE_2 = StringGraph.buildFromStrings("A", "B", "C")
@@ -201,7 +201,7 @@ public class Examples {
   );
 
   public static final NumberGraph<Integer> CYCLE_3;
-  public static final Solution<ObjectVertex<Integer>, Integer> SOLUTION_CYCLE_3 = Solution.create(
+  public static final Solution<ObjectVertex<Integer>, Integer, Integer> SOLUTION_CYCLE_3 = Solution.create(
       "CYCLE_3"
     , CYCLE_EXPECTED
     , CYCLE_3 = VALID_2.copyAsNumberGraph()

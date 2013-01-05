@@ -26,17 +26,17 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class Solution<TVertex extends IVertex<TValue>, TValue extends Object> {
+public class Solution<TVertex extends IVertex<TValue>, TValue extends Object, TProcessedValue extends Object> {
   public static final boolean CYCLE_EXPECTED = true;
   public static final boolean CYCLE_NOT_EXPECTED = false;
 
-  private final IGraph<TVertex, TValue> graph;
+  private final IGraph<TVertex, TValue, TProcessedValue> graph;
   private final ValidOrdering<TValue>[] orderings;
-  private final ValidList<TValue> ending_values_expected;
+  private final ValidList<TProcessedValue> ending_values_expected;
   private final boolean cycle_expected;
   private final String message;
 
-  public Solution(String message, boolean cycle_expected, IGraph<TVertex, TValue> graph, ValidList<TValue> ending_values_expected, ValidOrdering<TValue>...orderings) {
+  public Solution(String message, boolean cycle_expected, IGraph<TVertex, TValue, TProcessedValue> graph, ValidList<TProcessedValue> ending_values_expected, ValidOrdering<TValue>...orderings) {
     this.graph = graph;
     this.message = message == null ? "" : message;
     this.orderings = orderings;
@@ -52,11 +52,11 @@ public class Solution<TVertex extends IVertex<TValue>, TValue extends Object> {
     return cycle_expected;
   }
 
-  public IGraph<TVertex, TValue> getGraph() {
+  public IGraph<TVertex, TValue, TProcessedValue> getGraph() {
     return graph;
   }
 
-  public ValidList<TValue> getExpectedEndingValues() {
+  public ValidList<TProcessedValue> getExpectedEndingValues() {
     return ending_values_expected;
   }
 
@@ -117,12 +117,12 @@ public class Solution<TVertex extends IVertex<TValue>, TValue extends Object> {
     }
   }
 
-  public void checkSortAsync(ITopologicalSortCallback<TValue> callback) throws AssertionError {
+  public void checkSortAsync(ITopologicalSortCallback<TValue, TProcessedValue> callback) throws AssertionError {
     //Error callback indicating if a cycle was detected
     //The error callback will be called and we set the boolean value to false and then check it later.
     final boolean[] cycle_detected = new boolean[1];
 
-    ITopologicalSortAsyncResult<TValue> result =  null;
+    ITopologicalSortAsyncResult<TValue, TProcessedValue> result =  null;
     try {
       final ITopologicalSortErrorCallback<TValue> error_callback = new ITopologicalSortErrorCallback<TValue>() {
         @Override
@@ -150,28 +150,28 @@ public class Solution<TVertex extends IVertex<TValue>, TValue extends Object> {
   }
 
   @SuppressWarnings("unchecked")
-  public static <TVertex extends IVertex<TValue>, TValue extends Object> Solution<TVertex, TValue> create(IGraph<TVertex, TValue> graph, ValidOrdering<TValue>...orderings) {
-    return new Solution<TVertex, TValue>("", false, graph, new ValidList<TValue>(), orderings);
+  public static <TVertex extends IVertex<TValue>, TValue extends Object, TProcessedValue extends Object> Solution<TVertex, TValue, TProcessedValue> create(IGraph<TVertex, TValue, TProcessedValue> graph, ValidOrdering<TValue>...orderings) {
+    return new Solution<TVertex, TValue, TProcessedValue>("", false, graph, new ValidList<TProcessedValue>(), orderings);
   }
 
-  public static <TVertex extends IVertex<TValue>, TValue extends Object> Solution<TVertex, TValue> create(IGraph<TVertex, TValue> graph, ValidList<TValue> ending_values_expected, ValidOrdering<TValue>...orderings) {
-    return new Solution<TVertex, TValue>("", false, graph, ending_values_expected, orderings);
+  public static <TVertex extends IVertex<TValue>, TValue extends Object, TProcessedValue extends Object> Solution<TVertex, TValue, TProcessedValue> create(IGraph<TVertex, TValue, TProcessedValue> graph, ValidList<TProcessedValue> ending_values_expected, ValidOrdering<TValue>...orderings) {
+    return new Solution<TVertex, TValue, TProcessedValue>("", false, graph, ending_values_expected, orderings);
   }
 
-  public static <TVertex extends IVertex<TValue>, TValue extends Object> Solution create(boolean cycle_expected, IGraph<TVertex, TValue> graph, ValidList<TValue> ending_values_expected, ValidOrdering<TValue>...orderings) {
-    return new Solution<TVertex, TValue>("", cycle_expected, graph, ending_values_expected, orderings);
+  public static <TVertex extends IVertex<TValue>, TValue extends Object, TProcessedValue extends Object> Solution create(boolean cycle_expected, IGraph<TVertex, TValue, TProcessedValue> graph, ValidList<TProcessedValue> ending_values_expected, ValidOrdering<TValue>...orderings) {
+    return new Solution<TVertex, TValue, TProcessedValue>("", cycle_expected, graph, ending_values_expected, orderings);
   }
 
-  public static <TVertex extends IVertex<TValue>, TValue extends Object> Solution create(String message, IGraph<TVertex, TValue> graph, ValidList<TValue> ending_values_expected, ValidOrdering<TValue>...orderings) {
-    return new Solution<TVertex, TValue>(message, false, graph, ending_values_expected, orderings);
+  public static <TVertex extends IVertex<TValue>, TValue extends Object, TProcessedValue extends Object> Solution create(String message, IGraph<TVertex, TValue, TProcessedValue> graph, ValidList<TProcessedValue> ending_values_expected, ValidOrdering<TValue>...orderings) {
+    return new Solution<TVertex, TValue, TProcessedValue>(message, false, graph, ending_values_expected, orderings);
   }
 
   @SuppressWarnings("unchecked")
-  public static <TVertex extends IVertex<TValue>, TValue extends Object> Solution create(String message, boolean cycle_expected, IGraph<TVertex, TValue> graph, ValidOrdering<TValue>...orderings) {
-    return new Solution<TVertex, TValue>(message, cycle_expected, graph, new ValidList<TValue>(), orderings);
+  public static <TVertex extends IVertex<TValue>, TValue extends Object, TProcessedValue extends Object> Solution create(String message, boolean cycle_expected, IGraph<TVertex, TValue, TProcessedValue> graph, ValidOrdering<TValue>...orderings) {
+    return new Solution<TVertex, TValue, TProcessedValue>(message, cycle_expected, graph, new ValidList<TProcessedValue>(), orderings);
   }
 
-  public static <TVertex extends IVertex<TValue>, TValue extends Object> Solution create(String message, boolean cycle_expected, IGraph<TVertex, TValue> graph, ValidList<TValue> ending_values_expected, ValidOrdering<TValue>...orderings) {
-    return new Solution<TVertex, TValue>(message, cycle_expected, graph, ending_values_expected, orderings);
+  public static <TVertex extends IVertex<TValue>, TValue extends Object, TProcessedValue extends Object> Solution create(String message, boolean cycle_expected, IGraph<TVertex, TValue, TProcessedValue> graph, ValidList<TProcessedValue> ending_values_expected, ValidOrdering<TValue>...orderings) {
+    return new Solution<TVertex, TValue, TProcessedValue>(message, cycle_expected, graph, ending_values_expected, orderings);
   }
 }

@@ -39,9 +39,9 @@ public class DirectedAcyclicGraphTest {
 
   @Test
   public void testAsync() {
-    final ITopologicalSortCallback<Object> CALLBACK_NOOP = new ITopologicalSortCallback<Object>() {
+    final ITopologicalSortCallback<Object, Object> CALLBACK_NOOP = new ITopologicalSortCallback<Object, Object>() {
       @Override
-      public Object handle(Object o, ITopologicalSortInput<Object> input, IVertex<Object> vertex, ITopologicalSortCoordinator coordinator) throws Throwable {
+      public Object handle(Object o, ITopologicalSortInput<Object, Object> input, IVertex<Object> vertex, ITopologicalSortCoordinator coordinator) throws Throwable {
         return o;
       }
     };
@@ -52,9 +52,9 @@ public class DirectedAcyclicGraphTest {
       }
     };
 
-    final ITopologicalSortCallback<Object> CALLBACK_DEBUG = new ITopologicalSortCallback<Object>() {
+    final ITopologicalSortCallback<Object, Object> CALLBACK_DEBUG = new ITopologicalSortCallback<Object, Object>() {
       @Override
-      public Object handle(Object o, ITopologicalSortInput<Object> input, IVertex<Object> vertex, ITopologicalSortCoordinator coordinator) throws Throwable {
+      public Object handle(Object o, ITopologicalSortInput<Object, Object> input, IVertex<Object> vertex, ITopologicalSortCoordinator coordinator) throws Throwable {
         System.out.println(Thread.currentThread().getName() + ": " + o.toString() + ", input: " + input.toString());
         Thread.sleep(1000);
         return vertex;
@@ -93,9 +93,9 @@ public class DirectedAcyclicGraphTest {
     final NumberGraph<Integer> ng_1 = Examples.VALID_5;
 
     //Sum up the values as they're processed.
-    ITopologicalSortAsyncResult<Integer> ng_result = ng_1.sortAsync(new ITopologicalSortCallback<Integer>() {
+    ITopologicalSortAsyncResult<Integer, Integer> ng_result = ng_1.sortAsync(new ITopologicalSortCallback<Integer, Integer>() {
       @Override
-      public Integer handle(Integer number, ITopologicalSortInput<Integer> input, IVertex<Integer> vertex, ITopologicalSortCoordinator coordinator) throws Throwable {
+      public Integer handle(Integer number, ITopologicalSortInput<Integer, Integer> input, IVertex<Integer> vertex, ITopologicalSortCoordinator coordinator) throws Throwable {
         int prev_val = (input.isStart() ? 0 : input.first());
         int val = number;
         return prev_val + val;
@@ -105,9 +105,9 @@ public class DirectedAcyclicGraphTest {
     assertEquals(15, (int)ng_result.first());
 
     //Take the product of the values as they're processed.
-    ng_result = ng_1.sortAsync(new ITopologicalSortCallback<Integer>() {
+    ng_result = ng_1.sortAsync(new ITopologicalSortCallback<Integer, Integer>() {
       @Override
-      public Integer handle(Integer number, ITopologicalSortInput<Integer> input, IVertex<Integer> vertex, ITopologicalSortCoordinator coordinator) throws Throwable {
+      public Integer handle(Integer number, ITopologicalSortInput<Integer, Integer> input, IVertex<Integer> vertex, ITopologicalSortCoordinator coordinator) throws Throwable {
         int prev_val = (input.isStart() ? 1 : input.first());
         int val = number;
         return prev_val * val;

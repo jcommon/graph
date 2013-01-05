@@ -36,7 +36,7 @@ import java.util.concurrent.ExecutorService;
  *
  * @see <a href="http://en.wikipedia.org/wiki/Topological_sorting">http://en.wikipedia.org/wiki/Topological_sorting</a>
  */
-public interface ITopologicalSortStrategy<TVertex extends IVertex<TValue>, TValue extends Object> {
+public interface ITopologicalSortStrategy<TVertex extends IVertex<TValue>, TValue extends Object, TProcessedValue extends Object> {
   /** {@link String} available for use when throwing {@link CyclicGraphException}s. */
   String STANDARD_CYCLE_MESSAGE = "Cycle detected when topologically sorting the graph";
 
@@ -49,7 +49,7 @@ public interface ITopologicalSortStrategy<TVertex extends IVertex<TValue>, TValu
    *
    * @see <a href="http://en.wikipedia.org/wiki/Topological_sorting">http://en.wikipedia.org/wiki/Topological_sorting</a>
    */
-  List<TValue> sort(IAdjacencyList<TVertex, TValue> adjacencyList) throws CyclicGraphException;
+  List<TValue> sort(IAdjacencyList<TVertex, TValue, TProcessedValue> adjacencyList) throws CyclicGraphException;
 
   /**
    * Allows you to asynchronously and in-parallel process the vertices of a graph topologically. Care is taken to
@@ -70,5 +70,5 @@ public interface ITopologicalSortStrategy<TVertex extends IVertex<TValue>, TValu
    *
    * @see <a href="http://en.wikipedia.org/wiki/Topological_sorting">http://en.wikipedia.org/wiki/Topological_sorting</a>
    */
-  ITopologicalSortAsyncResult<TValue> sortAsync(ExecutorService executor, IAdjacencyList<TVertex, TValue> adjacencyList, ITopologicalSortCallback<TValue> callback, ITopologicalSortErrorCallback<TValue> errorCallback);
+  ITopologicalSortAsyncResult<TValue, TProcessedValue> sortAsync(ExecutorService executor, IAdjacencyList<TVertex, TValue, TProcessedValue> adjacencyList, ITopologicalSortCallback<TValue, TProcessedValue> callback, ITopologicalSortErrorCallback<TValue> errorCallback);
 }

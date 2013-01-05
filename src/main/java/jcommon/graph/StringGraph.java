@@ -24,7 +24,7 @@ package jcommon.graph;
  *
  * @see DirectedAcyclicGraph
  */
-public class StringGraph extends ObjectGraph<String> {
+public class StringGraph extends ObjectGraph<String, String> {
   /**
    * @see ObjectGraph#ObjectGraph()
    */

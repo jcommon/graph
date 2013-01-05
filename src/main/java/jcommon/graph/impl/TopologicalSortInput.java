@@ -30,24 +30,24 @@ import java.util.Set;
 /**
  * @see ITopologicalSortInput
  */
-public class TopologicalSortInput<TValue extends Object> implements ITopologicalSortInput<TValue> {
+public class TopologicalSortInput<TValue extends Object, TProcessedValue extends Object> implements ITopologicalSortInput<TValue, TProcessedValue> {
   private final boolean starting;
-  private final Map<IVertex, TValue> inputs;
+  private final Map<TValue, TProcessedValue> inputs;
 
   /**
    * Instantiates a new instance of {@link TopologicalSortInput}.
    *
-   * @param inputs An instance of a {@link Map} that maps between a {@link IVertex} and the output from
+   * @param inputs An instance of a {@link Map} that maps between a value and the output from
    *               processing it.
    */
-  public TopologicalSortInput(final boolean starting, final Map<IVertex, TValue> inputs) {
+  public TopologicalSortInput(final boolean starting, final Map<TValue, TProcessedValue> inputs) {
     if (inputs == null)
       throw new IllegalArgumentException("inputs cannot be empty");
 
     this.starting = starting;
 
     //Make a read-only copy of the map.
-    this.inputs = Collections.unmodifiableMap(new HashMap<IVertex, TValue>(inputs));
+    this.inputs = Collections.unmodifiableMap(new HashMap<TValue, TProcessedValue>(inputs));
   }
 
   /**
@@ -67,18 +67,18 @@ public class TopologicalSortInput<TValue extends Object> implements ITopological
   }
 
   /**
-   * @see ITopologicalSortInput#get(IVertex)
+   * @see ITopologicalSortInput#get(Object)
    */
   @Override
-  public TValue get(final IVertex vertex) {
-    return inputs.get(vertex);
+  public TProcessedValue get(final TValue value) {
+    return inputs.get(value);
   }
 
   /**
    * @see ITopologicalSortInput#first()
    */
   @Override
-  public TValue first() {
+  public TProcessedValue first() {
     if (inputs.isEmpty())
       return null;
     return inputs.values().iterator().next();
@@ -93,26 +93,26 @@ public class TopologicalSortInput<TValue extends Object> implements ITopological
   }
 
   /**
-   * @see ITopologicalSortInput#containsVertex(IVertex)
+   * @see ITopologicalSortInput#contains(Object)
    */
   @Override
-  public boolean containsVertex(final IVertex vertex) {
-    return inputs.containsKey(vertex);
+  public boolean contains(final TValue value) {
+    return inputs.containsKey(value);
   }
 
   /**
    * @see ITopologicalSortInput#inputs()
    */
   @Override
-  public Iterable<TValue> inputs() {
+  public Iterable<TProcessedValue> inputs() {
     return inputs.values();
   }
 
   /**
-   * @see ITopologicalSortInput#vertices()
+   * @see ITopologicalSortInput#values()
    */
   @Override
-  public Set<IVertex> vertices() {
+  public Set<TValue> values() {
     return inputs.keySet();
   }
 

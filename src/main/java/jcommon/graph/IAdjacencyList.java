@@ -34,7 +34,7 @@ import java.util.Set;
  *
  * @see <a href="http://www.cs.cmu.edu/~avrim/451f08/lectures/lect1002.pdf">http://www.cs.cmu.edu/~avrim/451f08/lectures/lect1002.pdf</a>
  */
-public interface IAdjacencyList<TVertex extends IVertex<TValue>, TValue extends Object> extends Iterable<IAdjacencyListPair<TVertex>> {
+public interface IAdjacencyList<TVertex extends IVertex<TValue>, TValue extends Object, TProcessedValue extends Object> extends Iterable<IAdjacencyListPair<TVertex>> {
   /**
    * Determines if the adjacency list is empty.
    *
@@ -119,5 +119,5 @@ public interface IAdjacencyList<TVertex extends IVertex<TValue>, TValue extends 
    *
    * @return An instance of {@link Map} mapping values to their processed result.
    */
-  Map<TValue, TValue> createResultMap(); //TODO: Reconsider if this should be TValue -> Object (IOW, callback should return Object, not TValue)
+  Map<TValue, TProcessedValue> createResultMap();
 }

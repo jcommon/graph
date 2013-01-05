@@ -38,7 +38,7 @@ import java.util.concurrent.Executors;
  *
  * @see IGraph
  */
-public class DirectedAcyclicGraph<TVertex extends IVertex<TValue>, TValue extends Object> implements Cloneable, IGraph<TVertex, TValue> {
+public class DirectedAcyclicGraph<TVertex extends IVertex<TValue>, TValue extends Object, TProcessedValue extends Object> implements Cloneable, IGraph<TVertex, TValue, TProcessedValue> {
   private Set<TVertex> vertices = new LinkedHashSet<TVertex>(5, 0.8f);
   private Set<IEdge<TVertex>> edges = new LinkedHashSet<IEdge<TVertex>>(8, 0.8f);
 
@@ -82,10 +82,10 @@ public class DirectedAcyclicGraph<TVertex extends IVertex<TValue>, TValue extend
    * @return A new instance of type {@link TGraph} with {@link DirectedAcyclicGraph} specific fields already filled in.
    */
   @SuppressWarnings("unchecked")
-  protected static <TGraph extends DirectedAcyclicGraph<TVertex, TValue>, TVertex extends IVertex<TValue>, TValue extends Object> TGraph copyGraph(final TGraph graph) {
+  protected static <TGraph extends DirectedAcyclicGraph<TVertex, TValue, TProcessedValue>, TVertex extends IVertex<TValue>, TValue extends Object, TProcessedValue extends Object> TGraph copyGraph(final TGraph graph) {
     try {
       final Class g_class = graph.getClass();
-      final Constructor<? extends DirectedAcyclicGraph<TVertex, TValue>> construct = g_class.getDeclaredConstructor();
+      final Constructor<? extends DirectedAcyclicGraph<TVertex, TValue, TProcessedValue>> construct = g_class.getDeclaredConstructor();
       construct.setAccessible(true);
 
       final TGraph g = (TGraph)construct.newInstance();
@@ -101,7 +101,7 @@ public class DirectedAcyclicGraph<TVertex extends IVertex<TValue>, TValue extend
   /**
    * @see IGraph#copy()
    */
-  public IGraph<TVertex, TValue> copy() {
+  public IGraph<TVertex, TValue, TProcessedValue> copy() {
     return copyGraph(this);
   }
 
@@ -112,8 +112,8 @@ public class DirectedAcyclicGraph<TVertex extends IVertex<TValue>, TValue extend
    * @param <TVertex> Type of {@link IVertex} of the vertices in the new {@link IGraph}.
    * @return A new instance of {@link IGraph} with the provided vertices already added.
    */
-  public static <TVertex extends IVertex<TValue>, TValue extends Object> IGraph<TVertex, TValue> build(final TVertex...vertices) {
-    final DirectedAcyclicGraph<TVertex, TValue> g = new DirectedAcyclicGraph<TVertex, TValue>();
+  public static <TVertex extends IVertex<TValue>, TValue extends Object, TProcessedValue extends Object> IGraph<TVertex, TValue, TProcessedValue> build(final TVertex...vertices) {
+    final DirectedAcyclicGraph<TVertex, TValue, TProcessedValue> g = new DirectedAcyclicGraph<TVertex, TValue, TProcessedValue>();
     if (vertices != null) {
       for(TVertex d : vertices) {
         g.addVertex(d);
@@ -128,7 +128,7 @@ public class DirectedAcyclicGraph<TVertex extends IVertex<TValue>, TValue extend
    * @param <TVertex> Type of {@link IVertex} of the vertices in the new {@link IGraph}.
    * @return A new instance of {@link IGraph} with an empty set of vertices.
    */
-  public static <TVertex extends IVertex<TValue>, TValue extends Object> IGraph<TVertex, TValue> create() {
+  public static <TVertex extends IVertex<TValue>, TValue extends Object, TProcessedValue extends Object> IGraph<TVertex, TValue, TProcessedValue> create() {
     return build((TVertex[])null);
   }
 
@@ -136,7 +136,7 @@ public class DirectedAcyclicGraph<TVertex extends IVertex<TValue>, TValue extend
    * @see IGraph#addVertex(IVertex)
    */
   @Override
-  public IGraph<TVertex, TValue> addVertex(final TVertex vertex) {
+  public IGraph<TVertex, TValue, TProcessedValue> addVertex(final TVertex vertex) {
     if (vertex == null)
       throw new IllegalArgumentException("vertex must not be null");
     vertices.add(vertex);
@@ -147,7 +147,7 @@ public class DirectedAcyclicGraph<TVertex extends IVertex<TValue>, TValue extend
    * @see IGraph#removeVertex(IVertex)
    */
   @Override
-  public IGraph<TVertex, TValue> removeVertex(final TVertex vertex) {
+  public IGraph<TVertex, TValue, TProcessedValue> removeVertex(final TVertex vertex) {
     if (vertex == null)
       throw new IllegalArgumentException("vertex must not be null");
     vertices.remove(vertex);
@@ -158,7 +158,7 @@ public class DirectedAcyclicGraph<TVertex extends IVertex<TValue>, TValue extend
    * @see IGraph#addEdge(IVertex, IVertex)
    */
   @Override
-  public IGraph<TVertex, TValue> addEdge(final TVertex from, final TVertex to) {
+  public IGraph<TVertex, TValue, TProcessedValue> addEdge(final TVertex from, final TVertex to) {
     edges.add(new Edge<TVertex>(from, to));
     return this;
   }
@@ -167,7 +167,7 @@ public class DirectedAcyclicGraph<TVertex extends IVertex<TValue>, TValue extend
    * @see IGraph#removeEdge(IVertex, IVertex)
    */
   @Override
-  public IGraph<TVertex, TValue> removeEdge(final TVertex from, final TVertex to) {
+  public IGraph<TVertex, TValue, TProcessedValue> removeEdge(final TVertex from, final TVertex to) {
     edges.remove(new Edge<TVertex>(from, to));
     return this;
   }
@@ -191,42 +191,42 @@ public class DirectedAcyclicGraph<TVertex extends IVertex<TValue>, TValue extend
    */
   @Override
   public List<TValue> sort() throws CyclicGraphException {
-    return sort(new SimpleTopologicalSort<TVertex, TValue>());
+    return sort(new SimpleTopologicalSort<TVertex, TValue, TProcessedValue>());
   }
 
   /**
    * @see IGraph#sort(ITopologicalSortStrategy)
    */
   @Override
-  public List<TValue> sort(final ITopologicalSortStrategy<TVertex, TValue> strategy) throws CyclicGraphException {
+  public List<TValue> sort(final ITopologicalSortStrategy<TVertex, TValue, TProcessedValue> strategy) throws CyclicGraphException {
     if (strategy == null)
       throw new IllegalArgumentException("strategy cannot be null");
     if (!validate())
       throw new IllegalStateException("The graph is invalid. Please confirm that all vertices are present for every relationship.");
-    return strategy.sort(new AdjacencyList<TVertex, TValue>(vertices, edges));
+    return strategy.sort(new AdjacencyList<TVertex, TValue, TProcessedValue>(vertices, edges));
   }
 
   /**
    * @see IGraph#sortAsync(ITopologicalSortCallback)
    */
   @Override
-  public ITopologicalSortAsyncResult<TValue> sortAsync(final ITopologicalSortCallback<TValue> callback) {
-    return sortAsync(new SimpleTopologicalSort<TVertex, TValue>(), callback, null);
+  public ITopologicalSortAsyncResult<TValue, TProcessedValue> sortAsync(final ITopologicalSortCallback<TValue, TProcessedValue> callback) {
+    return sortAsync(new SimpleTopologicalSort<TVertex, TValue, TProcessedValue>(), callback, null);
   }
 
   /**
    * @see IGraph#sortAsync(ITopologicalSortCallback, ITopologicalSortErrorCallback)
    */
   @Override
-  public ITopologicalSortAsyncResult<TValue> sortAsync(final ITopologicalSortCallback<TValue> callback, final ITopologicalSortErrorCallback<TValue> errorCallback) {
-    return sortAsync(new SimpleTopologicalSort<TVertex, TValue>(), callback, errorCallback);
+  public ITopologicalSortAsyncResult<TValue, TProcessedValue> sortAsync(final ITopologicalSortCallback<TValue, TProcessedValue> callback, final ITopologicalSortErrorCallback<TValue> errorCallback) {
+    return sortAsync(new SimpleTopologicalSort<TVertex, TValue, TProcessedValue>(), callback, errorCallback);
   }
 
   /**
    * @see IGraph#sortAsync(ITopologicalSortStrategy, ITopologicalSortCallback)
    */
   @Override
-  public ITopologicalSortAsyncResult<TValue> sortAsync(final ITopologicalSortStrategy<TVertex, TValue> strategy, final ITopologicalSortCallback<TValue> callback) {
+  public ITopologicalSortAsyncResult<TValue, TProcessedValue> sortAsync(final ITopologicalSortStrategy<TVertex, TValue, TProcessedValue> strategy, final ITopologicalSortCallback<TValue, TProcessedValue> callback) {
     return sortAsync(strategy, callback, null);
   }
 
@@ -234,9 +234,9 @@ public class DirectedAcyclicGraph<TVertex extends IVertex<TValue>, TValue extend
    * @see IGraph#sortAsync(ITopologicalSortStrategy, ITopologicalSortCallback, ITopologicalSortErrorCallback)
    */
   @Override
-  public ITopologicalSortAsyncResult<TValue> sortAsync(final ITopologicalSortStrategy<TVertex, TValue> strategy, final ITopologicalSortCallback<TValue> callback, final ITopologicalSortErrorCallback<TValue> errorCallback) {
+  public ITopologicalSortAsyncResult<TValue, TProcessedValue> sortAsync(final ITopologicalSortStrategy<TVertex, TValue, TProcessedValue> strategy, final ITopologicalSortCallback<TValue, TProcessedValue> callback, final ITopologicalSortErrorCallback<TValue> errorCallback) {
     final ExecutorService executor = Executors.newFixedThreadPool(Math.max(2, Runtime.getRuntime().availableProcessors() + 1));
-    final ITopologicalSortAsyncResult<TValue> result = sortAsync(executor, strategy, callback, errorCallback);
+    final ITopologicalSortAsyncResult<TValue, TProcessedValue> result = sortAsync(executor, strategy, callback, errorCallback);
 
     //We don't explicity shutdown b/c we may not be done processing
     //at this point. If need to abort prematurely, the caller can
@@ -249,23 +249,23 @@ public class DirectedAcyclicGraph<TVertex extends IVertex<TValue>, TValue extend
    * @see IGraph#sortAsync(java.util.concurrent.ExecutorService, ITopologicalSortCallback)
    */
   @Override
-  public ITopologicalSortAsyncResult<TValue> sortAsync(final ExecutorService executor, final ITopologicalSortCallback<TValue> callback) {
-    return sortAsync(executor, new SimpleTopologicalSort<TVertex, TValue>(), callback, null);
+  public ITopologicalSortAsyncResult<TValue, TProcessedValue> sortAsync(final ExecutorService executor, final ITopologicalSortCallback<TValue, TProcessedValue> callback) {
+    return sortAsync(executor, new SimpleTopologicalSort<TVertex, TValue, TProcessedValue>(), callback, null);
   }
 
   /**
    * @see IGraph#sortAsync(java.util.concurrent.ExecutorService, ITopologicalSortCallback, ITopologicalSortErrorCallback)
    */
   @Override
-  public ITopologicalSortAsyncResult<TValue> sortAsync(final ExecutorService executor, final ITopologicalSortCallback<TValue> callback, final ITopologicalSortErrorCallback<TValue> errorCallback) {
-    return sortAsync(executor, new SimpleTopologicalSort<TVertex, TValue>(), callback, errorCallback);
+  public ITopologicalSortAsyncResult<TValue, TProcessedValue> sortAsync(final ExecutorService executor, final ITopologicalSortCallback<TValue, TProcessedValue> callback, final ITopologicalSortErrorCallback<TValue> errorCallback) {
+    return sortAsync(executor, new SimpleTopologicalSort<TVertex, TValue, TProcessedValue>(), callback, errorCallback);
   }
 
   /**
    * @see IGraph#sortAsync(java.util.concurrent.ExecutorService, ITopologicalSortStrategy, ITopologicalSortCallback)
    */
   @Override
-  public ITopologicalSortAsyncResult<TValue> sortAsync(final ExecutorService executor, final ITopologicalSortStrategy<TVertex, TValue> strategy, final ITopologicalSortCallback<TValue> callback) {
+  public ITopologicalSortAsyncResult<TValue, TProcessedValue> sortAsync(final ExecutorService executor, final ITopologicalSortStrategy<TVertex, TValue, TProcessedValue> strategy, final ITopologicalSortCallback<TValue, TProcessedValue> callback) {
     return sortAsync(executor, strategy, callback, null);
   }
 
@@ -273,7 +273,7 @@ public class DirectedAcyclicGraph<TVertex extends IVertex<TValue>, TValue extend
    * @see IGraph#sortAsync(java.util.concurrent.ExecutorService, ITopologicalSortStrategy, ITopologicalSortCallback, ITopologicalSortErrorCallback)
    */
   @Override
-  public ITopologicalSortAsyncResult<TValue> sortAsync(final ExecutorService executor, final ITopologicalSortStrategy<TVertex, TValue> strategy, final ITopologicalSortCallback<TValue> callback, final ITopologicalSortErrorCallback<TValue> errorCallback) {
+  public ITopologicalSortAsyncResult<TValue, TProcessedValue> sortAsync(final ExecutorService executor, final ITopologicalSortStrategy<TVertex, TValue, TProcessedValue> strategy, final ITopologicalSortCallback<TValue, TProcessedValue> callback, final ITopologicalSortErrorCallback<TValue> errorCallback) {
     if (strategy == null)
       throw new IllegalArgumentException("strategy cannot be null");
     if (callback == null)
@@ -281,6 +281,6 @@ public class DirectedAcyclicGraph<TVertex extends IVertex<TValue>, TValue extend
     if (!validate())
       throw new IllegalStateException("The graph is invalid. Please confirm that all vertices are present for every relationship.");
 
-    return strategy.sortAsync(executor, new AdjacencyList<TVertex, TValue>(vertices, edges), callback, errorCallback);
+    return strategy.sortAsync(executor, new AdjacencyList<TVertex, TValue, TProcessedValue>(vertices, edges), callback, errorCallback);
   }
 }

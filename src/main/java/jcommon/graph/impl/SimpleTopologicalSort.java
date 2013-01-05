@@ -53,7 +53,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @see <a href="http://www.cs.washington.edu/education/courses/cse373/02sp/lectures/cse373-21-TopoSort-4up.pdf">http://www.cs.washington.edu/education/courses/cse373/02sp/lectures/cse373-21-TopoSort-4up.pdf</a>
  */
-public final class SimpleTopologicalSort<TVertex extends IVertex<TValue>, TValue extends Object> implements ITopologicalSortStrategy<TVertex, TValue> {
+public final class SimpleTopologicalSort<TVertex extends IVertex<TValue>, TValue extends Object, TProcessedValue extends Object> implements ITopologicalSortStrategy<TVertex, TValue, TProcessedValue> {
   /**
    * @see ITopologicalSortStrategy
    */
@@ -64,7 +64,7 @@ public final class SimpleTopologicalSort<TVertex extends IVertex<TValue>, TValue
    * @see ITopologicalSortStrategy#sort(IAdjacencyList)
    */
   @Override
-  public List<TValue> sort(final IAdjacencyList<TVertex, TValue> adjacencyList) throws CyclicGraphException {
+  public List<TValue> sort(final IAdjacencyList<TVertex, TValue, TProcessedValue> adjacencyList) throws CyclicGraphException {
     if (adjacencyList.isEmpty())
       return new ArrayList<TValue>(0);
 
@@ -113,8 +113,8 @@ public final class SimpleTopologicalSort<TVertex extends IVertex<TValue>, TValue
    * @see ITopologicalSortStrategy#sortAsync(ExecutorService, IAdjacencyList, ITopologicalSortCallback, ITopologicalSortErrorCallback)
    */
   @Override
-  public ITopologicalSortAsyncResult<TValue> sortAsync(final ExecutorService executorProcessors, final IAdjacencyList<TVertex, TValue> adjacencyList, final ITopologicalSortCallback<TValue> callback, final ITopologicalSortErrorCallback<TValue> errorCallback) {
-    final TopologicalSortAsyncResult<TValue> asyncResult = new TopologicalSortAsyncResult<TValue>(executorProcessors);
+  public ITopologicalSortAsyncResult<TValue, TProcessedValue> sortAsync(final ExecutorService executorProcessors, final IAdjacencyList<TVertex, TValue, TProcessedValue> adjacencyList, final ITopologicalSortCallback<TValue, TProcessedValue> callback, final ITopologicalSortErrorCallback<TValue> errorCallback) {
+    final TopologicalSortAsyncResult<TValue, TProcessedValue> asyncResult = new TopologicalSortAsyncResult<TValue, TProcessedValue>(executorProcessors);
     if (adjacencyList.isEmpty()) {
       asyncResult.asyncComplete(adjacencyList.createResultMap(), true);
       return asyncResult;
@@ -125,17 +125,17 @@ public final class SimpleTopologicalSort<TVertex extends IVertex<TValue>, TValue
     final List<Callable<Object>> callables = new ArrayList<Callable<Object>>(in_degrees.length);
     final Set<IAdjacencyListPair<TVertex>> remaining = new HashSet<IAdjacencyListPair<TVertex>>();
     final AtomicInteger[] atomics = new AtomicInteger[in_degrees.length];
-    final List<Map<IVertex, TValue>> inputs = new ArrayList<Map<IVertex, TValue>>(in_degrees.length);
+    final List<Map<TValue, TProcessedValue>> inputs = new ArrayList<Map<TValue, TProcessedValue>>(in_degrees.length);
     final AtomicInteger outstanding_submissions = new AtomicInteger(0);
     final ITopologicalSortCoordinator coordinator = new TopologicalSortCoordinator(asyncResult);
-    final Map<TValue, TValue> results = adjacencyList.createResultMap();
+    final Map<TValue, TProcessedValue> results = adjacencyList.createResultMap();
 
     //Find all vertices who have an in-degree of zero.
     //Also initialize latches to the size of the the in-degree + 1.
     for(int i = 0; i < in_degrees.length; ++i) {
       final IAdjacencyListPair<TVertex> pair = adjacencyList.pairAt(i);
       final AtomicInteger atom = atomics[i] = new AtomicInteger(in_degrees[i] == 0 ? 1 : in_degrees[i]);
-      final Map<IVertex, TValue> my_input = new HashMap<IVertex, TValue>(in_degrees[i], 1.0f);
+      final Map<TValue, TProcessedValue> my_input = new HashMap<TValue, TProcessedValue>(in_degrees[i], 1.0f);
       final boolean has_no_one_pointing_to_me = (in_degrees[i] == 0);
       inputs.add(my_input);
 
@@ -152,7 +152,7 @@ public final class SimpleTopologicalSort<TVertex extends IVertex<TValue>, TValue
           Throwable handled_exception = null;
           boolean handle_all_done = false;
           final TVertex vertex = pair.getVertex();
-          ITopologicalSortInput<TValue> input;
+          ITopologicalSortInput<TValue, TProcessedValue> input;
 
           try {
 
@@ -163,12 +163,12 @@ public final class SimpleTopologicalSort<TVertex extends IVertex<TValue>, TValue
               }
 
               synchronized (my_input) {
-                input = new TopologicalSortInput<TValue>(has_no_one_pointing_to_me, my_input);
+                input = new TopologicalSortInput<TValue, TProcessedValue>(has_no_one_pointing_to_me, my_input);
               }
 
               //Call the callback to let him handle this vertex.
               final TValue vertex_value = vertex.get();
-              TValue result = null;
+              TProcessedValue result = null;
               try {
                 result = callback.handle(vertex_value, input, vertex, coordinator);
               } catch(Throwable t) {
@@ -197,10 +197,10 @@ public final class SimpleTopologicalSort<TVertex extends IVertex<TValue>, TValue
                 for(TVertex dep : pair.getOutNeighbors()) {
                   final int index = adjacencyList.indexOf(dep);
                   final Callable<Object> dep_callable = callables.get(index);
-                  final Map<IVertex, TValue> dep_inputs = inputs.get(index);
+                  final Map<TValue, TProcessedValue> dep_inputs = inputs.get(index);
 
                   synchronized (dep_inputs) {
-                    dep_inputs.put(vertex, result);
+                    dep_inputs.put(vertex_value, result);
                   }
 
                   //Ensure we track the number of submissions. This will be used to

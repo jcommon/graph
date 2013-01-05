@@ -29,7 +29,7 @@ import java.util.*;
 /**
  * @see IAdjacencyList
  */
-public class AdjacencyList<TVertex extends IVertex<TValue>, TValue extends Object> implements IAdjacencyList<TVertex, TValue> {
+public class AdjacencyList<TVertex extends IVertex<TValue>, TValue extends Object, TProcessedValue extends Object> implements IAdjacencyList<TVertex, TValue, TProcessedValue> {
   private final List<IAdjacencyListPair<TVertex>> num_map;
   private final Map<TVertex, Integer> index_map;
   private final Map<TVertex, List<TVertex>> vertex_map;
@@ -147,7 +147,7 @@ public class AdjacencyList<TVertex extends IVertex<TValue>, TValue extends Objec
   }
 
   @Override
-  public Map<TValue, TValue> createResultMap() {
-    return new HashMap<TValue, TValue>(end_vertices.size());
+  public Map<TValue, TProcessedValue> createResultMap() {
+    return new HashMap<TValue, TProcessedValue>(end_vertices.size());
   }
 }

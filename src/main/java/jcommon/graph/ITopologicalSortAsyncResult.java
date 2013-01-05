@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @param <TValue> The expected result type for ending graph vertices who have no out neighbors.
  */
-public interface ITopologicalSortAsyncResult<TValue extends Object> {
+public interface ITopologicalSortAsyncResult<TValue extends Object, TProcessedValue extends Object> {
   /**
    * Determines if all processing of vertices has completed.
    *
@@ -166,7 +166,7 @@ public interface ITopologicalSortAsyncResult<TValue extends Object> {
    *
    * @see #resultFor(Object)
    */
-  TValue get(TValue value);
+  TProcessedValue get(TValue value);
 
   /**
    * Retrieves the result for an ending value.
@@ -178,7 +178,7 @@ public interface ITopologicalSortAsyncResult<TValue extends Object> {
    *
    * @return The value whose result you want. <code>null</code> if the value is not in the result list.
    */
-  TValue resultFor(TValue value);
+  TProcessedValue resultFor(TValue value);
 
   /**
    * Retrieves the result for the first ending value.
@@ -192,7 +192,7 @@ public interface ITopologicalSortAsyncResult<TValue extends Object> {
    *
    * @return The value of the first given result. <code>null</code> if there are no values in the result list.
    */
-  TValue first();
+  TProcessedValue first();
 
   /**
    * The number of returned results.
@@ -227,7 +227,7 @@ public interface ITopologicalSortAsyncResult<TValue extends Object> {
    *
    * @return An instance of {@link Iterable} for traversing the contents of the results.
    */
-  Iterable<TValue> results();
+  Iterable<TProcessedValue> results();
 
   /**
    * Returns the list of ending values (values for vertices that have no out neighbors) that generated the result.

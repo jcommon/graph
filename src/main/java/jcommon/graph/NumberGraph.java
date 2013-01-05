@@ -26,7 +26,7 @@ package jcommon.graph;
  *
  * @see DirectedAcyclicGraph
  */
-public class NumberGraph<TNumber extends Number> extends ObjectGraph<TNumber> {
+public class NumberGraph<TNumber extends Number> extends ObjectGraph<TNumber, TNumber> {
   /**
    * @see ObjectGraph#ObjectGraph()
    */

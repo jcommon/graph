@@ -29,7 +29,7 @@ package jcommon.graph;
  *
  * @param <TValue> The type of {@link Object} that this callback will operate on.
  */
-public interface ITopologicalSortCallback<TValue extends Object> {
+public interface ITopologicalSortCallback<TValue extends Object, TProcessedValue extends Object> {
   /**
    * The callback that will be executed inside a thread other than the one
    * invoking the sort.
@@ -40,5 +40,5 @@ public interface ITopologicalSortCallback<TValue extends Object> {
    *                    asynchronous sorting submissions done by the driver (which is typically done by an instance
    *                    of {@link ITopologicalSortStrategy}).
    */
-  TValue handle(TValue value, ITopologicalSortInput<TValue> input, IVertex<TValue> vertex, ITopologicalSortCoordinator coordinator) throws Throwable;
+  TProcessedValue handle(TValue value, ITopologicalSortInput<TValue, TProcessedValue> input, IVertex<TValue> vertex, ITopologicalSortCoordinator coordinator) throws Throwable;
 }
