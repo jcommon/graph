@@ -23,7 +23,9 @@ import org.junit.Test;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -83,6 +85,36 @@ public class DirectedAcyclicGraphTest {
       results[i] = Examples.ALL_VALID_GRAPHS[i].sortAsync(executor, CALLBACK_NOOP, ERROR_CALLBACK_NOOP);
     assertTrue(allSuccessfullyCompleted(results));
     executor.shutdownNow();
+
+    for(Solution solution : Examples.ALL_SOLUTIONS)
+      solution.checkSortAsync(CALLBACK_NOOP);
+
+    //Create a graph like: 1 -> 2 -> 3 -> 4 -> 5
+    final NumberGraph ng_1 = Examples.VALID_5;
+
+    //Sum up the values as they're processed.
+    ITopologicalSortAsyncResult<Number> ng_result = ng_1.sortAsync(new ITopologicalSortCallback<Number>() {
+      @Override
+      public Number handle(Number number, ITopologicalSortInput<Number> input, IVertex<Number> vertex, ITopologicalSortCoordinator coordinator) throws Throwable {
+        int prev_val = (Integer)(input.isStart() ? 0 : input.first());
+        int val = (Integer)number;
+        return prev_val + val;
+      }
+    });
+    assertTrue(ng_result.waitForCompletion(10L, TimeUnit.SECONDS));
+    assertEquals(15, ng_result.first());
+
+    //Take the product of the values as they're processed.
+    ng_result = ng_1.sortAsync(new ITopologicalSortCallback<Number>() {
+      @Override
+      public Number handle(Number number, ITopologicalSortInput<Number> input, IVertex<Number> vertex, ITopologicalSortCoordinator coordinator) throws Throwable {
+        int prev_val = (Integer)(input.isStart() ? 1 : input.first());
+        int val = (Integer)number;
+        return prev_val * val;
+      }
+    });
+    assertTrue(ng_result.waitForCompletion(10L, TimeUnit.SECONDS));
+    assertEquals(120, ng_result.first());
   }
 
   private boolean allSuccessfullyCompleted(ITopologicalSortAsyncResult[] results) {

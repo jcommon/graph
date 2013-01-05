@@ -210,7 +210,7 @@ public class DirectedAcyclicGraph<TVertex extends IVertex<TValue>, TValue extend
    * @see IGraph#sortAsync(ITopologicalSortCallback)
    */
   @Override
-  public ITopologicalSortAsyncResult sortAsync(final ITopologicalSortCallback<TValue> callback) {
+  public ITopologicalSortAsyncResult<TValue> sortAsync(final ITopologicalSortCallback<TValue> callback) {
     return sortAsync(new SimpleTopologicalSort<TVertex, TValue>(), callback, null);
   }
 
@@ -218,7 +218,7 @@ public class DirectedAcyclicGraph<TVertex extends IVertex<TValue>, TValue extend
    * @see IGraph#sortAsync(ITopologicalSortCallback, ITopologicalSortErrorCallback)
    */
   @Override
-  public ITopologicalSortAsyncResult sortAsync(final ITopologicalSortCallback<TValue> callback, final ITopologicalSortErrorCallback<TValue> errorCallback) {
+  public ITopologicalSortAsyncResult<TValue> sortAsync(final ITopologicalSortCallback<TValue> callback, final ITopologicalSortErrorCallback<TValue> errorCallback) {
     return sortAsync(new SimpleTopologicalSort<TVertex, TValue>(), callback, errorCallback);
   }
 
@@ -226,7 +226,7 @@ public class DirectedAcyclicGraph<TVertex extends IVertex<TValue>, TValue extend
    * @see IGraph#sortAsync(ITopologicalSortStrategy, ITopologicalSortCallback)
    */
   @Override
-  public ITopologicalSortAsyncResult sortAsync(final ITopologicalSortStrategy<TVertex, TValue> strategy, final ITopologicalSortCallback<TValue> callback) {
+  public ITopologicalSortAsyncResult<TValue> sortAsync(final ITopologicalSortStrategy<TVertex, TValue> strategy, final ITopologicalSortCallback<TValue> callback) {
     return sortAsync(strategy, callback, null);
   }
 
@@ -234,9 +234,9 @@ public class DirectedAcyclicGraph<TVertex extends IVertex<TValue>, TValue extend
    * @see IGraph#sortAsync(ITopologicalSortStrategy, ITopologicalSortCallback, ITopologicalSortErrorCallback)
    */
   @Override
-  public ITopologicalSortAsyncResult sortAsync(final ITopologicalSortStrategy<TVertex, TValue> strategy, final ITopologicalSortCallback<TValue> callback, final ITopologicalSortErrorCallback<TValue> errorCallback) {
+  public ITopologicalSortAsyncResult<TValue> sortAsync(final ITopologicalSortStrategy<TVertex, TValue> strategy, final ITopologicalSortCallback<TValue> callback, final ITopologicalSortErrorCallback<TValue> errorCallback) {
     final ExecutorService executor = Executors.newFixedThreadPool(Math.max(2, Runtime.getRuntime().availableProcessors() + 1));
-    final ITopologicalSortAsyncResult result = sortAsync(executor, strategy, callback, errorCallback);
+    final ITopologicalSortAsyncResult<TValue> result = sortAsync(executor, strategy, callback, errorCallback);
 
     //We don't explicity shutdown b/c we may not be done processing
     //at this point. If need to abort prematurely, the caller can
@@ -249,7 +249,7 @@ public class DirectedAcyclicGraph<TVertex extends IVertex<TValue>, TValue extend
    * @see IGraph#sortAsync(java.util.concurrent.ExecutorService, ITopologicalSortCallback)
    */
   @Override
-  public ITopologicalSortAsyncResult sortAsync(final ExecutorService executor, final ITopologicalSortCallback<TValue> callback) {
+  public ITopologicalSortAsyncResult<TValue> sortAsync(final ExecutorService executor, final ITopologicalSortCallback<TValue> callback) {
     return sortAsync(executor, new SimpleTopologicalSort<TVertex, TValue>(), callback, null);
   }
 
@@ -257,7 +257,7 @@ public class DirectedAcyclicGraph<TVertex extends IVertex<TValue>, TValue extend
    * @see IGraph#sortAsync(java.util.concurrent.ExecutorService, ITopologicalSortCallback, ITopologicalSortErrorCallback)
    */
   @Override
-  public ITopologicalSortAsyncResult sortAsync(final ExecutorService executor, final ITopologicalSortCallback<TValue> callback, final ITopologicalSortErrorCallback<TValue> errorCallback) {
+  public ITopologicalSortAsyncResult<TValue> sortAsync(final ExecutorService executor, final ITopologicalSortCallback<TValue> callback, final ITopologicalSortErrorCallback<TValue> errorCallback) {
     return sortAsync(executor, new SimpleTopologicalSort<TVertex, TValue>(), callback, errorCallback);
   }
 
@@ -265,7 +265,7 @@ public class DirectedAcyclicGraph<TVertex extends IVertex<TValue>, TValue extend
    * @see IGraph#sortAsync(java.util.concurrent.ExecutorService, ITopologicalSortStrategy, ITopologicalSortCallback)
    */
   @Override
-  public ITopologicalSortAsyncResult sortAsync(final ExecutorService executor, final ITopologicalSortStrategy<TVertex, TValue> strategy, final ITopologicalSortCallback<TValue> callback) {
+  public ITopologicalSortAsyncResult<TValue> sortAsync(final ExecutorService executor, final ITopologicalSortStrategy<TVertex, TValue> strategy, final ITopologicalSortCallback<TValue> callback) {
     return sortAsync(executor, strategy, callback, null);
   }
 
@@ -273,7 +273,7 @@ public class DirectedAcyclicGraph<TVertex extends IVertex<TValue>, TValue extend
    * @see IGraph#sortAsync(java.util.concurrent.ExecutorService, ITopologicalSortStrategy, ITopologicalSortCallback, ITopologicalSortErrorCallback)
    */
   @Override
-  public ITopologicalSortAsyncResult sortAsync(final ExecutorService executor, final ITopologicalSortStrategy<TVertex, TValue> strategy, final ITopologicalSortCallback<TValue> callback, final ITopologicalSortErrorCallback<TValue> errorCallback) {
+  public ITopologicalSortAsyncResult<TValue> sortAsync(final ExecutorService executor, final ITopologicalSortStrategy<TVertex, TValue> strategy, final ITopologicalSortCallback<TValue> callback, final ITopologicalSortErrorCallback<TValue> errorCallback) {
     if (strategy == null)
       throw new IllegalArgumentException("strategy cannot be null");
     if (callback == null)

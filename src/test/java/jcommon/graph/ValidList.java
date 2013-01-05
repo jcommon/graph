@@ -19,47 +19,59 @@
 
 package jcommon.graph;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ValidOrdering<TValue extends Object> {
-  private final TValue[] ordering;
+public class ValidList<TValue extends Object> {
+  private final TValue[] list;
 
-  public ValidOrdering(TValue...values) {
-    this.ordering = values;
+  public ValidList(TValue... values) {
+    this.list = values;
   }
 
-  public TValue[] getOrdering() {
-    return ordering;
+  public TValue[] getList() {
+    return list;
   }
 
   @Override
   public String toString() {
-    return "" + (ordering == null ? null : Arrays.asList(ordering));
+    return "" + (list == null ? null : Arrays.asList(list));
   }
 
-  public static <TValue extends Object> ValidOrdering build(TValue...values) {
-    return new ValidOrdering<TValue>(values);
+  public static <TValue extends Object> ValidList build(TValue...values) {
+    return new ValidList<TValue>(values);
   }
 
-  public static ValidOrdering<String> buildFromStrings(String...values) {
-    return new ValidOrdering<String>(values);
+  public static ValidList<String> buildFromStrings(String...values) {
+    return new ValidList<String>(values);
   }
 
-  public static ValidOrdering<Number> buildFromNumbers(Number...values) {
-    return new ValidOrdering<Number>(values);
+  public static ValidList<Number> buildFromNumbers(Number...values) {
+    return new ValidList<Number>(values);
   }
 
   public boolean matches(TValue...values) {
     return matches(Arrays.asList(values));
   }
 
+  public boolean matches(Iterable<TValue> values) {
+    //Convert to a list first.
+    final List<TValue> l = new ArrayList<TValue>();
+    for (TValue t : values) {
+      l.add(t);
+    }
+    return matches(l);
+  }
+
   public boolean matches(List<TValue> values) {
-    if (ordering.length != values.size())
+    if (list.length != values.size())
       return false;
 
-    for(int i = 0; i < ordering.length; ++i) {
-      if ((ordering[i] == null && values.get(i) != null) || !ordering[i].equals(values.get(i)))
+    //Order does not matter -- just presence
+
+    for(TValue v : list) {
+      if (!values.contains(v))
         return false;
     }
 

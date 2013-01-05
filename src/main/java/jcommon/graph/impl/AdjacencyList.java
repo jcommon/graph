@@ -142,7 +142,7 @@ public class AdjacencyList<TVertex extends IVertex<TValue>, TValue extends Objec
   }
 
   @Override
-  public boolean isEndingVertex(TVertex vertex) {
+  public boolean isEndingVertex(final TVertex vertex) {
     return end_vertices.contains(vertex);
   }
 

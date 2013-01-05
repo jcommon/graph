@@ -31,6 +31,7 @@ public class Examples {
       "VALID_SIMPLE_1"
     , CYCLE_NOT_EXPECTED
     , VALID_SIMPLE_1 = ObjectGraph.buildFromObjects()
+    , ValidList.build()
     , ValidOrdering.build()
   );
 
@@ -40,6 +41,7 @@ public class Examples {
       "VALID_SIMPLE_2"
     , CYCLE_NOT_EXPECTED
     , VALID_SIMPLE_2 = StringGraph.buildFromStrings("A")
+    , ValidList.buildFromStrings("A")
     , ValidOrdering.buildFromStrings("A")
   );
 
@@ -49,6 +51,7 @@ public class Examples {
       "VALID_SIMPLE_2"
     , CYCLE_NOT_EXPECTED
     , VALID_SIMPLE_3 = StringGraph.buildFromStrings("A", "B")
+    , ValidList.buildFromStrings("A", "B")
     , ValidOrdering.buildFromStrings("A", "B")
   );
 
@@ -59,6 +62,7 @@ public class Examples {
     , CYCLE_NOT_EXPECTED
     , VALID_SIMPLE_4 = StringGraph.buildFromStrings("A", "B")
         .addEdge("B", "A")
+    , ValidList.buildFromStrings("A")
     , ValidOrdering.buildFromStrings("B", "A")
   );
 
@@ -76,6 +80,7 @@ public class Examples {
         .addEdge("C", "D")
         .addEdge("C", "E")
         .addEdge("D", "E")
+    , ValidList.buildFromStrings("E", "F")
     , ValidOrdering.buildFromStrings("A", "B", "C", "D", "E", "F")
     , ValidOrdering.buildFromStrings("F", "A", "B", "C", "D", "E")
     , ValidOrdering.buildFromStrings("A", "F", "B", "C", "D", "E")
@@ -100,6 +105,7 @@ public class Examples {
         .addEdge(6, 5)
         .addEdge(6, 8)
         .addEdge(9, 8)
+    , ValidList.buildFromNumbers(3, 7, 8)
     , ValidOrdering.buildFromNumbers(7, 9, 1, 4, 6, 5, 8, 2, 3)
     , ValidOrdering.buildFromNumbers(1, 2, 9, 7, 4, 6, 3, 5, 8)
     , ValidOrdering.buildFromNumbers(1, 7, 9, 2, 4, 3, 6, 5, 8)
@@ -135,6 +141,7 @@ public class Examples {
         .addEdge("B", "D")
         .addEdge("D", "E")
         .addEdge("F", "B")
+    , ValidList.build("C", "E")
     , ValidOrdering.buildFromStrings("A", "F", "B", "C", "D", "E")
   );
 
@@ -155,7 +162,23 @@ public class Examples {
         .addEdge(5, 3)
         .addEdge(6, 3)
         .addEdge(6, 5)
-    , ValidOrdering.buildFromNumbers(1, 6, 2, 5, 3, 4)
+    , ValidList.build(4)
+    , ValidOrdering.build(1, 6, 2, 5, 3, 4)
+  );
+
+  //Valid order: 1, 2, 3, 4, 5
+  //Expected ending vertices: 5
+  public static final NumberGraph VALID_5;
+  public static final Solution<NumberVertex, Number> SOLUTION_VALID_5 = Solution.create(
+      "VALID_5"
+    , CYCLE_NOT_EXPECTED
+    , VALID_5 = NumberGraph.buildFromNumbers(1, 2, 3, 4, 5)
+        .addEdge(1, 2)
+        .addEdge(2, 3)
+        .addEdge(3, 4)
+        .addEdge(4, 5)
+    , ValidList.build(5)
+    , ValidOrdering.build(1, 2, 3, 4, 5)
   );
 
   public static final StringGraph CYCLE_1;
@@ -195,6 +218,7 @@ public class Examples {
     , SOLUTION_VALID_2
     , SOLUTION_VALID_3
     , SOLUTION_VALID_4
+    , SOLUTION_VALID_5
 
     , SOLUTION_CYCLE_1
     , SOLUTION_CYCLE_2
@@ -211,6 +235,7 @@ public class Examples {
     , VALID_2
     , VALID_3
     , VALID_4
+    , VALID_5
 
     , CYCLE_1
     , CYCLE_2

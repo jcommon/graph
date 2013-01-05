@@ -90,4 +90,12 @@ public class Edge<TVertex extends IVertex> implements IEdge<TVertex> {
 
     return from.equals(e.from) && to.equals(e.to);
   }
+
+  /**
+   * @see Object#toString()
+   */
+  @Override
+  public String toString() {
+    return ("" + from) + " -> " + ("" + to);
+  }
 }

@@ -168,7 +168,9 @@
     </module>
     <module name="SuperFinalize"/>
     <module name="ArrayTrailingComma"/>
-    <module name="UnnecessaryParentheses"/>
+    <module name="UnnecessaryParentheses">
+      <property name="severity" value="ignore"/>
+    </module>
     <module name="DesignForExtension">
       <property name="severity" value="ignore"/>
     </module>
@@ -197,11 +199,13 @@
       <property name="classMaximum" value="3000" />
       <property name="fileMaximum" value="4000" />
     </module>
-    <module name="NPathComplexity"/>
+    <module name="NPathComplexity">
+      <property name="max" value="300"/>
+    </module>
     <module name="Regexp"/>
     <module name="UpperEll"/>
     <module name="TrailingComment">
-      <property name="legalComment" value="^\$.*\$$"/>
+      <property name="legalComment" value="^\s*TODO:.*$"/>
     </module>
     <module name="TodoComment">
       <property name="severity" value="ignore"/>

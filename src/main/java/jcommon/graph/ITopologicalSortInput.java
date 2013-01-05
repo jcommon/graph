@@ -28,6 +28,13 @@ import java.util.Set;
  */
 public interface ITopologicalSortInput<TValue extends Object> {
   /**
+   * Indicates if this is a starting vertex (one with an in-degree of zero) we're processing.
+   *
+   * @return <code>true</code> if this represents a starting vertex (one with an in-degree of zero).
+   */
+  boolean isStart();
+
+  /**
    * Determines if the input is empty.
    *
    * @return <code>true</code> if the input is empty; <code>false</code> otherwise.
@@ -38,8 +45,21 @@ public interface ITopologicalSortInput<TValue extends Object> {
    * Gets the output of an out neighbor vertex.
    *
    * @param vertex The vertex whose output is desired.
+   *
+   * @return The output of an out neighbor vertex.
    */
   TValue get(IVertex vertex);
+
+  /**
+   * Retrieves the value of the first provided input.
+   *
+   * If there is more than one input vertex, this method is not guaranteed to provide the same
+   * answer with every invocation. If there is more than one result, you should use the
+   * {@link #get(IVertex)} method.
+   *
+   * @return The value of the first provided input. <code>null</code> if there are no values in the input list.
+   */
+  TValue first();
 
   /**
    * The size of the {@link ITopologicalSortInput}. This is the same as the number of in-degree vertices in the {@link IAdjacencyList}.

@@ -159,8 +159,8 @@ public interface ITopologicalSortAsyncResult<TValue extends Object> {
   /**
    * Gets the result for an ending value. Alias for {@link #resultFor(Object)}.
    *
-   * The results should be considered unreliable until after {@link #isSuccessful()} or
-   * {@link #waitForCompletion()} returns <code>true</code>.
+   * The results should be considered unreliable until after {@link #isDone()} or
+   * {@link #waitForCompletion()} returns.
    *
    * @param value The value whose result you want.
    *
@@ -171,8 +171,8 @@ public interface ITopologicalSortAsyncResult<TValue extends Object> {
   /**
    * Retrieves the result for an ending value.
    *
-   * The results should be considered unreliable until after {@link #isSuccessful()} or
-   * {@link #waitForCompletion()} returns <code>true</code>.
+   * The results should be considered unreliable until after {@link #isDone()} or
+   * {@link #waitForCompletion()} returns.
    *
    * @param value The value whose result you want.
    *
@@ -181,12 +181,26 @@ public interface ITopologicalSortAsyncResult<TValue extends Object> {
   TValue resultFor(TValue value);
 
   /**
+   * Retrieves the result for the first ending value.
+   *
+   * If there is more than one result, this method is not guaranteed to provide the same
+   * answer with every invocation. If there is more than one result, you should use the
+   * {@link #get(Object)} or {@link #resultFor(Object)} methods.
+   *
+   * The results should be considered unreliable until after {@link #isDone()} or
+   * {@link #waitForCompletion()} returns.
+   *
+   * @return The value of the first given result. <code>null</code> if there are no values in the result list.
+   */
+  TValue first();
+
+  /**
    * The number of returned results.
    * It's possible that this does not agree with the number of vertices with no out neighbors (ending vertices)
    * if processing was interrupted.
    *
-   * The results should be considered unreliable until after {@link #isSuccessful()} or
-   * {@link #waitForCompletion()} returns <code>true</code>.
+   * The results should be considered unreliable until after {@link #isDone()} or
+   * {@link #waitForCompletion()} returns.
    *
    * @return An int representing the size of the results.
    *
@@ -197,8 +211,8 @@ public interface ITopologicalSortAsyncResult<TValue extends Object> {
   /**
    * Returns a boolean indicating if the results contain a key for the provided value.
    *
-   * The results should be considered unreliable until after {@link #isSuccessful()} or
-   * {@link #waitForCompletion()} returns <code>true</code>.
+   * The results should be considered unreliable until after {@link #isDone()} or
+   * {@link #waitForCompletion()} returns.
    *
    * @param value The value for whom membership in the results will be tested.
    * @return <code>true</code> if the provided value is a member of the results; <code>false</code> otherwise.
@@ -208,8 +222,8 @@ public interface ITopologicalSortAsyncResult<TValue extends Object> {
   /**
    * Generates an instance of {@link Iterable} that allows traversing the contents of the results.
    *
-   * The results should be considered unreliable until after {@link #isSuccessful()} or
-   * {@link #waitForCompletion()} returns <code>true</code>.
+   * The results should be considered unreliable until after {@link #isDone()} or
+   * {@link #waitForCompletion()} returns.
    *
    * @return An instance of {@link Iterable} for traversing the contents of the results.
    */
@@ -218,8 +232,8 @@ public interface ITopologicalSortAsyncResult<TValue extends Object> {
   /**
    * Returns the list of ending values (values for vertices that have no out neighbors) that generated the result.
    *
-   * The results should be considered unreliable until after {@link #isSuccessful()} or
-   * {@link #waitForCompletion()} returns <code>true</code>.
+   * The results should be considered unreliable until after {@link #isDone()} or
+   * {@link #waitForCompletion()} returns.
    *
    * @return An instance of {@link Iterable} representing the ending values (values for vertices that have no out neighbors) that generated the result.
    */

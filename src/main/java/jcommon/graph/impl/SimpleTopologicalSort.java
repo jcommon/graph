@@ -136,6 +136,7 @@ public final class SimpleTopologicalSort<TVertex extends IVertex<TValue>, TValue
       final IAdjacencyListPair<TVertex> pair = adjacencyList.pairAt(i);
       final AtomicInteger atom = atomics[i] = new AtomicInteger(in_degrees[i] == 0 ? 1 : in_degrees[i]);
       final Map<IVertex, TValue> my_input = new HashMap<IVertex, TValue>(in_degrees[i], 1.0f);
+      final boolean has_no_one_pointing_to_me = (in_degrees[i] == 0);
       inputs.add(my_input);
 
       //Ensure that we add all items in the adjacency list to our list of remaining items.
@@ -162,7 +163,7 @@ public final class SimpleTopologicalSort<TVertex extends IVertex<TValue>, TValue
               }
 
               synchronized (my_input) {
-                input = new TopologicalSortInput<TValue>(my_input);
+                input = new TopologicalSortInput<TValue>(has_no_one_pointing_to_me, my_input);
               }
 
               //Call the callback to let him handle this vertex.
@@ -259,7 +260,12 @@ public final class SimpleTopologicalSort<TVertex extends IVertex<TValue>, TValue
       };
       callables.add(callable);
 
-      if (in_degrees[i] == 0) {
+      //If in-degree is zero, then that indicates a starting vertex.
+      if (has_no_one_pointing_to_me) {
+        ////If this is a starting vertex, add its value as its input.
+        //final TVertex v = pair.getVertex();
+        //my_input.put(v, v.get());
+
         //We do this to ensure that callables has been fully
         //initialized prior to starting up any tasks.
         queue.add(callable);

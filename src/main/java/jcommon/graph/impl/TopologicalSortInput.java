@@ -31,6 +31,7 @@ import java.util.Set;
  * @see ITopologicalSortInput
  */
 public class TopologicalSortInput<TValue extends Object> implements ITopologicalSortInput<TValue> {
+  private final boolean starting;
   private final Map<IVertex, TValue> inputs;
 
   /**
@@ -39,12 +40,22 @@ public class TopologicalSortInput<TValue extends Object> implements ITopological
    * @param inputs An instance of a {@link Map} that maps between a {@link IVertex} and the output from
    *               processing it.
    */
-  public TopologicalSortInput(final Map<IVertex, TValue> inputs) {
+  public TopologicalSortInput(final boolean starting, final Map<IVertex, TValue> inputs) {
     if (inputs == null)
       throw new IllegalArgumentException("inputs cannot be empty");
 
+    this.starting = starting;
+
     //Make a read-only copy of the map.
     this.inputs = Collections.unmodifiableMap(new HashMap<IVertex, TValue>(inputs));
+  }
+
+  /**
+   * @see ITopologicalSortInput#isStart()
+   */
+  @Override
+  public boolean isStart() {
+    return starting;
   }
 
   /**
@@ -61,6 +72,16 @@ public class TopologicalSortInput<TValue extends Object> implements ITopological
   @Override
   public TValue get(final IVertex vertex) {
     return inputs.get(vertex);
+  }
+
+  /**
+   * @see ITopologicalSortInput#first()
+   */
+  @Override
+  public TValue first() {
+    if (inputs.isEmpty())
+      return null;
+    return inputs.values().iterator().next();
   }
 
   /**

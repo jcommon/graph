@@ -82,8 +82,8 @@ final class TopologicalSortAsyncResult<TValue extends Object> implements ITopolo
   void asyncComplete(final Map<TValue, TValue> results, final boolean successful) {
     synchronized (lock) {
       this.results = results;
-      this.done = true;
       this.successful = successful;
+      this.done = true;
       this.latch.countDown();
     }
   }
@@ -144,12 +144,19 @@ final class TopologicalSortAsyncResult<TValue extends Object> implements ITopolo
   }
 
   @Override
-  public TValue get(TValue value) {
+  public TValue get(final TValue value) {
     return resultFor(value);
   }
 
   @Override
-  public TValue resultFor(TValue value) {
+  public TValue first() {
+    if (!isDone() || results.isEmpty())
+      return null;
+    return results.values().iterator().next();
+  }
+
+  @Override
+  public TValue resultFor(final TValue value) {
     return isDone() ? results.get(value) : null;
   }
 
@@ -159,7 +166,7 @@ final class TopologicalSortAsyncResult<TValue extends Object> implements ITopolo
   }
 
   @Override
-  public boolean contains(TValue value) {
+  public boolean contains(final TValue value) {
     return isDone() ? results.containsKey(value) : false;
   }
 
