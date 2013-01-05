@@ -70,5 +70,5 @@ public interface ITopologicalSortStrategy<TVertex extends IVertex<TValue>, TValu
    *
    * @see <a href="http://en.wikipedia.org/wiki/Topological_sorting">http://en.wikipedia.org/wiki/Topological_sorting</a>
    */
-  ITopologicalSortAsyncResult sortAsync(ExecutorService executor, IAdjacencyList<TVertex, TValue> adjacencyList, ITopologicalSortCallback<TValue> callback, ITopologicalSortErrorCallback<TValue> errorCallback);
+  ITopologicalSortAsyncResult<TValue> sortAsync(ExecutorService executor, IAdjacencyList<TVertex, TValue> adjacencyList, ITopologicalSortCallback<TValue> callback, ITopologicalSortErrorCallback<TValue> errorCallback);
 }

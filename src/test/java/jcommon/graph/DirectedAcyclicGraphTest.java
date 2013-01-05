@@ -40,7 +40,7 @@ public class DirectedAcyclicGraphTest {
     final ITopologicalSortCallback<Object> CALLBACK_NOOP = new ITopologicalSortCallback<Object>() {
       @Override
       public Object handle(Object o, ITopologicalSortInput<Object> input, IVertex<Object> vertex, ITopologicalSortCoordinator coordinator) throws Throwable {
-        return null;
+        return o;
       }
     };
 

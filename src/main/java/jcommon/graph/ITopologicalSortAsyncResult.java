@@ -25,8 +25,10 @@ import java.util.concurrent.TimeUnit;
 /**
  * Returned by an asynchronous sort call. Used to know or await
  * for notification of asynchronous processing completion.
+ *
+ * @param <TValue> The expected result type for ending graph vertices who have no out neighbors.
  */
-public interface ITopologicalSortAsyncResult {
+public interface ITopologicalSortAsyncResult<TValue extends Object> {
   /**
    * Determines if all processing of vertices has completed.
    *
@@ -143,4 +145,83 @@ public interface ITopologicalSortAsyncResult {
    *         {@link #isSuccessful()} or simply call {@link #waitForCompletion()} instead.
    */
   boolean await(long timeout, TimeUnit unit) throws InterruptedException;
+
+  /**
+   * Determines if the results are empty.
+   *
+   * The results should be considered unreliable until after {@link #isSuccessful()} or
+   * {@link #waitForCompletion()} returns <code>true</code>.
+   *
+   * @return <code>true</code> if the results are empty or processing has not completed; <code>false</code> otherwise.
+   */
+  boolean isEmpty();
+
+  /**
+   * Gets the result for an ending value. Alias for {@link #resultFor(Object)}.
+   *
+   * The results should be considered unreliable until after {@link #isSuccessful()} or
+   * {@link #waitForCompletion()} returns <code>true</code>.
+   *
+   * @param value The value whose result you want.
+   *
+   * @see #resultFor(Object)
+   */
+  TValue get(TValue value);
+
+  /**
+   * Retrieves the result for an ending value.
+   *
+   * The results should be considered unreliable until after {@link #isSuccessful()} or
+   * {@link #waitForCompletion()} returns <code>true</code>.
+   *
+   * @param value The value whose result you want.
+   *
+   * @return The value whose result you want. <code>null</code> if the value is not in the result list.
+   */
+  TValue resultFor(TValue value);
+
+  /**
+   * The number of returned results.
+   * It's possible that this does not agree with the number of vertices with no out neighbors (ending vertices)
+   * if processing was interrupted.
+   *
+   * The results should be considered unreliable until after {@link #isSuccessful()} or
+   * {@link #waitForCompletion()} returns <code>true</code>.
+   *
+   * @return An int representing the size of the results.
+   *
+   * @see #results()
+   */
+  int size();
+
+  /**
+   * Returns a boolean indicating if the results contain a key for the provided value.
+   *
+   * The results should be considered unreliable until after {@link #isSuccessful()} or
+   * {@link #waitForCompletion()} returns <code>true</code>.
+   *
+   * @param value The value for whom membership in the results will be tested.
+   * @return <code>true</code> if the provided value is a member of the results; <code>false</code> otherwise.
+   */
+  boolean contains(TValue value);
+
+  /**
+   * Generates an instance of {@link Iterable} that allows traversing the contents of the results.
+   *
+   * The results should be considered unreliable until after {@link #isSuccessful()} or
+   * {@link #waitForCompletion()} returns <code>true</code>.
+   *
+   * @return An instance of {@link Iterable} for traversing the contents of the results.
+   */
+  Iterable<TValue> results();
+
+  /**
+   * Returns the list of ending values (values for vertices that have no out neighbors) that generated the result.
+   *
+   * The results should be considered unreliable until after {@link #isSuccessful()} or
+   * {@link #waitForCompletion()} returns <code>true</code>.
+   *
+   * @return An instance of {@link Iterable} representing the ending values (values for vertices that have no out neighbors) that generated the result.
+   */
+  Iterable<TValue> endingValues();
 }

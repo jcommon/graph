@@ -24,13 +24,7 @@ import jcommon.graph.IAdjacencyListPair;
 import jcommon.graph.IEdge;
 import jcommon.graph.IVertex;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @see IAdjacencyList
@@ -39,6 +33,7 @@ public class AdjacencyList<TVertex extends IVertex<TValue>, TValue extends Objec
   private final List<IAdjacencyListPair<TVertex>> num_map;
   private final Map<TVertex, Integer> index_map;
   private final Map<TVertex, List<TVertex>> vertex_map;
+  private final Set<TVertex> end_vertices;
 
   /**
    * @see IAdjacencyList
@@ -52,6 +47,7 @@ public class AdjacencyList<TVertex extends IVertex<TValue>, TValue extends Objec
     final Map<TVertex, List<TVertex>> vertex_map = new HashMap<TVertex, List<TVertex>>(vertices.size(), 1.0f);
     final Map<TVertex, Integer> index_map = new HashMap<TVertex, Integer>(vertices.size(), 1.0f);
     final List<TVertex> EMPTY_VERTICES_ARRAYLIST = new ArrayList<TVertex>(0);
+    final Set<TVertex> end_vertices = new HashSet<TVertex>(2, 1.0f);
 
     for(TVertex d : vertices) {
       final List<TVertex> al_to = new ArrayList<TVertex>();
@@ -66,12 +62,20 @@ public class AdjacencyList<TVertex extends IVertex<TValue>, TValue extends Objec
       vertex_map.put(d, arr_to);
       num_map.add(new AdjacencyListPair<TVertex>(d, arr_to));
       index_map.put(d, num_map.size() - 1);
+
+      //Track the vertices that have no edges coming out of them -- those are end points
+      //that we will later want to gather in order to return them at the end of async
+      //processing.
+      if (arr_to.isEmpty()) {
+        end_vertices.add(d);
+      }
     }
 
     //Ensure the maps are read-only at this point.
     this.num_map = Collections.unmodifiableList(num_map);
     this.index_map = Collections.unmodifiableMap(index_map);
     this.vertex_map = Collections.unmodifiableMap(vertex_map);
+    this.end_vertices = Collections.unmodifiableSet(end_vertices);
   }
 
   /**
@@ -122,6 +126,11 @@ public class AdjacencyList<TVertex extends IVertex<TValue>, TValue extends Objec
   }
 
   @Override
+  public Set<TVertex> getEndingVertices() {
+    return end_vertices;
+  }
+
+  @Override
   public Iterator<IAdjacencyListPair<TVertex>> iterator() {
     return num_map.iterator();
   }
@@ -130,5 +139,15 @@ public class AdjacencyList<TVertex extends IVertex<TValue>, TValue extends Objec
   public int indexOf(final IVertex vertex) {
     final Integer result = index_map.get(vertex);
     return (result != null) ? result : -1;
+  }
+
+  @Override
+  public boolean isEndingVertex(TVertex vertex) {
+    return end_vertices.contains(vertex);
+  }
+
+  @Override
+  public Map<TValue, TValue> createResultMap() {
+    return new HashMap<TValue, TValue>(end_vertices.size());
   }
 }

@@ -21,6 +21,8 @@ package jcommon.graph.impl;
 
 import jcommon.graph.ITopologicalSortAsyncResult;
 
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -28,13 +30,14 @@ import java.util.concurrent.TimeUnit;
 /**
  * @see ITopologicalSortAsyncResult
  */
-final class TopologicalSortAsyncResult implements ITopologicalSortAsyncResult {
+final class TopologicalSortAsyncResult<TValue extends Object> implements ITopologicalSortAsyncResult<TValue> {
   private final Object lock = new Object();
   private final ExecutorService executor;
   private final CountDownLatch latch;
   private boolean done;
   private boolean successful;
   private boolean discontinue_processing;
+  private Map<TValue, TValue> results;
 
   public TopologicalSortAsyncResult(final ExecutorService executor) {
     this.executor = executor;
@@ -76,8 +79,9 @@ final class TopologicalSortAsyncResult implements ITopologicalSortAsyncResult {
     return lock;
   }
 
-  void asyncComplete(final boolean successful) {
+  void asyncComplete(final Map<TValue, TValue> results, final boolean successful) {
     synchronized (lock) {
+      this.results = results;
       this.done = true;
       this.successful = successful;
       this.latch.countDown();
@@ -132,5 +136,40 @@ final class TopologicalSortAsyncResult implements ITopologicalSortAsyncResult {
   @Override
   public boolean await(final long timeout, final TimeUnit unit) throws InterruptedException {
     return latch.await(timeout, unit);
+  }
+
+  @Override
+  public boolean isEmpty() {
+    return !isDone() || results.isEmpty();
+  }
+
+  @Override
+  public TValue get(TValue value) {
+    return resultFor(value);
+  }
+
+  @Override
+  public TValue resultFor(TValue value) {
+    return isDone() ? results.get(value) : null;
+  }
+
+  @Override
+  public int size() {
+    return isDone() ? results.size() : 0;
+  }
+
+  @Override
+  public boolean contains(TValue value) {
+    return isDone() ? results.containsKey(value) : false;
+  }
+
+  @Override
+  public Iterable<TValue> results() {
+    return isDone() ? results.values() : new ArrayList<TValue>(0);
+  }
+
+  @Override
+  public Iterable<TValue> endingValues() {
+    return isDone() ? results.keySet() : new ArrayList<TValue>(0);
   }
 }

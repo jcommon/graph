@@ -24,6 +24,8 @@ import static jcommon.graph.Solution.CYCLE_NOT_EXPECTED;
 
 @SuppressWarnings("unchecked")
 public class Examples {
+
+  //Expected ending vertices: <empty>
   public static final IGraph VALID_SIMPLE_1;
   public static final Solution<ObjectVertex, Object> SOLUTION_VALID_SIMPLE_1 = Solution.create(
       "VALID_SIMPLE_1"
@@ -32,6 +34,7 @@ public class Examples {
     , ValidOrdering.build()
   );
 
+  //Expected ending vertices: A
   public static final StringGraph VALID_SIMPLE_2;
   public static final Solution<StringVertex, String> SOLUTION_VALID_SIMPLE_2 = Solution.create(
       "VALID_SIMPLE_2"
@@ -40,6 +43,7 @@ public class Examples {
     , ValidOrdering.buildFromStrings("A")
   );
 
+  //Expected ending vertices: A, B
   public static final StringGraph VALID_SIMPLE_3;
   public static final Solution<StringVertex, String> SOLUTION_VALID_SIMPLE_3 = Solution.create(
       "VALID_SIMPLE_2"
@@ -48,6 +52,7 @@ public class Examples {
     , ValidOrdering.buildFromStrings("A", "B")
   );
 
+  //Expected ending vertices: A
   public static final StringGraph VALID_SIMPLE_4;
   public static final Solution<StringVertex, String> SOLUTION_VALID_SIMPLE_4 = Solution.create(
       "VALID_SIMPLE_4"
@@ -59,6 +64,7 @@ public class Examples {
 
   //http://www.cs.washington.edu/education/courses/cse373/02sp/lectures/cse373-21-TopoSort-4up.pdf
   //Valid order: A, B, C, D, E, F
+  //Expected ending vertices: E, F
   public static final StringGraph VALID_1;
   public static final Solution<StringVertex, String> SOLUTION_VALID_1 = Solution.create(
       "VALID_1"
@@ -78,6 +84,7 @@ public class Examples {
   //http://www.cs.cornell.edu/courses/cs312/2004fa/lectures/lecture15.htm
   //Valid order: 7, 9, 1, 4, 6, 5, 8, 2, 3
   //Valid order: 1, 2, 9, 7, 4, 6, 3, 5, 8
+  //Expected ending vertices: 3, 7, 8
   public static final NumberGraph VALID_2;
   public static final Solution<NumberVertex, Number> SOLUTION_VALID_2 = Solution.create(
       "VALID_2"
@@ -109,6 +116,7 @@ public class Examples {
   //C <-- B <-- F
   //
   //Valid ordering: A, F, B, C, D, E
+  //Expected ending vertices: C, E
   public static final StringGraph VALID_3;
   public static final Solution<StringVertex, String> SOLUTION_VALID_3 = Solution.create(
       "VALID_3"
@@ -132,6 +140,7 @@ public class Examples {
 
   //https://ece.uwaterloo.ca/~cmoreno/ece250/2012-03-16--topological-sort.pdf
   //Valid order: 1, 6, 2, 5, 3, 4
+  //Expected ending vertices: 4
   public static final NumberGraph VALID_4;
   public static final Solution<NumberVertex, Number> SOLUTION_VALID_4 = Solution.create(
       "VALID_4"

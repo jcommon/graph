@@ -113,10 +113,10 @@ public final class SimpleTopologicalSort<TVertex extends IVertex<TValue>, TValue
    * @see ITopologicalSortStrategy#sortAsync(ExecutorService, IAdjacencyList, ITopologicalSortCallback, ITopologicalSortErrorCallback)
    */
   @Override
-  public ITopologicalSortAsyncResult sortAsync(final ExecutorService executorProcessors, final IAdjacencyList<TVertex, TValue> adjacencyList, final ITopologicalSortCallback<TValue> callback, final ITopologicalSortErrorCallback<TValue> errorCallback) {
-    final TopologicalSortAsyncResult asyncResult = new TopologicalSortAsyncResult(executorProcessors);
+  public ITopologicalSortAsyncResult<TValue> sortAsync(final ExecutorService executorProcessors, final IAdjacencyList<TVertex, TValue> adjacencyList, final ITopologicalSortCallback<TValue> callback, final ITopologicalSortErrorCallback<TValue> errorCallback) {
+    final TopologicalSortAsyncResult<TValue> asyncResult = new TopologicalSortAsyncResult<TValue>(executorProcessors);
     if (adjacencyList.isEmpty()) {
-      asyncResult.asyncComplete(true);
+      asyncResult.asyncComplete(adjacencyList.createResultMap(), true);
       return asyncResult;
     }
 
@@ -128,6 +128,7 @@ public final class SimpleTopologicalSort<TVertex extends IVertex<TValue>, TValue
     final List<Map<IVertex, TValue>> inputs = new ArrayList<Map<IVertex, TValue>>(in_degrees.length);
     final AtomicInteger outstanding_submissions = new AtomicInteger(0);
     final ITopologicalSortCoordinator coordinator = new TopologicalSortCoordinator(asyncResult);
+    final Map<TValue, TValue> results = adjacencyList.createResultMap();
 
     //Find all vertices who have an in-degree of zero.
     //Also initialize latches to the size of the the in-degree + 1.
@@ -149,7 +150,7 @@ public final class SimpleTopologicalSort<TVertex extends IVertex<TValue>, TValue
         public Object call() throws Exception {
           Throwable handled_exception = null;
           boolean handle_all_done = false;
-          final IVertex<TValue> vertex = pair.getVertex();
+          final TVertex vertex = pair.getVertex();
           ITopologicalSortInput<TValue> input;
 
           try {
@@ -165,13 +166,24 @@ public final class SimpleTopologicalSort<TVertex extends IVertex<TValue>, TValue
               }
 
               //Call the callback to let him handle this vertex.
+              final TValue vertex_value = vertex.get();
               TValue result = null;
               try {
-                result = callback.handle(vertex.get(), input, vertex, coordinator);
+                result = callback.handle(vertex_value, input, vertex, coordinator);
               } catch(Throwable t) {
                 //We need to handle the exception later after we've done other work.
                 //Save it off for later evaluation.
                 handled_exception = t;
+              }
+
+              //Add to result set if this is a vertex with no out neighbors -- which
+              //means that it is not pointing to any other vertices. As such, we're
+              //likely interested in its callback's result. In that case, we save
+              //it off so we can provide it in the ITopologicalSortAsyncResult instance.
+              if (adjacencyList.isEndingVertex(vertex)) {
+                synchronized (results) {
+                  results.put(vertex_value, result);
+                }
               }
 
               //Ensure we haven't been asked to stop processing. If so,
@@ -239,7 +251,7 @@ public final class SimpleTopologicalSort<TVertex extends IVertex<TValue>, TValue
           }
 
           if (handle_all_done) {
-            asyncResult.asyncComplete(remaining.size() == 0);
+            asyncResult.asyncComplete(results, remaining.size() == 0);
           }
 
           return null;
@@ -260,7 +272,7 @@ public final class SimpleTopologicalSort<TVertex extends IVertex<TValue>, TValue
       if (errorCallback != null) {
         errorCallback.handleError(null, new CyclicGraphException(STANDARD_CYCLE_MESSAGE), null, coordinator);
       }
-      asyncResult.asyncComplete(false);
+      asyncResult.asyncComplete(results, false);
       return asyncResult;
     }
 
@@ -277,7 +289,8 @@ public final class SimpleTopologicalSort<TVertex extends IVertex<TValue>, TValue
       } catch(Throwable t) {
         if (errorCallback != null)
           errorCallback.handleError(null, new CyclicGraphException(STANDARD_CYCLE_MESSAGE), null, coordinator);
-        asyncResult.asyncComplete(false);
+        asyncResult.discontinueScheduling();
+        asyncResult.asyncComplete(results, false);
         return asyncResult;
       }
     }

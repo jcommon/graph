@@ -20,13 +20,19 @@
 package jcommon.graph;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * An adjacency list is essentially an array of size n where A[i] is the list of out-neighbors of node i.
+ * Please see the following for a more thorough explanation:
+ *   <a href="http://www.cs.cmu.edu/~avrim/451f08/lectures/lect1002.pdf">http://www.cs.cmu.edu/~avrim/451f08/lectures/lect1002.pdf</a>
  *
- * Please see <a href="http://www.cs.cmu.edu/~avrim/451f08/lectures/lect1002.pdf">http://www.cs.cmu.edu/~avrim/451f08/lectures/lect1002.pdf</a>
+ * Implementations of this interface must be thread safe.
  *
  * @param <TVertex> Type of {@link IVertex}.
+ *
+ * @see <a href="http://www.cs.cmu.edu/~avrim/451f08/lectures/lect1002.pdf">http://www.cs.cmu.edu/~avrim/451f08/lectures/lect1002.pdf</a>
  */
 public interface IAdjacencyList<TVertex extends IVertex<TValue>, TValue extends Object> extends Iterable<IAdjacencyListPair<TVertex>> {
   /**
@@ -89,4 +95,29 @@ public interface IAdjacencyList<TVertex extends IVertex<TValue>, TValue extends 
    * @return An int representing the size of the {@link IAdjacencyList}.
    */
   int size();
+
+  /**
+   * Provides a {@link Set} that contains vertices who have no out neighbors.
+   *
+   * @return A {@link Set} containing vertices with no out neighbors.
+   */
+  Set<TVertex> getEndingVertices();
+
+  /**
+   * Determines if the provided vertex parameter is in the set of ending vertices.
+   *
+   * @param vertex The vertex for whom you wish to test for set membership.
+   * @return <code>true</code> if the vertex is in the set of ending vertices; <code>false</code> otherwise.
+   *
+   * @see #getEndingVertices()
+   */
+  boolean isEndingVertex(TVertex vertex);
+
+  /**
+   * Creates an instance of a {@link Map} that's properly sized for holding a
+   * mapping of values to their processed result.
+   *
+   * @return An instance of {@link Map} mapping values to their processed result.
+   */
+  Map<TValue, TValue> createResultMap(); //TODO: Reconsider if this should be TValue -> Object (IOW, callback should return Object, not TValue)
 }
