@@ -28,7 +28,7 @@ import java.util.List;
  *
  * @param <TVertex> Type of {@link IVertex}.
  */
-public interface IAdjacencyList<TVertex extends IVertex> extends Iterable<IAdjacencyListPair<TVertex>> {
+public interface IAdjacencyList<TVertex extends IVertex<TValue>, TValue extends Object> extends Iterable<IAdjacencyListPair<TVertex>> {
   /**
    * Determines if the adjacency list is empty.
    *

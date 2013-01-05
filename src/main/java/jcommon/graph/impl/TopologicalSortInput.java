@@ -25,12 +25,13 @@ import jcommon.graph.IVertex;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @see ITopologicalSortInput
  */
-public class TopologicalSortInput<TVertex extends IVertex> implements ITopologicalSortInput<TVertex> {
-  private final Map<TVertex, Object> inputs;
+public class TopologicalSortInput<TValue extends Object> implements ITopologicalSortInput<TValue> {
+  private final Map<IVertex, TValue> inputs;
 
   /**
    * Instantiates a new instance of {@link TopologicalSortInput}.
@@ -38,12 +39,12 @@ public class TopologicalSortInput<TVertex extends IVertex> implements ITopologic
    * @param inputs An instance of a {@link Map} that maps between a {@link IVertex} and the output from
    *               processing it.
    */
-  public TopologicalSortInput(final Map<TVertex, Object> inputs) {
+  public TopologicalSortInput(final Map<IVertex, TValue> inputs) {
     if (inputs == null)
       throw new IllegalArgumentException("inputs cannot be empty");
 
     //Make a read-only copy of the map.
-    this.inputs = Collections.unmodifiableMap(new HashMap<TVertex, Object>(inputs));
+    this.inputs = Collections.unmodifiableMap(new HashMap<IVertex, TValue>(inputs));
   }
 
   /**
@@ -58,7 +59,7 @@ public class TopologicalSortInput<TVertex extends IVertex> implements ITopologic
    * @see ITopologicalSortInput#get(IVertex)
    */
   @Override
-  public Object get(final TVertex vertex) {
+  public TValue get(final IVertex vertex) {
     return inputs.get(vertex);
   }
 
@@ -74,7 +75,7 @@ public class TopologicalSortInput<TVertex extends IVertex> implements ITopologic
    * @see ITopologicalSortInput#containsVertex(IVertex)
    */
   @Override
-  public boolean containsVertex(final TVertex vertex) {
+  public boolean containsVertex(final IVertex vertex) {
     return inputs.containsKey(vertex);
   }
 
@@ -82,16 +83,16 @@ public class TopologicalSortInput<TVertex extends IVertex> implements ITopologic
    * @see ITopologicalSortInput#inputs()
    */
   @Override
-  public Iterable<Object> inputs() {
+  public Iterable<TValue> inputs() {
     return inputs.values();
   }
 
   /**
-   * @see ITopologicalSortInput#getInputs()
+   * @see ITopologicalSortInput#vertices()
    */
   @Override
-  public Object[] getInputs() {
-    return inputs.values().toArray(new Object[inputs.size()]);
+  public Set<IVertex> vertices() {
+    return inputs.keySet();
   }
 
   @Override

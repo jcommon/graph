@@ -24,7 +24,7 @@ package jcommon.graph;
  *
  * @see IVertex
  */
-public class ObjectVertex implements IVertex {
+public class ObjectVertex implements IVertex<Object> {
   private final Object value;
 
   /**
@@ -41,6 +41,7 @@ public class ObjectVertex implements IVertex {
    *
    * @return An instance of a {@link Object} that this {@link ObjectVertex} represents.
    */
+  @Override
   public Object get() {
     return getValue();
   }
@@ -50,6 +51,7 @@ public class ObjectVertex implements IVertex {
    *
    * @return An instance of a {@link Object} that this {@link ObjectVertex} represents.
    */
+  @Override
   public Object getValue() {
     return value;
   }

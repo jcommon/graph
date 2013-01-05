@@ -23,5 +23,18 @@ package jcommon.graph;
  * Marker interface that designates an object as something that can be
  * reasoned about in an {@link IGraph} instance.
  */
-public interface IVertex {
+public interface IVertex<TValue extends Object> {
+  /**
+   * Returns the value associated with this {@link IVertex}.
+   *
+   * @return The instance associated with this {@link IVertex}.
+   */
+  TValue get();
+
+  /**
+   * Returns the value associated with this {@link IVertex}. Alias for {@link #get()}.
+   *
+   * @return The instance associated with this {@link IVertex}.
+   */
+  TValue getValue();
 }

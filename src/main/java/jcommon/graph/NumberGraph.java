@@ -24,7 +24,7 @@ package jcommon.graph;
  *
  * @see DirectedAcyclicGraph
  */
-public class NumberGraph extends DirectedAcyclicGraph<NumberVertex> {
+public class NumberGraph extends DirectedAcyclicGraph<NumberVertex, Number> {
   /**
    * @see DirectedAcyclicGraph#DirectedAcyclicGraph()
    */

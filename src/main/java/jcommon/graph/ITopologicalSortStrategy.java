@@ -36,7 +36,7 @@ import java.util.concurrent.ExecutorService;
  *
  * @see <a href="http://en.wikipedia.org/wiki/Topological_sorting">http://en.wikipedia.org/wiki/Topological_sorting</a>
  */
-public interface ITopologicalSortStrategy<TVertex extends IVertex> {
+public interface ITopologicalSortStrategy<TVertex extends IVertex<TValue>, TValue extends Object> {
   /** {@link String} available for use when throwing {@link CyclicGraphException}s. */
   String STANDARD_CYCLE_MESSAGE = "Cycle detected when topologically sorting the graph";
 
@@ -49,7 +49,7 @@ public interface ITopologicalSortStrategy<TVertex extends IVertex> {
    *
    * @see <a href="http://en.wikipedia.org/wiki/Topological_sorting">http://en.wikipedia.org/wiki/Topological_sorting</a>
    */
-  List<TVertex> sort(IAdjacencyList<TVertex> adjacencyList) throws CyclicGraphException;
+  List<TValue> sort(IAdjacencyList<TVertex, TValue> adjacencyList) throws CyclicGraphException;
 
   /**
    * Allows you to asynchronously and in-parallel process the vertices of a graph topologically. Care is taken to
@@ -62,7 +62,7 @@ public interface ITopologicalSortStrategy<TVertex extends IVertex> {
    *                      This may be called concurrently depending on the makeup of the graph.
    * @param errorCallback An instance of {@link ITopologicalSortErrorCallback} that will be called if an error during
    *                      processing occurs either in the
-   *                      {@link ITopologicalSortCallback#handle(IVertex, ITopologicalSortInput, ITopologicalSortCoordinator)} method or in the
+   *                      {@link ITopologicalSortCallback#handle(Object, ITopologicalSortInput, IVertex, ITopologicalSortCoordinator)} method or in the
    *                      {@link ITopologicalSortStrategy#sortAsync(java.util.concurrent.ExecutorService, IAdjacencyList, ITopologicalSortCallback, ITopologicalSortErrorCallback)}
    *                      method.
    * @return              An instance of {@link ITopologicalSortAsyncResult} that allows the caller to coordinate the
@@ -70,5 +70,5 @@ public interface ITopologicalSortStrategy<TVertex extends IVertex> {
    *
    * @see <a href="http://en.wikipedia.org/wiki/Topological_sorting">http://en.wikipedia.org/wiki/Topological_sorting</a>
    */
-  ITopologicalSortAsyncResult sortAsync(ExecutorService executor, IAdjacencyList<TVertex> adjacencyList, ITopologicalSortCallback<TVertex> callback, ITopologicalSortErrorCallback<TVertex> errorCallback);
+  ITopologicalSortAsyncResult sortAsync(ExecutorService executor, IAdjacencyList<TVertex, TValue> adjacencyList, ITopologicalSortCallback<TValue> callback, ITopologicalSortErrorCallback<TValue> errorCallback);
 }

@@ -32,9 +32,10 @@ import java.util.concurrent.ExecutorService;
  * in-parallel process the vertices of a graph topologically. Care is taken to prevent the processing of vertices before
  * their parent vertices have completed processing.
  *
- * @param <TVertex> Type of {@link IVertex} vertices that this graph contains.
+ * @param <TVertex> Type of {@link IVertex} that vertices in this graph are.
+ * @param <TValue> Type of {@link Object} that the vertices in this graph contain.
  */
-public interface IGraph<TVertex extends IVertex> {
+public interface IGraph<TVertex extends IVertex<TValue>, TValue extends Object> {
   /**
    * Reference for an array of empty vertices that can be reused instead
    * of having to allocate a new empty array on the heap every time.
@@ -60,7 +61,7 @@ public interface IGraph<TVertex extends IVertex> {
    *
    * @return A deep copy of this instance of {@link IGraph}.
    */
-  IGraph<TVertex> copy();
+  IGraph<TVertex, TValue> copy();
 
   /**
    * Adds a new {@link IVertex} instance of <code>TVertex</code> to this {@link IGraph}.
@@ -68,7 +69,7 @@ public interface IGraph<TVertex extends IVertex> {
    * @param vertex The instance of {@link IVertex} of <code>TVertex</code> to add to this {@link IGraph}.
    * @return The current instance of {@link IGraph} for use in a builder-style pattern.
    */
-  IGraph<TVertex> addVertex(TVertex vertex);
+  IGraph<TVertex, TValue> addVertex(TVertex vertex);
 
   /**
    * Removes an {@link IVertex} instance of <code>TVertex</code> from this {@link IGraph}.
@@ -76,7 +77,7 @@ public interface IGraph<TVertex extends IVertex> {
    * @param vertex The instance of {@link IVertex} of <code>TVertex</code> to remove from this {@link IGraph}.
    * @return The current instance of {@link IGraph} for use in a builder-style pattern.
    */
-  IGraph<TVertex> removeVertex(TVertex vertex);
+  IGraph<TVertex, TValue> removeVertex(TVertex vertex);
 
   /**
    * Adds a new {@link IEdge} instance to this {@link IGraph}.
@@ -85,7 +86,7 @@ public interface IGraph<TVertex extends IVertex> {
    * @param to An instance of {@link IVertex} of <code>TVertex</code> that the edge is pointing to.
    * @return The current instance of {@link IGraph} for use in a builder-style pattern.
    */
-  IGraph<TVertex> addEdge(TVertex from, TVertex to);
+  IGraph<TVertex, TValue> addEdge(TVertex from, TVertex to);
 
   /**
    * Removes an existing edge from this {@link IGraph}.
@@ -94,7 +95,7 @@ public interface IGraph<TVertex extends IVertex> {
    * @param to An instance of {@link IVertex} of <code>TVertex</code> that the edge is pointing to.
    * @return The current instance of {@link IGraph} for use in a builder-style pattern.
    */
-  IGraph<TVertex> removeEdge(TVertex from, TVertex to);
+  IGraph<TVertex, TValue> removeEdge(TVertex from, TVertex to);
 
   /**
    * Does a simple sanity check on the structure of the graph. Should not be called until the graph has been
@@ -113,7 +114,7 @@ public interface IGraph<TVertex extends IVertex> {
    *
    * @see <a href="http://en.wikipedia.org/wiki/Topological_sorting">http://en.wikipedia.org/wiki/Topological_sorting</a>
    */
-  List<TVertex> sort() throws CyclicGraphException;
+  List<TValue> sort() throws CyclicGraphException;
 
   /**
    * Provides a topologically sorted list of {@link IVertex} vertices.
@@ -127,7 +128,7 @@ public interface IGraph<TVertex extends IVertex> {
    *
    * @see <a href="http://en.wikipedia.org/wiki/Topological_sorting">http://en.wikipedia.org/wiki/Topological_sorting</a>
    */
-  List<TVertex> sort(ITopologicalSortStrategy<TVertex> strategy) throws CyclicGraphException;
+  List<TValue> sort(ITopologicalSortStrategy<TVertex, TValue> strategy) throws CyclicGraphException;
 
   /**
    * Allows you to asynchronously and in-parallel process the vertices of a graph topologically. Care is taken to
@@ -140,7 +141,7 @@ public interface IGraph<TVertex extends IVertex> {
    *
    * @see <a href="http://en.wikipedia.org/wiki/Topological_sorting">http://en.wikipedia.org/wiki/Topological_sorting</a>
    */
-  ITopologicalSortAsyncResult sortAsync(ITopologicalSortCallback<TVertex> callback);
+  ITopologicalSortAsyncResult sortAsync(ITopologicalSortCallback<TValue> callback);
 
   /**
    * Allows you to asynchronously and in-parallel process the vertices of a graph topologically. Care is taken to
@@ -150,7 +151,7 @@ public interface IGraph<TVertex extends IVertex> {
    *                      This may be called concurrently depending on the makeup of the graph.
    * @param errorCallback An instance of {@link ITopologicalSortErrorCallback} that will be called if an error during
    *                      processing occurs either in the
-   *                      {@link ITopologicalSortCallback#handle(IVertex, ITopologicalSortInput, ITopologicalSortCoordinator)} method or in the
+   *                      {@link ITopologicalSortCallback#handle(Object, ITopologicalSortInput, IVertex, ITopologicalSortCoordinator)} method or in the
    *                      {@link ITopologicalSortStrategy#sortAsync(java.util.concurrent.ExecutorService, IAdjacencyList, ITopologicalSortCallback, ITopologicalSortErrorCallback)}
    *                      method.
    * @return              An instance of {@link ITopologicalSortAsyncResult} that allows the caller to coordinate the
@@ -158,7 +159,7 @@ public interface IGraph<TVertex extends IVertex> {
    *
    * @see <a href="http://en.wikipedia.org/wiki/Topological_sorting">http://en.wikipedia.org/wiki/Topological_sorting</a>
    */
-  ITopologicalSortAsyncResult sortAsync(ITopologicalSortCallback<TVertex> callback, ITopologicalSortErrorCallback<TVertex> errorCallback);
+  ITopologicalSortAsyncResult sortAsync(ITopologicalSortCallback<TValue> callback, ITopologicalSortErrorCallback<TValue> errorCallback);
 
   /**
    * Allows you to asynchronously and in-parallel process the vertices of a graph topologically. Care is taken to
@@ -175,7 +176,7 @@ public interface IGraph<TVertex extends IVertex> {
    *
    * @see <a href="http://en.wikipedia.org/wiki/Topological_sorting">http://en.wikipedia.org/wiki/Topological_sorting</a>
    */
-  ITopologicalSortAsyncResult sortAsync(ITopologicalSortStrategy<TVertex> strategy, ITopologicalSortCallback<TVertex> callback);
+  ITopologicalSortAsyncResult sortAsync(ITopologicalSortStrategy<TVertex, TValue> strategy, ITopologicalSortCallback<TValue> callback);
 
   /**
    * Allows you to asynchronously and in-parallel process the vertices of a graph topologically. Care is taken to
@@ -189,7 +190,7 @@ public interface IGraph<TVertex extends IVertex> {
    *                      This may be called concurrently depending on the makeup of the graph.
    * @param errorCallback An instance of {@link ITopologicalSortErrorCallback} that will be called if an error during
    *                      processing occurs either in the
-   *                      {@link ITopologicalSortCallback#handle(IVertex, ITopologicalSortInput, ITopologicalSortCoordinator)} method or in the
+   *                      {@link ITopologicalSortCallback#handle(Object, ITopologicalSortInput, IVertex, ITopologicalSortCoordinator)} method or in the
    *                      {@link ITopologicalSortStrategy#sortAsync(java.util.concurrent.ExecutorService, IAdjacencyList, ITopologicalSortCallback, ITopologicalSortErrorCallback)}
    *                      method.
    * @return              An instance of {@link ITopologicalSortAsyncResult} that allows the caller to coordinate the
@@ -197,7 +198,7 @@ public interface IGraph<TVertex extends IVertex> {
    *
    * @see <a href="http://en.wikipedia.org/wiki/Topological_sorting">http://en.wikipedia.org/wiki/Topological_sorting</a>
    */
-  ITopologicalSortAsyncResult sortAsync(ITopologicalSortStrategy<TVertex> strategy, ITopologicalSortCallback<TVertex> callback, ITopologicalSortErrorCallback<TVertex> errorCallback);
+  ITopologicalSortAsyncResult sortAsync(ITopologicalSortStrategy<TVertex, TValue> strategy, ITopologicalSortCallback<TValue> callback, ITopologicalSortErrorCallback<TValue> errorCallback);
 
   /**
    * Allows you to asynchronously and in-parallel process the vertices of a graph topologically. Care is taken to
@@ -211,7 +212,7 @@ public interface IGraph<TVertex extends IVertex> {
    *
    * @see <a href="http://en.wikipedia.org/wiki/Topological_sorting">http://en.wikipedia.org/wiki/Topological_sorting</a>
    */
-  ITopologicalSortAsyncResult sortAsync(ExecutorService executor, ITopologicalSortCallback<TVertex> callback);
+  ITopologicalSortAsyncResult sortAsync(ExecutorService executor, ITopologicalSortCallback<TValue> callback);
 
   /**
    * Allows you to asynchronously and in-parallel process the vertices of a graph topologically. Care is taken to
@@ -223,7 +224,7 @@ public interface IGraph<TVertex extends IVertex> {
    *                      This may be called concurrently depending on the makeup of the graph.
    * @param errorCallback An instance of {@link ITopologicalSortErrorCallback} that will be called if an error during
    *                      processing occurs either in the
-   *                      {@link ITopologicalSortCallback#handle(IVertex, ITopologicalSortInput, ITopologicalSortCoordinator)} method or in the
+   *                      {@link ITopologicalSortCallback#handle(Object, ITopologicalSortInput, IVertex, ITopologicalSortCoordinator)} method or in the
    *                      {@link ITopologicalSortStrategy#sortAsync(java.util.concurrent.ExecutorService, IAdjacencyList, ITopologicalSortCallback, ITopologicalSortErrorCallback)}
    *                      method.
    * @return              An instance of {@link ITopologicalSortAsyncResult} that allows the caller to coordinate the
@@ -231,7 +232,7 @@ public interface IGraph<TVertex extends IVertex> {
    *
    * @see <a href="http://en.wikipedia.org/wiki/Topological_sorting">http://en.wikipedia.org/wiki/Topological_sorting</a>
    */
-  ITopologicalSortAsyncResult sortAsync(ExecutorService executor, ITopologicalSortCallback<TVertex> callback, ITopologicalSortErrorCallback<TVertex> errorCallback);
+  ITopologicalSortAsyncResult sortAsync(ExecutorService executor, ITopologicalSortCallback<TValue> callback, ITopologicalSortErrorCallback<TValue> errorCallback);
 
   /**
    * Allows you to asynchronously and in-parallel process the vertices of a graph topologically. Care is taken to
@@ -250,7 +251,7 @@ public interface IGraph<TVertex extends IVertex> {
    *
    * @see <a href="http://en.wikipedia.org/wiki/Topological_sorting">http://en.wikipedia.org/wiki/Topological_sorting</a>
    */
-  ITopologicalSortAsyncResult sortAsync(ExecutorService executor, ITopologicalSortStrategy<TVertex> strategy, ITopologicalSortCallback<TVertex> callback);
+  ITopologicalSortAsyncResult sortAsync(ExecutorService executor, ITopologicalSortStrategy<TVertex, TValue> strategy, ITopologicalSortCallback<TValue> callback);
 
   /**
    * Allows you to asynchronously and in-parallel process the vertices of a graph topologically. Care is taken to
@@ -266,7 +267,7 @@ public interface IGraph<TVertex extends IVertex> {
    *                      This may be called concurrently depending on the makeup of the graph.
    * @param errorCallback An instance of {@link ITopologicalSortErrorCallback} that will be called if an error during
    *                      processing occurs either in the
-   *                      {@link ITopologicalSortCallback#handle(IVertex, ITopologicalSortInput, ITopologicalSortCoordinator)} method or in the
+   *                      {@link ITopologicalSortCallback#handle(Object, ITopologicalSortInput, IVertex, ITopologicalSortCoordinator)} method or in the
    *                      {@link ITopologicalSortStrategy#sortAsync(java.util.concurrent.ExecutorService, IAdjacencyList, ITopologicalSortCallback, ITopologicalSortErrorCallback)}
    *                      method.
    * @return              An instance of {@link ITopologicalSortAsyncResult} that allows the caller to coordinate the
@@ -274,5 +275,5 @@ public interface IGraph<TVertex extends IVertex> {
    *
    * @see <a href="http://en.wikipedia.org/wiki/Topological_sorting">http://en.wikipedia.org/wiki/Topological_sorting</a>
    */
-  ITopologicalSortAsyncResult sortAsync(ExecutorService executor, ITopologicalSortStrategy<TVertex> strategy, ITopologicalSortCallback<TVertex> callback, ITopologicalSortErrorCallback<TVertex> errorCallback);
+  ITopologicalSortAsyncResult sortAsync(ExecutorService executor, ITopologicalSortStrategy<TVertex, TValue> strategy, ITopologicalSortCallback<TValue> callback, ITopologicalSortErrorCallback<TValue> errorCallback);
 }

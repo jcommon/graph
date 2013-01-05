@@ -25,15 +25,15 @@ import static jcommon.graph.Solution.CYCLE_NOT_EXPECTED;
 @SuppressWarnings("unchecked")
 public class Examples {
   public static final IGraph VALID_SIMPLE_1;
-  public static final Solution SOLUTION_VALID_SIMPLE_1 = Solution.create(
+  public static final Solution<ObjectVertex, Object> SOLUTION_VALID_SIMPLE_1 = Solution.create(
       "VALID_SIMPLE_1"
     , CYCLE_NOT_EXPECTED
-    , VALID_SIMPLE_1 = DirectedAcyclicGraph.create()
+    , VALID_SIMPLE_1 = ObjectGraph.buildFromObjects()
     , ValidOrdering.build()
   );
 
   public static final StringGraph VALID_SIMPLE_2;
-  public static final Solution<StringVertex> SOLUTION_VALID_SIMPLE_2 = Solution.create(
+  public static final Solution<StringVertex, String> SOLUTION_VALID_SIMPLE_2 = Solution.create(
       "VALID_SIMPLE_2"
     , CYCLE_NOT_EXPECTED
     , VALID_SIMPLE_2 = StringGraph.buildFromStrings("A")
@@ -41,7 +41,7 @@ public class Examples {
   );
 
   public static final StringGraph VALID_SIMPLE_3;
-  public static final Solution<StringVertex> SOLUTION_VALID_SIMPLE_3 = Solution.create(
+  public static final Solution<StringVertex, String> SOLUTION_VALID_SIMPLE_3 = Solution.create(
       "VALID_SIMPLE_2"
     , CYCLE_NOT_EXPECTED
     , VALID_SIMPLE_3 = StringGraph.buildFromStrings("A", "B")
@@ -49,7 +49,7 @@ public class Examples {
   );
 
   public static final StringGraph VALID_SIMPLE_4;
-  public static final Solution<StringVertex> SOLUTION_VALID_SIMPLE_4 = Solution.create(
+  public static final Solution<StringVertex, String> SOLUTION_VALID_SIMPLE_4 = Solution.create(
       "VALID_SIMPLE_4"
     , CYCLE_NOT_EXPECTED
     , VALID_SIMPLE_4 = StringGraph.buildFromStrings("A", "B")
@@ -60,7 +60,7 @@ public class Examples {
   //http://www.cs.washington.edu/education/courses/cse373/02sp/lectures/cse373-21-TopoSort-4up.pdf
   //Valid order: A, B, C, D, E, F
   public static final StringGraph VALID_1;
-  public static final Solution<StringVertex> SOLUTION_VALID_1 = Solution.create(
+  public static final Solution<StringVertex, String> SOLUTION_VALID_1 = Solution.create(
       "VALID_1"
     , CYCLE_NOT_EXPECTED
     , VALID_1 = StringGraph.buildFromStrings("A", "B", "C", "D", "E", "F")
@@ -79,7 +79,7 @@ public class Examples {
   //Valid order: 7, 9, 1, 4, 6, 5, 8, 2, 3
   //Valid order: 1, 2, 9, 7, 4, 6, 3, 5, 8
   public static final NumberGraph VALID_2;
-  public static final Solution<NumberVertex> SOLUTION_VALID_2 = Solution.create(
+  public static final Solution<NumberVertex, Number> SOLUTION_VALID_2 = Solution.create(
       "VALID_2"
     , CYCLE_NOT_EXPECTED
     , VALID_2 = NumberGraph.buildFromNumbers(1, 2, 3, 4, 5, 6, 7, 8, 9)
@@ -110,7 +110,7 @@ public class Examples {
   //
   //Valid ordering: A, F, B, C, D, E
   public static final StringGraph VALID_3;
-  public static final Solution<StringVertex> SOLUTION_VALID_3 = Solution.create(
+  public static final Solution<StringVertex, String> SOLUTION_VALID_3 = Solution.create(
       "VALID_3"
     , CYCLE_NOT_EXPECTED
     , VALID_3 = StringGraph.createForStrings()
@@ -133,7 +133,7 @@ public class Examples {
   //https://ece.uwaterloo.ca/~cmoreno/ece250/2012-03-16--topological-sort.pdf
   //Valid order: 1, 6, 2, 5, 3, 4
   public static final NumberGraph VALID_4;
-  public static final Solution<NumberVertex> SOLUTION_VALID_4 = Solution.create(
+  public static final Solution<NumberVertex, Number> SOLUTION_VALID_4 = Solution.create(
       "VALID_4"
     , CYCLE_NOT_EXPECTED
     , VALID_4 = NumberGraph.buildFromNumbers(1, 2, 3, 4, 5, 6)
@@ -150,7 +150,7 @@ public class Examples {
   );
 
   public static final StringGraph CYCLE_1;
-  public static final Solution<StringVertex> SOLUTION_CYCLE_1 = Solution.create(
+  public static final Solution<StringVertex, String> SOLUTION_CYCLE_1 = Solution.create(
       "CYCLE_1"
     , CYCLE_EXPECTED
     , CYCLE_1 = StringGraph.buildFromStrings("A", "B")
@@ -159,7 +159,7 @@ public class Examples {
   );
 
   public static final StringGraph CYCLE_2;
-  public static final Solution<StringVertex> SOLUTION_CYCLE_2 = Solution.create(
+  public static final Solution<StringVertex, String> SOLUTION_CYCLE_2 = Solution.create(
       "CYCLE_2"
     , CYCLE_EXPECTED
     , CYCLE_2 = StringGraph.buildFromStrings("A", "B", "C")
@@ -169,7 +169,7 @@ public class Examples {
   );
 
   public static final NumberGraph CYCLE_3;
-  public static final Solution<NumberVertex> SOLUTION_CYCLE_3 = Solution.create(
+  public static final Solution<NumberVertex, Number> SOLUTION_CYCLE_3 = Solution.create(
       "CYCLE_3"
     , CYCLE_EXPECTED
     , CYCLE_3 = VALID_2.copyAsNumberGraph()

@@ -22,14 +22,14 @@ package jcommon.graph;
 import java.util.Arrays;
 import java.util.List;
 
-public class ValidOrdering<TVertex extends IVertex> {
-  private final TVertex[] ordering;
+public class ValidOrdering<TValue extends Object> {
+  private final TValue[] ordering;
 
-  public ValidOrdering(TVertex...vertices) {
+  public ValidOrdering(TValue...vertices) {
     this.ordering = vertices;
   }
 
-  public IVertex[] getOrdering() {
+  public TValue[] getOrdering() {
     return ordering;
   }
 
@@ -38,36 +38,28 @@ public class ValidOrdering<TVertex extends IVertex> {
     return "" + (ordering == null ? null : Arrays.asList(ordering));
   }
 
-  public static <TVertex extends IVertex> ValidOrdering build(TVertex...vertices) {
-    return new ValidOrdering<TVertex>(vertices);
+  public static <TValue extends Object> ValidOrdering build(TValue...vertices) {
+    return new ValidOrdering<TValue>(vertices);
   }
 
-  public static ValidOrdering<StringVertex> buildFromStrings(String...vertices) {
-    StringVertex[] ordering = new StringVertex[vertices.length];
-    for(int i = 0; i < vertices.length; ++i) {
-      ordering[i] = StringVertex.from(vertices[i]);
-    }
-    return new ValidOrdering<StringVertex>(ordering);
+  public static ValidOrdering<String> buildFromStrings(String...vertices) {
+    return new ValidOrdering<String>(vertices);
   }
 
-  public static ValidOrdering<NumberVertex> buildFromNumbers(Number...vertices) {
-    NumberVertex[] ordering = new NumberVertex[vertices.length];
-    for(int i = 0; i < vertices.length; ++i) {
-      ordering[i] = NumberVertex.from(vertices[i]);
-    }
-    return new ValidOrdering<NumberVertex>(ordering);
+  public static ValidOrdering<Number> buildFromNumbers(Number...vertices) {
+    return new ValidOrdering<Number>(vertices);
   }
 
-  public boolean matches(TVertex...vertices) {
+  public boolean matches(TValue...vertices) {
     return matches(Arrays.asList(vertices));
   }
 
-  public boolean matches(List<TVertex> vertices) {
+  public boolean matches(List<TValue> vertices) {
     if (ordering.length != vertices.size())
       return false;
 
     for(int i = 0; i < ordering.length; ++i) {
-      if (!ordering[i].equals(vertices.get(i)))
+      if ((ordering[i] == null && vertices.get(i) != null) || !ordering[i].equals(vertices.get(i)))
         return false;
     }
 

@@ -24,7 +24,7 @@ package jcommon.graph;
  *
  * @see IVertex
  */
-public class NumberVertex implements IVertex {
+public class NumberVertex implements IVertex<Number> {
   private final Number value;
 
   /**
@@ -44,6 +44,7 @@ public class NumberVertex implements IVertex {
    *
    * @return An instance of a {@link Number} that this {@link NumberVertex} represents.
    */
+  @Override
   public Number get() {
     return getValue();
   }
@@ -53,6 +54,7 @@ public class NumberVertex implements IVertex {
    *
    * @return An instance of a {@link Number} that this {@link NumberVertex} represents.
    */
+  @Override
   public Number getValue() {
     return value;
   }

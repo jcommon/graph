@@ -27,18 +27,18 @@ package jcommon.graph;
  * case, processing will not proceed until the transitive vertices have
  * completed their work.
  *
- * @param <TVertex> The type of {@link IVertex} that this callback will operate on.
+ * @param <TValue> The type of {@link Object} that this callback will operate on.
  */
-public interface ITopologicalSortCallback<TVertex extends IVertex> {
+public interface ITopologicalSortCallback<TValue extends Object> {
   /**
    * The callback that will be executed inside a thread other than the one
    * invoking the sort.
    *
-   * @param dependency Instance of {@link IVertex} that can now be processed.
+   * @param vertex      Instance of {@link IVertex} that can now be processed.
    * @param input       Instance of {@link ITopologicalSortInput} that provides the in-degree outputs of directly dependent vertices.
    * @param coordinator Instance of {@link ITopologicalSortCoordinator} that allows for communication between
    *                    asynchronous sorting submissions done by the driver (which is typically done by an instance
    *                    of {@link ITopologicalSortStrategy}).
    */
-  Object handle(TVertex dependency, ITopologicalSortInput<TVertex> input, ITopologicalSortCoordinator coordinator) throws Throwable;
+  TValue handle(TValue value, ITopologicalSortInput<TValue> input, IVertex<TValue> vertex, ITopologicalSortCoordinator coordinator) throws Throwable;
 }

@@ -22,9 +22,9 @@ package jcommon.graph;
 /**
  * A callback for when an error has occurred during asynchronous processing.
  *
- * @param <TVertex> The type of {@link IVertex} that this error callback will operate on.
+ * @param <TValue> The type of {@link Object} that this error callback will operate on.
  */
-public interface ITopologicalSortErrorCallback<TVertex extends IVertex> {
+public interface ITopologicalSortErrorCallback<TValue extends Object> {
   /**
    * The callback that will be executed inside a thread pool other than the
    * one invoking the sort.
@@ -35,5 +35,5 @@ public interface ITopologicalSortErrorCallback<TVertex extends IVertex> {
    *                    asynchronous sorting submissions done by the driver (which is typically done by an instance
    *                    of {@link ITopologicalSortStrategy}).
    */
-  void handleError(TVertex vertex, Throwable t, ITopologicalSortCoordinator coordinator);
+  void handleError(TValue value, Throwable t, IVertex<TValue> vertex, ITopologicalSortCoordinator coordinator);
 }

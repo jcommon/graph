@@ -35,7 +35,7 @@ import java.util.Set;
 /**
  * @see IAdjacencyList
  */
-public class AdjacencyList<TVertex extends IVertex> implements IAdjacencyList<TVertex> {
+public class AdjacencyList<TVertex extends IVertex<TValue>, TValue extends Object> implements IAdjacencyList<TVertex, TValue> {
   private final List<IAdjacencyListPair<TVertex>> num_map;
   private final Map<TVertex, Integer> index_map;
   private final Map<TVertex, List<TVertex>> vertex_map;

@@ -24,7 +24,7 @@ package jcommon.graph;
  *
  * @see IVertex
  */
-public class StringVertex implements IVertex {
+public class StringVertex implements IVertex<String> {
   private final String name;
 
   /**
@@ -44,8 +44,18 @@ public class StringVertex implements IVertex {
    *
    * @return An instance of a {@link String} that this {@link StringVertex} represents.
    */
+  @Override
   public String get() {
     return getName();
+  }
+
+  /**
+   * Retrieves the name that this {@link StringVertex} represents.
+   *
+   * @return An instance of a {@link String} that this {@link StringVertex} represents.
+   */
+  public String getName() {
+    return name;
   }
 
   /**
@@ -53,7 +63,8 @@ public class StringVertex implements IVertex {
    *
    * @return An instance of a {@link String} that this {@link StringVertex} represents.
    */
-  public String getName() {
+  @Override
+  public String getValue() {
     return name;
   }
 

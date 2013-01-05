@@ -37,31 +37,31 @@ public class DirectedAcyclicGraphTest {
 
   @Test
   public void testAsync() {
-    final ITopologicalSortCallback<IVertex> CALLBACK_NOOP = new ITopologicalSortCallback<IVertex>() {
+    final ITopologicalSortCallback<Object> CALLBACK_NOOP = new ITopologicalSortCallback<Object>() {
       @Override
-      public Object handle(IVertex vertex, ITopologicalSortInput input, ITopologicalSortCoordinator coordinator) throws Throwable {
+      public Object handle(Object o, ITopologicalSortInput<Object> input, IVertex<Object> vertex, ITopologicalSortCoordinator coordinator) throws Throwable {
         return null;
       }
     };
 
-    final ITopologicalSortErrorCallback<IVertex> ERROR_CALLBACK_NOOP = new ITopologicalSortErrorCallback<IVertex>() {
+    final ITopologicalSortErrorCallback<Object> ERROR_CALLBACK_NOOP = new ITopologicalSortErrorCallback<Object>() {
       @Override
-      public void handleError(IVertex vertex, Throwable t, ITopologicalSortCoordinator coordinator) {
+      public void handleError(Object value, Throwable t, IVertex<Object> vertex, ITopologicalSortCoordinator coordinator) {
       }
     };
 
-    final ITopologicalSortCallback<IVertex> CALLBACK_DEBUG = new ITopologicalSortCallback<IVertex>() {
+    final ITopologicalSortCallback<Object> CALLBACK_DEBUG = new ITopologicalSortCallback<Object>() {
       @Override
-      public Object handle(IVertex vertex, ITopologicalSortInput input, ITopologicalSortCoordinator coordinator) throws Throwable {
-        System.out.println(Thread.currentThread().getName() + ": " + vertex.toString() + ", input: " + input.toString());
+      public Object handle(Object o, ITopologicalSortInput<Object> input, IVertex<Object> vertex, ITopologicalSortCoordinator coordinator) throws Throwable {
+        System.out.println(Thread.currentThread().getName() + ": " + o.toString() + ", input: " + input.toString());
         Thread.sleep(1000);
         return vertex;
       }
     };
 
-    final ITopologicalSortErrorCallback<IVertex> ERROR_CALLBACK_DEBUG = new ITopologicalSortErrorCallback<IVertex>() {
+    final ITopologicalSortErrorCallback<Object> ERROR_CALLBACK_DEBUG = new ITopologicalSortErrorCallback<Object>() {
       @Override
-      public void handleError(IVertex vertex, Throwable t, ITopologicalSortCoordinator coordinator) {
+      public void handleError(Object value, Throwable t, IVertex<Object> vertex, ITopologicalSortCoordinator coordinator) {
         System.err.println(Thread.currentThread().getName() + ": " + t.getMessage());
       }
     };

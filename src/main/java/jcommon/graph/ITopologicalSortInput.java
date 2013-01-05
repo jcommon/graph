@@ -19,12 +19,14 @@
 
 package jcommon.graph;
 
+import java.util.Set;
+
 /**
  * Aggregates the output of out neighbor vertices as input to a vertex being processed.
  *
- * @param <TVertex> Type of {@link jcommon.graph.IVertex}.
+ * @param <TValue> An instance of an {@link Object} that can be retrieved.
  */
-public interface ITopologicalSortInput<TVertex extends IVertex> {
+public interface ITopologicalSortInput<TValue extends Object> {
   /**
    * Determines if the input is empty.
    *
@@ -37,7 +39,7 @@ public interface ITopologicalSortInput<TVertex extends IVertex> {
    *
    * @param vertex The vertex whose output is desired.
    */
-  Object get(TVertex vertex);
+  TValue get(IVertex vertex);
 
   /**
    * The size of the {@link ITopologicalSortInput}. This is the same as the number of in-degree vertices in the {@link IAdjacencyList}.
@@ -52,19 +54,19 @@ public interface ITopologicalSortInput<TVertex extends IVertex> {
    * @param vertex The vertex for whom membership will be tested.
    * @return <code>true</code> if the provided vertex instance is a member of the input; <code>false</code> otherwise.
    */
-  boolean containsVertex(TVertex vertex);
+  boolean containsVertex(IVertex vertex);
 
   /**
    * Generates an instance of {@link Iterable} that allows traversing the contents of the input.
    *
    * @return An instance of {@link Iterable} for traversing the contents of the input.
    */
-  Iterable<Object> inputs();
+  Iterable<TValue> inputs();
 
   /**
-   * Generates an array of the in-degree neighbor outputs as inputs for a vertex being processed.
+   * Returns the set of vertices that generated the input.
    *
-   * @return An array of the in-degree neighbor outputs as inputs for a vertex being processed.
+   * @return A {@link Set} containing the set of vertices that generated the input.
    */
-  Object[] getInputs();
+  Set<IVertex> vertices();
 }

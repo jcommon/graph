@@ -49,11 +49,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Please see the following for a description of the basic algorithm:
  *   <a href="http://www.cs.washington.edu/education/courses/cse373/02sp/lectures/cse373-21-TopoSort-4up.pdf">http://www.cs.washington.edu/education/courses/cse373/02sp/lectures/cse373-21-TopoSort-4up.pdf</a>
  *
- * @param <TVertex> Type of {@link IVertex} that a topological sort will operate on.
+ * @param <TValue> Type of {@link Object} that a topological sort will operate on.
  *
  * @see <a href="http://www.cs.washington.edu/education/courses/cse373/02sp/lectures/cse373-21-TopoSort-4up.pdf">http://www.cs.washington.edu/education/courses/cse373/02sp/lectures/cse373-21-TopoSort-4up.pdf</a>
  */
-public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITopologicalSortStrategy<TVertex> {
+public final class SimpleTopologicalSort<TVertex extends IVertex<TValue>, TValue extends Object> implements ITopologicalSortStrategy<TVertex, TValue> {
   /**
    * @see ITopologicalSortStrategy
    */
@@ -61,12 +61,12 @@ public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITo
   }
 
   /**
-   * @see ITopologicalSortStrategy#sort(jcommon.graph.IAdjacencyList)
+   * @see ITopologicalSortStrategy#sort(IAdjacencyList)
    */
   @Override
-  public List<TVertex> sort(final IAdjacencyList<TVertex> adjacencyList) throws CyclicGraphException {
+  public List<TValue> sort(final IAdjacencyList<TVertex, TValue> adjacencyList) throws CyclicGraphException {
     if (adjacencyList.isEmpty())
-      return new ArrayList<TVertex>(0);
+      return new ArrayList<TValue>(0);
 
     final List<TVertex> ordered = new ArrayList<TVertex>(adjacencyList.size());
 
@@ -101,14 +101,19 @@ public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITo
     if (ordered.size() != adjacencyList.size())
       throw new CyclicGraphException(STANDARD_CYCLE_MESSAGE);
 
-    return ordered;
+    //Convert list of vertices to the objects they contain.
+    final List<TValue> ordered_list = new ArrayList<TValue>(ordered.size());
+    for (int i = 0; i < ordered.size(); ++i) {
+      ordered_list.add(ordered.get(i).get());
+    }
+    return ordered_list;
   }
 
   /**
    * @see ITopologicalSortStrategy#sortAsync(ExecutorService, IAdjacencyList, ITopologicalSortCallback, ITopologicalSortErrorCallback)
    */
   @Override
-  public ITopologicalSortAsyncResult sortAsync(final ExecutorService executorProcessors, final IAdjacencyList<TVertex> adjacencyList, final ITopologicalSortCallback<TVertex> callback, final ITopologicalSortErrorCallback<TVertex> errorCallback) {
+  public ITopologicalSortAsyncResult sortAsync(final ExecutorService executorProcessors, final IAdjacencyList<TVertex, TValue> adjacencyList, final ITopologicalSortCallback<TValue> callback, final ITopologicalSortErrorCallback<TValue> errorCallback) {
     final TopologicalSortAsyncResult asyncResult = new TopologicalSortAsyncResult(executorProcessors);
     if (adjacencyList.isEmpty()) {
       asyncResult.asyncComplete(true);
@@ -120,7 +125,7 @@ public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITo
     final List<Callable<Object>> callables = new ArrayList<Callable<Object>>(in_degrees.length);
     final Set<IAdjacencyListPair<TVertex>> remaining = new HashSet<IAdjacencyListPair<TVertex>>();
     final AtomicInteger[] atomics = new AtomicInteger[in_degrees.length];
-    final List<Map<TVertex, Object>> inputs = new ArrayList<Map<TVertex, Object>>(in_degrees.length);
+    final List<Map<IVertex, TValue>> inputs = new ArrayList<Map<IVertex, TValue>>(in_degrees.length);
     final AtomicInteger outstanding_submissions = new AtomicInteger(0);
     final ITopologicalSortCoordinator coordinator = new TopologicalSortCoordinator(asyncResult);
 
@@ -129,7 +134,7 @@ public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITo
     for(int i = 0; i < in_degrees.length; ++i) {
       final IAdjacencyListPair<TVertex> pair = adjacencyList.pairAt(i);
       final AtomicInteger atom = atomics[i] = new AtomicInteger(in_degrees[i] == 0 ? 1 : in_degrees[i]);
-      final Map<TVertex, Object> my_input = new HashMap<TVertex, Object>(in_degrees[i], 1.0f);
+      final Map<IVertex, TValue> my_input = new HashMap<IVertex, TValue>(in_degrees[i], 1.0f);
       inputs.add(my_input);
 
       //Ensure that we add all items in the adjacency list to our list of remaining items.
@@ -144,8 +149,8 @@ public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITo
         public Object call() throws Exception {
           Throwable handled_exception = null;
           boolean handle_all_done = false;
-          final TVertex vertex = pair.getVertex();
-          ITopologicalSortInput<TVertex> input;
+          final IVertex<TValue> vertex = pair.getVertex();
+          ITopologicalSortInput<TValue> input;
 
           try {
 
@@ -156,13 +161,13 @@ public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITo
               }
 
               synchronized (my_input) {
-                input = new TopologicalSortInput<TVertex>(my_input);
+                input = new TopologicalSortInput<TValue>(my_input);
               }
 
               //Call the callback to let him handle this vertex.
-              Object result = null;
+              TValue result = null;
               try {
-                result = callback.handle(vertex, input, coordinator);
+                result = callback.handle(vertex.get(), input, vertex, coordinator);
               } catch(Throwable t) {
                 //We need to handle the exception later after we've done other work.
                 //Save it off for later evaluation.
@@ -179,7 +184,7 @@ public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITo
                 for(TVertex dep : pair.getOutNeighbors()) {
                   final int index = adjacencyList.indexOf(dep);
                   final Callable<Object> dep_callable = callables.get(index);
-                  final Map<TVertex, Object> dep_inputs = inputs.get(index);
+                  final Map<IVertex, TValue> dep_inputs = inputs.get(index);
 
                   synchronized (dep_inputs) {
                     dep_inputs.put(vertex, result);
@@ -226,7 +231,7 @@ public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITo
           } catch(Throwable t) {
             if (errorCallback != null) {
               try {
-                errorCallback.handleError(vertex, t, coordinator);
+                errorCallback.handleError(vertex.get(), t, vertex, coordinator);
               } catch(Throwable t2) {
                 //Swallow any exceptions thrown by our error handler.
               }
@@ -253,7 +258,7 @@ public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITo
     //then this is not a DAG (directed acyclic graph).
     if (queue.isEmpty()) {
       if (errorCallback != null) {
-        errorCallback.handleError(null, new CyclicGraphException(STANDARD_CYCLE_MESSAGE), coordinator);
+        errorCallback.handleError(null, new CyclicGraphException(STANDARD_CYCLE_MESSAGE), null, coordinator);
       }
       asyncResult.asyncComplete(false);
       return asyncResult;
@@ -271,7 +276,7 @@ public final class SimpleTopologicalSort<TVertex extends IVertex> implements ITo
         executorProcessors.submit(callable);
       } catch(Throwable t) {
         if (errorCallback != null)
-          errorCallback.handleError(null, new CyclicGraphException(STANDARD_CYCLE_MESSAGE), coordinator);
+          errorCallback.handleError(null, new CyclicGraphException(STANDARD_CYCLE_MESSAGE), null, coordinator);
         asyncResult.asyncComplete(false);
         return asyncResult;
       }
