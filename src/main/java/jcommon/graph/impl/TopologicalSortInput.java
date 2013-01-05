@@ -20,7 +20,6 @@
 package jcommon.graph.impl;
 
 import jcommon.graph.ITopologicalSortInput;
-import jcommon.graph.IVertex;
 
 import java.util.Collections;
 import java.util.HashMap;
